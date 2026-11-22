@@ -138,6 +138,9 @@ export function reveal(target, o = {}) {
   draftC.style.visibility = finalC.style.visibility = glMode ? 'hidden' : 'visible';
 
   let srcs = null, dead = false, raf = 0, last = 0, visible = true, autoStart = 0;
+  // if frames run slow for about a second, render the effect at a lower resolution (the browser scales it up)
+  const SCALES = [1, 0.8, 0.65, 0.5];
+  let level = lite ? 1 : 0, slow = 0;
   const live = () => srcs && srcs.some((s) => s instanceof HTMLVideoElement);
 
   function paint() {
@@ -166,7 +169,8 @@ export function reveal(target, o = {}) {
     const r = host.getBoundingClientRect();
     ch.W = Math.max(1, r.width); ch.H = Math.max(1, r.height); ch.AR = ch.W / ch.H;
     ch.DPR = Math.min(window.devicePixelRatio || 1, lite ? 1.5 : 2, 3200 / ch.W);
-    for (const cv of [glc, fxc]) { cv.width = Math.round(ch.W * ch.DPR); cv.height = Math.round(ch.H * ch.DPR); }
+    fxc.width = Math.round(ch.W * ch.DPR); fxc.height = Math.round(ch.H * ch.DPR);
+    glc.width = Math.round(ch.W * ch.DPR * SCALES[level]); glc.height = Math.round(ch.H * ch.DPR * SCALES[level]);
     if (el.reach) ch.K = el.reach(ch.AR) / DONE;
     el.resize?.(ch);
     paint();
@@ -225,6 +229,10 @@ export function reveal(target, o = {}) {
       if (reduce) { draftC.style.opacity = String(1 - k); } else draftC.style.clipPath = el.clip((k * 100).toFixed(2));
     }
     o.onProgress?.(ch.p);
+    if (glMode && dt > 0) {
+      slow = dt > 0.025 ? slow + dt : Math.max(0, slow - dt * 0.5);
+      if (slow > 1 && level < SCALES.length - 1) { level++; slow = 0; glc.width = Math.round(ch.W * ch.DPR * SCALES[level]); glc.height = Math.round(ch.H * ch.DPR * SCALES[level]); }
+    }
     const busy = glMode || Math.abs(ch.pTarget - ch.p) > 1e-4 || (mode === 'auto' && autoStart && ch.pTarget < 1);
     if (visible && busy) raf = requestAnimationFrame(frame);
   }

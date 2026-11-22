@@ -11,8 +11,9 @@ import { fbm, vn, hh, seedFuel, rand, lite, DONE } from './core.js';
 const CS = 5.2;       // stones per unit of page height
 const FALLK = 0.2;    // fuel a chunk takes to fall out of sight
 const MAXD = 0.38;    // how far it has dropped by then
-const NSCAN = lite ? 6 : 8;
+const NSCAN = lite ? 4 : 6;   // how many points up the column to look for a falling stone
 const STEP = 0.42 / (NSCAN - 1);
+const ER = lite ? 1 : 2;      // edge search radius (cells); 1 is close enough on small screens
 const OFF = -0.45;    // the epicentre is held back so 0% is whole
 const PEBBLE = ['#5f584f', '#7a7166', '#948a7c', '#b3a998', '#3c3631'];
 
@@ -113,6 +114,7 @@ const float CS = ${CS.toFixed(2)};
 const float FALLK = ${FALLK.toFixed(2)};
 const float MAXD = ${MAXD.toFixed(2)};
 const int NSCAN = ${NSCAN};
+const int ER = ${ER};
 const float STEP = ${STEP.toFixed(4)};
 uniform float uScan;
 
@@ -141,7 +143,7 @@ float cellEdge(vec2 a, out vec4 C, out vec2 nb) {
   }
   float ed = 8.;
   nb = vec2(0., 1.);
-  for (int j = -2; j <= 2; j++) for (int i = -2; i <= 2; i++) {
+  for (int j = -ER; j <= ER; j++) for (int i = -ER; i <= ER; i++) {
     vec2 g = mg + vec2(float(i), float(j)), r = g + .15 + .7 * jit(ip + g) - f, dv = r - mr;
     if (dot(dv, dv) > 1e-6) {
       float e = dot(.5 * (mr + r), normalize(dv));
@@ -165,11 +167,9 @@ vec2 fallSrc(vec2 a, vec4 C, float fall, out float rot) {
 float bump(vec2 p) { return vn(p * 26.) * .65 + vn(p * 61.) * .35; }
 
 // a stone: rounded at its edges, pitted and grainy, lit from the top left, the sketch cut into its face
-vec3 stone(vec2 p, vec2 suv, vec4 C, float e, vec2 nb) {
+vec3 stone(vec2 p, vec2 suv, vec4 C, float e, vec2 nb, vec2 g) {
   float k = clamp(e / .04, 0., 1.);
   float slope = (1. - k * k) * 1.8;                      // the face rolls off steeply into the crack
-  float b0 = bump(p);
-  vec2 g = vec2(bump(p + vec2(.002, 0.)) - b0, bump(p + vec2(0., .002)) - b0) * 7.;
   vec3 N = normalize(vec3(nb * slope - g, 1.));
   vec3 L = normalize(vec3(-.5, .65, .6));
   float diff = max(dot(N, L), 0.);
@@ -199,11 +199,13 @@ void main() {
   // ahead of the quake the paper turns to stone; cracks run out along the stones' edges, hairlines branch off
   float torch = uPtrOn * smoothstep(.15, 0., distance(a, uPtr));
   float dPix = seedFuel(a, vn(a * 3.), .3, 1., 0);
-  float petr = max(smoothstep(-.34, -.3, dOwn + (vn(a * 24.) - .5) * .03), torch * .8);   // each stone forms whole, one by one
-  float crack = max(smoothstep(-.32, -.06, dPix + (vn(a * 31.) - .5) * .08), torch * .6);
+  float nz = vn(a * 31.) - .5;
+  float form = smoothstep(-.37, -.29, dOwn);                     // each stone petrifies from its edges inward
+  float petr = max(1. - smoothstep(form * .13 - .004, form * .13, e), torch * .8);
+  float crack = max(smoothstep(-.32, -.06, dPix + nz * .08), torch * .6);
   float loose = smoothstep(-.09, 0., dOwn);
   float cw = crack * (.0015 + .003 * crack) + loose * .004;
-  float ej = e + (vn(a * 80.) - .5) * .004 * crack;
+  float ej = e + nz * .004 * crack;
   float hair = .65 * vn(a * 15.) + .35 * vn(a * 34.);
   float hmask = max(smoothstep(.6, .85, vn(a * 4.7 + vec2(3., 8.))), 1. - smoothstep(0., .03, ej));
   float hl = (1. - smoothstep(.011, .022, abs(hair - .5))) * smoothstep(.45, 1., crack) * hmask * petr;
@@ -211,7 +213,10 @@ void main() {
   // a stone still in place: rattles when it works loose
   vec2 jig = loose * vec2(sin(uT * 55. + own.x * 7.), cos(uT * 63. + own.y * 5.)) * .0016 - vec2(0., loose * .004);
   vec2 suv = uv + vec2(jig.x / uAr, jig.y);
-  vec3 ground = mix(texture(uDraft, suv).rgb, stone(a + jig, suv, own, ej, nb), petr);
+  float b0 = bump(a);
+  vec2 g = vec2(dFdx(b0), dFdy(b0)) / max(abs(dFdy(a.y)), 1e-5) * .014;   // pitted surface: slope from neighbouring pixels
+  vec3 ground = texture(uDraft, suv).rgb;
+  if (petr > 0.) ground = mix(ground, stone(a + jig, suv, own, ej, nb, g), petr);
   float inC = (1. - smoothstep(cw, cw + .0015, ej)) * smoothstep(0., .1, crack + loose);
   vec3 fissure = mix(vec3(.2, .16, .12), vec3(.03, .025, .02), clamp(1. - ej / max(cw, 1e-4), 0., 1.));
   ground = mix(ground, fissure, inC);
@@ -235,12 +240,13 @@ void main() {
       if (dc <= 0. || dc >= FALLK) continue;
       float fall = dc / FALLK, rot;
       vec2 src = fallSrc(a, C, fall, rot);
-      vec4 C2; vec2 nb2;
+${lite ? `      if (chunk(src).xy != C.xy) continue;
+      float e2 = 1.; vec2 nb2 = vec2(0., 1.);                          // phones: a cheaper, flat-lit stone` : `      vec4 C2; vec2 nb2;
       float e2 = cellEdge(src, C2, nb2);
-      if (C2.xy != C.xy) continue;
+      if (C2.xy != C.xy) continue;`}
       float cs = cos(rot), sn = sin(rot);
       nb2 = vec2(cs * nb2.x - sn * nb2.y, sn * nb2.x + cs * nb2.y);   // the light stays put as it turns
-      vec3 piece = stone(src, vec2(src.x / uAr, src.y), C, e2, nb2) * (1. - .5 * fall);
+      vec3 piece = stone(src, vec2(src.x / uAr, src.y), C, e2, nb2, vec2(0.)) * (1. - .5 * fall);
       col = mix(piece, col, smoothstep(.75, 1., fall));
       break;
     }

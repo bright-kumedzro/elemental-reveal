@@ -261,11 +261,11 @@ const lightning = {
     c.lineCap = 'round'; c.lineJoin = 'round';
     const H = ch.H;
     const draw = (polys, g) => {
-      if (!polys || g < 0.03) return;
+      if (!polys || g < (lite ? 0.08 : 0.03)) return;
       for (const { pts, w } of polys) {
         c.beginPath();
         pts.forEach(([x, y], i) => (i ? c.lineTo(x * H, (1 - y) * H) : c.moveTo(x * H, (1 - y) * H)));
-        c.strokeStyle = `rgba(150,120,255,${(0.22 * g).toFixed(3)})`; c.lineWidth = 8 * w; c.stroke();
+        if (!lite) { c.strokeStyle = `rgba(150,120,255,${(0.22 * g).toFixed(3)})`; c.lineWidth = 8 * w; c.stroke(); }
         c.strokeStyle = `rgba(205,190,255,${(0.6 * g).toFixed(3)})`; c.lineWidth = 2.8 * w; c.stroke();
         c.strokeStyle = `rgba(255,255,255,${Math.min(1, g).toFixed(3)})`; c.lineWidth = 1.1 * w + 0.3; c.stroke();
       }
@@ -313,8 +313,11 @@ void main() {
 
   // behind: the final, split into colour fringes near the edge, with a violet afterglow
   float e = d > 0. ? exp(-d * 28.) : 0.;
-  vec2 ca = vec2(.005, 0.) * e;
-  vec3 fin = vec3(texture(uFinal, vUv + ca).r, texture(uFinal, vUv).g, texture(uFinal, vUv - ca).b);
+  vec3 fin = texture(uFinal, vUv).rgb;
+  if (e > .02) {                                // colour fringes, only near the edge
+    vec2 ca = vec2(.005, 0.) * e;
+    fin.r = texture(uFinal, vUv + ca).r; fin.b = texture(uFinal, vUv - ca).b;
+  }
   fin += vec3(.32, .22, .62) * e * .3;
 
   vec3 col = mix(dr, fin, smoothstep(0., .004, d));

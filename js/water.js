@@ -5,13 +5,15 @@
    In the water a flowing texture carries ripples downward, refracting the design underneath; the leading bead
    bulges and catches the light, and the sketch's pigment is dragged down and dissolved just behind the front.
    Click to spill some: it pools where it lands, then runs down. */
-import { fbm, vn, ign, rand, DONE, MAX_SEEDS } from './core.js';
+import { fbm, vn, ign, rand, lite, DONE, MAX_SEEDS } from './core.js';
 
 const SRC = 0.12;    // the water enters this far above the page
 const W0 = 0.038;    // half-width of a rivulet's blunt head
 const HB = 0.1;      // how long the head takes to swell to that width
 const GROW = 0.06;   // how much every rivulet thickens as more water comes (per unit of progress·K)
 const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+const TAPS = lite ? 4 : 7;   // neighbouring columns checked on each side (fewer on phones, same reach)
+const REACH = 0.18;
 
 const speed = (x) => { const n = vn(x * 4.3, 3.7) * 0.62 + vn(x * 10.1, 9.1) * 0.38; return 0.3 + 1.15 * n * n; };
 
@@ -29,8 +31,8 @@ function flow(ax, ay, pk) {
   const t = 1 - ay + SRC;
   const x = ax + (vn(ax * 1.6, t * 2.8) - 0.5) * 0.2 + (vn(ax * 4.1 + 9, t * 7.3) - 0.5) * 0.05;   // rivulets meander
   let best = -1e3, age = 0;
-  for (let i = -7; i <= 7; i++) {
-    const o = Math.sign(i) * Math.pow(Math.abs(i), 1.6) * 0.008;
+  for (let i = -TAPS; i <= TAPS; i++) {
+    const o = Math.sign(i) * Math.pow(Math.abs(i) / TAPS, 1.6) * REACH;
     const s = speed(x + o), ag = pk - t / s, wt = W0 + GROW * pk, hb = HB * wt / W0;
     const w = ag <= 0 ? ag * s : wt * Math.sqrt(Math.min(ag / hb, 1)) + 0.08 * Math.max(ag - hb, 0);
     if (w - Math.abs(o) > best) { best = w - Math.abs(o); age = ag; }
@@ -163,8 +165,8 @@ vec2 flow(vec2 a) {
   float x = a.x + (vn(vec2(a.x * 1.6, t * 2.8)) - .5) * .2 + (vn(vec2(a.x * 4.1 + 9., t * 7.3)) - .5) * .05;
   float wt = W0 + GROW * pk, hb = HB * wt / W0;
   float best = -1e3, age = 0.;
-  for (int i = -7; i <= 7; i++) {
-    float fi = float(i), o = sign(fi) * pow(abs(fi), 1.6) * .008;
+  for (int i = -${TAPS}; i <= ${TAPS}; i++) {
+    float fi = float(i), o = sign(fi) * pow(abs(fi) / ${TAPS}., 1.6) * ${REACH};
     float s = speed(x + o), ag = pk - t / s;
     float w = ag <= 0. ? ag * s : wt * sqrt(min(ag / hb, 1.)) + .08 * max(ag - hb, 0.);
     if (w - abs(o) > best) { best = w - abs(o); age = ag; }
@@ -216,9 +218,8 @@ void main() {
   // ripples carried downward by the flow; their slope bends the light
   vec2 fp = vec2(a.x * 34., (1. - a.y) * 9. - uT * 2.2), fq = vec2(a.x * 13. + 4., (1. - a.y) * 4. - uT * 1.3);
   float w0 = vn(fp) * .6 + vn(fq) * .4;
-  float wx = vn(fp + vec2(.68, 0.)) * .6 + vn(fq + vec2(.26, 0.)) * .4;
-  float wy = vn(fp + vec2(0., .18)) * .6 + vn(fq + vec2(0., .08)) * .4;
-  vec2 nrm = vec2(wx - w0, wy - w0) * 2.5;
+  float pxA = max(abs(dFdy(a.y)), 1e-5);                                     // page units per pixel
+  vec2 nrm = vec2(dFdx(w0), -dFdy(w0)) / pxA * .05;
   vec2 g = vec2(dFdx(th), dFdy(th));                                         // the bead's edge is a lens too
   vec2 refr = nrm * .006 * th + g * 60. * px;
   vec3 fin = texture(uFinal, vUv + refr).rgb;

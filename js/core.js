@@ -386,7 +386,10 @@ export function boot(defs) {
   if (!reduce) gl = glc.getContext('webgl2', { antialias: false, alpha: false, premultipliedAlpha: false, powerPreference: 'high-performance' });
   if (!gl) root.classList.add('fallback');
 
-  let VW = 1, VH = 1, DPR = 1, sx = 1, sy = 1, raf = 0, last = 0, mark = null, frozen = false;
+  let VW = 1, VH = 1, DPR = 1, sx = 1, sy = 1, fsx = 1, fsy = 1, raf = 0, last = 0, mark = null, frozen = false;
+  // If frames run slow for a while, the WebGL canvas renders at a lower resolution (the browser scales it up).
+  const SCALES = [1, 0.8, 0.65, 0.5];
+  let level = lite ? 1 : 0, slow = 0;   // phones start a notch down
 
   const VS = `#version 300 es
 in vec2 aPos; out vec2 vUv;
@@ -582,7 +585,7 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
       }
       const r = ch.rect;
       fc.save();
-      fc.setTransform(sx, 0, 0, sy, r.left * sx, r.top * sy);
+      fc.setTransform(fsx, 0, 0, fsy, r.left * fsx, r.top * fsy);
       fc.beginPath(); fc.rect(0, 0, ch.W, ch.H); fc.clip();
       el.step(ch, fc, dt, now);
       el.overlay?.(ch, fc, dt, now);
@@ -642,9 +645,10 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
     VW = Math.max(1, glc.clientWidth || window.innerWidth);
     VH = Math.max(1, glc.clientHeight || window.innerHeight);
     DPR = Math.min(window.devicePixelRatio || 1, lite ? 1.5 : 2, 3200 / VW);
-    const w = Math.round(VW * DPR), h = Math.round(VH * DPR);
-    for (const cv of [glc, fxc]) if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
-    sx = glc.width / VW; sy = glc.height / VH;
+    const w = Math.round(VW * DPR), h = Math.round(VH * DPR), k = SCALES[level];
+    if (fxc.width !== w || fxc.height !== h) { fxc.width = w; fxc.height = h; }
+    if (glc.width !== Math.round(w * k) || glc.height !== Math.round(h * k)) { glc.width = Math.round(w * k); glc.height = Math.round(h * k); }
+    sx = glc.width / VW; sy = glc.height / VH; fsx = fxc.width / VW; fsy = fxc.height / VH;
     for (const ch of chapters) { ch.measure(); if (ch.dirty) ch.paint(); }
   }
 
@@ -674,6 +678,11 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
     if (frozen) return;
     const dt = Math.min(0.05, (now - (last || now)) / 1000); last = now;
     const live = drawAll(dt, now);
+    // about a second of frames slower than ~40fps steps the resolution down a notch
+    if (dt > 0 && live.some((ch) => ch.mode === 'gl')) {
+      slow = dt > 0.025 ? slow + dt : Math.max(0, slow - dt * 0.5);
+      if (slow > 1 && level < SCALES.length - 1) { level++; slow = 0; resize(); }
+    }
     const busy = live.some((ch) => ch.mode === 'gl' || Math.abs(ch.pTarget - ch.p) > 1e-4);
     if (busy) raf = requestAnimationFrame(frame);
   }

@@ -12,6 +12,7 @@ const FLIGHT = 1150;                       // ms from first scroll to impact
 const P0 = 0.02;                           // progress the spread is measured from
 const BALL = 300;                          // fireball flight time, ms
 const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+const FLAME = lite ? 2 : 4;              // how many points below each pixel the flames look for burning paper
 
 function cometAt(t) {                      // accelerates in along a curve, uv
   const e = Math.pow(Math.min(1, Math.max(0, t)), 1.7), a = (1 - e) * (1 - e), b = 2 * e * (1 - e), c = e * e;
@@ -262,8 +263,8 @@ void main() {
 
   // flames rise off the burning band below this pixel, torn into tongues by turbulence streaming upward
   float F = burning(d);
-  for (int k = 1; k <= 4; k++) {
-    float s = float(k) * .038;
+  for (int k = 1; k <= ${FLAME}; k++) {
+    float s = float(k) * ${(0.152 / FLAME).toFixed(3)};
     vec2 b = a - vec2(0., s);
     F = max(F, burning(seedFuel(b, fbm(b * 3.), .45, 1., 0)) * (1. - s / .17));
   }
