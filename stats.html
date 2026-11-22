@@ -85,7 +85,6 @@
     function figures(t) {
       const vals = [fmt(t.sites), fmt(t.active7), fmt(t.loads), t.retention28 == null ? '—' : `${Math.round(t.retention28 * 100)}%`];
       $('#figures').querySelectorAll('.n').forEach((el, i) => { el.textContent = vals[i]; });
-      if (t.retention28 == null) $('#figures').querySelectorAll('.l')[3].textContent = 'still using it after four weeks (once sites are four weeks old)';
     }
 
     function columns(daily) {
