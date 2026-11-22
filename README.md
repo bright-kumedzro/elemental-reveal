@@ -91,7 +91,7 @@ vercel deploy --prod
 
 `?capture=<effect>&p=<progress>&t=<ms>` shows one chapter full screen on a virtual clock. For fire, `&comet=<ms>` places the comet partway through its flight. `window.__capture.prime(p, t)` and `window.__capture.frame(p, t, 0)` render frame by frame, which is how the covers and card loops are made.
 
-`/api/ping` records adoption in Upstash Redis (connected through the Vercel Marketplace). `/stats` shows it, behind the `STATS_TOKEN` environment variable.
+`/api/ping` records adoption in Neon Postgres (connected through the Vercel Marketplace, free plan). `/stats` shows it, behind the `STATS_TOKEN` environment variable.
 
 burn-the-draft.vercel.app redirects to `/fire`.
 
