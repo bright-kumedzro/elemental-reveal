@@ -15,7 +15,9 @@
     "js/water.js",
     "js/air.js",
     "js/earth.js",
-    "js/lightning.js"
+    "js/lightning.js",
+    "LICENSE",
+    "README.md"
   ],
   "keywords": [
     "webgl",
@@ -34,5 +36,6 @@
   "scripts": {
     "pages": "node scripts/pages.mjs",
     "serve": "python -m http.server 5179"
-  }
+  },
+  "sideEffects": false
 }

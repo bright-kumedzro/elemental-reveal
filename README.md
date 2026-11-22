@@ -1,65 +1,100 @@
 # Weather the draft
 
-Five scroll-driven reveals. Fire, water, air, earth and lightning each take the same pencil wireframe apart in their own way and leave the finished design underneath.
+Five WebGL2 reveals between any two images: **fire, water, air, earth and lightning**. Each one takes the first image apart in its own way and leaves the second underneath. Drive it with scroll, let it play on its own, or set the progress yourself. No dependencies.
 
-**Live:** https://weather-the-draft.vercel.app (all five in a row) · each element on its own page: [/fire](https://weather-the-draft.vercel.app/fire), [/water](https://weather-the-draft.vercel.app/water), [/air](https://weather-the-draft.vercel.app/air), [/earth](https://weather-the-draft.vercel.app/earth), [/lightning](https://weather-the-draft.vercel.app/lightning). Part of the [Playground](https://www.brightkumedzro.com/playground).
+**Live demo and docs:** https://weather-the-draft.vercel.app/use · **See all five:** https://weather-the-draft.vercel.app
 
-## The elements
+## Install
 
-- **Fire.** The first scroll calls down a comet. It streaks in trailing fire, lights the page as it comes, and hits: a flash, a shockwave that bends everything it crosses, and a blast crater that catches. Flames rise off the burning edge, embers lift away, and the final wavers in the heat. Move over the paper and fire follows your hand. Click to throw a fireball. It arcs up from below and lights a new fire where it lands.
-- **Water.** Water pours in from the top and runs down the page under gravity. Each column has its own speed, so it comes down in meandering rivulets with blunt, rounded heads. Every rivulet thickens as more water comes until they merge into a sheet, and a lumpy warp keeps the edges irregular. Ahead of it the paper wicks the water up and the pencil runs, leaving a tide line. In the water, ripples flow downhill and refract the design, and the sketch's pigment washes out behind the front. Click to spill some.
-- **Air.** Wind blows in from the left along streaky noise. The paper flutters, then gets stripped off in streaks and carried downwind. Paper flecks take their colour from the part of the sketch they came from. Click to send a gust.
-- **Earth.** Ahead of the quake the paper turns to stone, one stone at a time. Each stone is a domain-warped Voronoi cell, shaded as a rounded, pitted, grainy rock with the sketch cut into its face. Cracks race out along the stones' edges, then each stone rattles loose and falls down the page, turning as it drops. Each pixel scans upward for a stone whose fall has carried it there. Click to start a quake.
-- **Lightning.** Four bolts grow as branching random walks. Each gets a chamfer distance field, packed one bolt per channel into an `RGBA16F` texture. When scroll progress reaches a bolt it strikes, and the reveal spreads out from its channel. Click to call down your own. Flashes are short, cover a small area, and fire at most about twice a second.
+```sh
+npm install weather-the-draft
+```
 
-## Use it in your project
+```js
+import { reveal } from 'weather-the-draft';
 
-`js/lib.js` puts any of the five effects between any two images, on any page. There's a live demo and the full options at [/use](https://weather-the-draft.vercel.app/use).
+reveal('#hero', { effect: 'water', from: '/sketch.png', to: '/final.png' });
+```
+
+Or with no build step, straight from a CDN. Pin the version so updates never change your page unexpectedly:
 
 ```html
 <div id="hero" style="height: 80vh"></div>
 <script type="module">
-  import { reveal } from 'https://weather-the-draft.vercel.app/js/lib.js';
-  reveal('#hero', { effect: 'water', from: '/sketch.png', to: '/final.png' });
+  import { reveal } from 'https://cdn.jsdelivr.net/npm/weather-the-draft@0.1/js/lib.js';
+  reveal('#hero', { effect: 'fire', from: '/sketch.png', to: '/final.png' });
 </script>
 ```
 
-- **Progress** follows the scroll by default. Set `progress: 'auto'` to play once when it comes into view, `track: '#wrapper'` to pin it inside a tall wrapper, or `progress: 'manual'` to drive it yourself with `fx.progress(p)`.
-- `reveal` returns `{ ready, progress, play, reset, destroy }`.
-- `from` and `to` take an image URL or an `<img>`, `<canvas>` or `<video>`. Anything inside the element stays on top of the effect.
-- `/js/*` is served with `Access-Control-Allow-Origin: *`, so the import works from any site. Your images need CORS headers if they're on another domain.
+The element needs a size. Anything you put inside it stays on top of the effect, so it works as a background behind your own content.
 
-## How it works
+## Options
 
-- **Two drawings, one layout.** Each chapter paints a draft (Caveat on paper) and a final (Plus Jakarta Sans on dark) from the same layout and uploads them as textures.
-- **One WebGL canvas for everything.** A fixed WebGL2 canvas sits behind the page. Each frame, every chapter on screen is drawn into its own stage's rectangle (viewport + scissor), each with its own fragment shader. Textures are created when a chapter comes within a screen of the viewport and deleted once it's well out of view.
-- **Fuel.** Each element's shader gives every pixel a fuel value, and scrolling pushes the front through it. Each element has a JS copy of its fuel function, built on the same integer-hash noise, so particles spawn exactly at the front.
-- **Fallbacks.** Without WebGL2 each chapter does a CSS clip wipe. With `prefers-reduced-motion` they cross-fade, with no flashes.
+| Option | Default | What it does |
+|---|---|---|
+| `effect` | `'fire'` | `'fire'`, `'water'`, `'air'`, `'earth'` or `'lightning'` |
+| `from` | required | What gets taken away: an image URL, or an `<img>`, `<canvas>` or `<video>` |
+| `to` | required | What's revealed underneath |
+| `progress` | `'scroll'` | `'scroll'` follows the page, `'auto'` plays once when it comes into view, and `'manual'` waits for `fx.progress(p)` |
+| `track` | none | Scroll mode: a tall wrapper the element is pinned inside (`position: sticky`) |
+| `duration` | `3500` | Auto mode: how long it takes, in ms |
+| `interactive` | `true` | Hover and click effects: throw fire, spill water, send a gust, start a quake, call down a bolt |
+| `fit` | `'cover'` | `'cover'`, `'contain'` or `'fill'`, like CSS `object-fit` |
+| `background` | `'#0b0b0c'` | Shown behind images that don't fill the element |
+| `onProgress` | none | Called every frame with progress from 0 to 1 (the draft is gone by about 0.9) |
+| `telemetry` | `true` | The anonymous adoption ping, described below |
+| `credit` | `true` | One line crediting the library in the browser console |
 
-There are no libraries and no build step. `js/core.js` is the engine and each element is one file in `js/`.
+`reveal()` returns `{ ready, progress(p?), play(), reset(), destroy() }`.
 
-## Pages
+## Good to know
 
-`index.html` and the five element pages are written by `scripts/pages.mjs` from the copy at the top of that file. Edit the copy there, then run:
+- Images from another domain need CORS headers, or WebGL can't read them.
+- Each call gets its own WebGL2 canvas. Browsers cap how many can run at once (often around 16), so call `destroy()` on ones you're done with.
+- On slow devices it drops its render resolution automatically until it's smooth.
+- Without WebGL2 it falls back to a wipe. With reduced motion on it cross-fades, so lightning doesn't flash.
+- It's safe to import during server rendering; it only runs in the browser.
+
+## Telemetry
+
+So I can see whether anyone uses this, the library sends one tiny request per page per effect to `weather-the-draft.vercel.app/api/ping`. It contains the effect name and the library version. The server records your site's domain from the request's `Origin` header. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. Turn it off with `telemetry: false`.
+
+## Credit
+
+MIT licensed, so use it anywhere. Keeping the copyright notice in the code is the only requirement. If it helps your project, a link back to [weather-the-draft.vercel.app](https://weather-the-draft.vercel.app) is appreciated, never required.
+
+---
+
+## The site
+
+`index.html` runs all five in a row. Each element also has a page of its own: `/fire`, `/water`, `/air`, `/earth`, `/lightning`.
+
+- **Fire.** The first scroll calls down a comet. It streaks in, hits with a flash and a shockwave, and flames rise off the burning edge. Move over the paper and fire follows your hand. Click to throw a fireball.
+- **Water.** Water runs down the page in meandering rivulets with irregular, blunt edges that merge into a sheet, refracting the design. The paper wicks ahead of it and the pencil runs. Click to spill some.
+- **Air.** Wind strips the paper off in streaks and carries it downwind. Click to send a gust.
+- **Earth.** The paper turns to stone, one stone at a time, cracks along jagged fault lines and falls apart. Click to start a quake.
+- **Lightning.** Branching bolts strike as you scroll, and the reveal spreads out from each channel. Click to call down your own.
+
+### How it works
+
+- Each chapter paints two drawings from one layout, the draft and the final, and uploads them as textures. One fixed WebGL2 canvas draws every chapter on screen into its own rectangle, each with its own fragment shader. Textures load when a chapter comes near and are freed when it's well away.
+- Each element's shader gives every pixel a fuel value, and progress pushes the front through it. A JS copy of each fuel function, using the same integer-hash noise, tells the particles where the front is.
+- `js/core.js` is the engine and site drawing; `js/lib.js` is the library; each effect is one file in `js/`.
+
+### Develop
 
 ```sh
-node scripts/pages.mjs
-```
-
-## Run locally
-
-```sh
-python -m http.server 5179
-```
-
-Then open http://127.0.0.1:5179. ES modules need a server, so opening the file directly won't work.
-
-`?capture=<fire|water|air|earth|lightning>&p=<progress>&t=<ms>` shows one chapter full screen and renders a single frame on a virtual clock. For fire, `&comet=<ms>` places the comet partway through its flight. `window.__capture.prime(p, t)` and `window.__capture.frame(p, t, 0)` render frame by frame, which is how the covers and card loops are made.
-
-## Deploy
-
-```sh
+python -m http.server 5179          # then open http://127.0.0.1:5179
+node scripts/pages.mjs              # rewrite index.html and the five element pages from their copy
 vercel deploy --prod
 ```
 
+`?capture=<effect>&p=<progress>&t=<ms>` shows one chapter full screen on a virtual clock. For fire, `&comet=<ms>` places the comet partway through its flight. `window.__capture.prime(p, t)` and `window.__capture.frame(p, t, 0)` render frame by frame, which is how the covers and card loops are made.
+
+`/api/ping` records adoption in Upstash Redis (connected through the Vercel Marketplace). `/stats` shows it, behind the `STATS_TOKEN` environment variable.
+
 burn-the-draft.vercel.app redirects to `/fire`.
+
+## License
+
+[MIT](LICENSE) © 2026 Bright Kumedzro

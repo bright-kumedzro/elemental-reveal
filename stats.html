@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Adoption · Weather the draft</title>
+  <link rel="icon" href="/bk-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    :root { --surface: #121214; --grid: #232328; --mark: #33adff; --muted: #8b8b93; }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 56px 16px 80px; }
+    .wrap h1 { font-size: clamp(30px, 5vw, 44px); margin: 0 0 6px; }
+    .sub { color: var(--soft); margin: 0 0 32px; font-size: 14px; }
+    .gate { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0; max-width: 520px; }
+    .gate input { flex: 1 1 260px; font: 15px "Plus Jakarta Sans", system-ui; color: var(--ink); background: var(--surface); border: 1px solid #2e2e33; border-radius: 999px; padding: 12px 16px; }
+    .gate input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .err { color: #ff8a80; font-size: 14px; }
+    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 8px 0 28px; }
+    .tile { background: var(--surface); border: 1px solid var(--grid); border-radius: 16px; padding: 18px 18px 16px; }
+    .tile .label { color: var(--muted); font-size: 13px; font-weight: 500; }
+    .tile .value { font-size: 34px; font-weight: 700; letter-spacing: -.02em; margin-top: 6px; font-variant-numeric: tabular-nums; }
+    .tile .note { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .card { background: var(--surface); border: 1px solid var(--grid); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+    .card h2 { font-size: 15px; font-weight: 600; margin: 0 0 2px; letter-spacing: 0; }
+    .card .hint { color: var(--muted); font-size: 12px; margin: 0 0 16px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+    .chart { position: relative; }
+    .chart svg { display: block; width: 100%; height: 220px; overflow: visible; }
+    .chart .axis { fill: var(--muted); font: 11px "Plus Jakarta Sans", system-ui; font-variant-numeric: tabular-nums; }
+    .chart .tip { position: absolute; pointer-events: none; background: #1d1d21; border: 1px solid #2e2e33; border-radius: 10px; padding: 8px 10px; font-size: 12px; white-space: nowrap; transform: translate(-50%, -100%); opacity: 0; transition: opacity .12s; }
+    .chart .tip b { font-size: 14px; }
+    .meters { display: grid; gap: 12px; }
+    .meter { display: grid; grid-template-columns: 90px 1fr 64px; align-items: center; gap: 12px; font-size: 14px; }
+    .meter .track { height: 10px; background: var(--grid); border-radius: 0 4px 4px 0; position: relative; }
+    .meter .fill { position: absolute; inset: 0 auto 0 0; background: var(--mark); border-radius: 0 4px 4px 0; }
+    .meter .fig { text-align: right; font-variant-numeric: tabular-nums; color: var(--soft); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--grid); }
+    th { color: var(--muted); font-weight: 600; font-size: 12px; }
+    td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+    td a { color: var(--ink); }
+    .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--mark); margin-right: 6px; }
+    .empty { color: var(--muted); font-size: 14px; padding: 8px 0; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <a class="pill" href="/" style="display:inline-block;margin-bottom:32px">← Weather the draft</a>
+    <h1>Adoption</h1>
+    <p class="sub">Sites running the library, from its anonymous ping: one per page per effect, domain only. Localhost and this site aren't counted.</p>
+
+    <form class="gate" id="gate">
+      <label class="sr" for="token">Stats token</label>
+      <input id="token" type="password" placeholder="Stats token" autocomplete="current-password" required>
+      <button class="btn primary" type="submit">Show</button>
+      <p class="err" id="err" hidden></p>
+    </form>
+
+    <div id="out" hidden>
+      <div class="kpis" id="kpis"></div>
+      <div class="card">
+        <h2>Active sites per day</h2>
+        <p class="hint">Distinct sites that loaded it each day, last 30 days</p>
+        <div class="chart" id="daily"></div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h2>Effects</h2>
+          <p class="hint">Page loads by effect, all time</p>
+          <div class="meters" id="effects"></div>
+        </div>
+        <div class="card">
+          <h2>Versions</h2>
+          <p class="hint">Page loads by library version, all time</p>
+          <div class="meters" id="versions"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Sites</h2>
+        <p class="hint">Top 100 by page loads</p>
+        <div style="overflow-x:auto"><table id="sites"></table></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const $ = (s) => document.querySelector(s);
+    const fmt = (n) => Number(n).toLocaleString('en');
+    const date = (t) => (t ? new Date(t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—');
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    let token = '';
+    try { token = localStorage.getItem('wtd-stats-token') || ''; } catch {}
+
+    async function load() {
+      const res = await fetch('/api/stats', { headers: { Authorization: `Bearer ${token}` } });
+      if (res.status === 401) throw new Error('That token isn’t right.');
+      if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || `Error ${res.status}`);
+      return res.json();
+    }
+
+    function tiles(t) {
+      const ret = t.retention28 == null ? '—' : `${Math.round(t.retention28 * 100)}%`;
+      $('#kpis').innerHTML = [
+        ['Sites using it', fmt(t.sites), 'all time'],
+        ['Active this week', fmt(t.active7), `${fmt(t.active30)} in the last 30 days`],
+        ['New this week', fmt(t.new7), 'first load in the last 7 days'],
+        ['Still using it', ret, t.cohort28 ? `of ${fmt(t.cohort28)} sites 4+ weeks old` : 'no sites 4+ weeks old yet'],
+        ['Page loads', fmt(t.loads), 'all time'],
+      ].map(([l, v, n]) => `<div class="tile"><div class="label">${l}</div><div class="value">${v}</div><div class="note">${n}</div></div>`).join('');
+    }
+
+    function columns(daily) {
+      const el = $('#daily'), W = el.clientWidth || 800, H = 220, padL = 32, padB = 22, padT = 8;
+      const max = Math.max(1, ...daily.map((d) => d.sites));
+      const step = Math.max(1, Math.ceil(max / 4)), top = step * 4;
+      const slot = (W - padL) / daily.length, bw = Math.min(24, slot - 2);
+      const y = (v) => H - padB - (v / top) * (H - padB - padT);
+      let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Active sites per day for the last 30 days">`;
+      for (let v = 0; v <= top; v += step) svg += `<line x1="${padL}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)" stroke-width="1"/><text class="axis" x="${padL - 8}" y="${y(v) + 4}" text-anchor="end">${fmt(v)}</text>`;
+      daily.forEach((d, i) => {
+        const x = padL + i * slot + (slot - bw) / 2, h = H - padB - y(d.sites), r = Math.min(4, h / 2, bw / 2);
+        if (d.sites > 0) svg += `<path d="M${x},${H - padB} v${-(h - r)} q0,${-r} ${r},${-r} h${bw - 2 * r} q${r},0 ${r},${r} v${h - r} z" fill="var(--mark)"/>`;
+        svg += `<rect data-i="${i}" x="${padL + i * slot}" y="${padT}" width="${slot}" height="${H - padT}" fill="transparent"/>`;
+        if (i % 7 === 0 || i === daily.length - 1) svg += `<text class="axis" x="${x + bw / 2}" y="${H - 6}" text-anchor="middle">${new Date(d.day).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</text>`;
+      });
+      el.innerHTML = svg + '</svg><div class="tip"></div>';
+      const tip = el.querySelector('.tip');
+      el.querySelectorAll('rect[data-i]').forEach((r) => {
+        const show = () => {
+          const d = daily[+r.dataset.i], bx = (+r.getAttribute('x') + slot / 2) / W * el.clientWidth;
+          tip.innerHTML = `${date(d.day)}<br><b>${fmt(d.sites)}</b> sites · ${fmt(d.loads)} loads`;
+          tip.style.left = `${bx}px`; tip.style.top = `${y(d.sites) / H * 220 - 8}px`; tip.style.opacity = 1;
+        };
+        r.addEventListener('pointerenter', show);
+        r.addEventListener('pointerleave', () => { tip.style.opacity = 0; });
+      });
+    }
+
+    function meters(el, obj) {
+      const rows = Object.entries(obj).sort((a, b) => b[1] - a[1]);
+      const max = Math.max(1, ...rows.map((r) => r[1]));
+      el.innerHTML = rows.length
+        ? rows.map(([k, v]) => `<div class="meter"><span>${esc(k)}</span><span class="track"><span class="fill" style="width:${(v / max) * 100}%"></span></span><span class="fig">${fmt(v)}</span></div>`).join('')
+        : '<p class="empty">Nothing yet.</p>';
+    }
+
+    function sites(list) {
+      $('#sites').innerHTML = list.length
+        ? `<thead><tr><th>Site</th><th class="num">Page loads</th><th>First seen</th><th>Last seen</th></tr></thead><tbody>` +
+          list.map((s) => `<tr><td>${s.active7 ? '<span class="dot" title="Active this week"></span>' : ''}<a href="https://${esc(s.site)}" target="_blank" rel="noreferrer noopener">${esc(s.site)}</a></td><td class="num">${fmt(s.loads)}</td><td>${date(s.first)}</td><td>${date(s.last)}</td></tr>`).join('') + '</tbody>'
+        : '<tbody><tr><td class="empty">No sites yet. They appear here once someone runs the library on a live site.</td></tr></tbody>';
+    }
+
+    async function show() {
+      $('#err').hidden = true;
+      try {
+        const d = await load();
+        try { localStorage.setItem('wtd-stats-token', token); } catch {}
+        $('#gate').hidden = true; $('#out').hidden = false;
+        tiles(d.totals); columns(d.daily); meters($('#effects'), d.effects); meters($('#versions'), d.versions); sites(d.sites);
+        addEventListener('resize', () => columns(d.daily));
+      } catch (e) {
+        $('#err').textContent = e.message; $('#err').hidden = false;
+      }
+    }
+
+    $('#gate').addEventListener('submit', (e) => { e.preventDefault(); token = $('#token').value.trim(); show(); });
+    if (token) show();
+  </script>
+</body>
+</html>

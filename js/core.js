@@ -6,9 +6,11 @@
    An element module supplies the shader, a JS mirror of its fuel function (so particles know where the front is),
    and its particles. Modes per chapter: gl (WebGL2) · clip (no WebGL2: CSS wipe) · fade (reduced motion). */
 
-export const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-export const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
-export const lite = matchMedia('(max-width: 699px)').matches || (navigator.hardwareConcurrency || 8) <= 4;
+// Safe to import where there is no window (server rendering); the effects only run in the browser.
+const mq = (q) => typeof matchMedia === 'function' && matchMedia(q).matches;
+export const reduce = mq('(prefers-reduced-motion: reduce)');
+export const fine = mq('(hover: hover) and (pointer: fine)');
+export const lite = mq('(max-width: 699px)') || (typeof navigator !== 'undefined' && (navigator.hardwareConcurrency || 8) <= 4);
 export const OCT = lite ? 3 : 5;          // fbm octaves, shared by the shaders and the JS copies
 export const DONE = 0.9;                  // chapter progress at which the draft is fully gone
 export const MAX_SEEDS = 6;

@@ -16,6 +16,29 @@ import earth from './earth.js';
 import lightning from './lightning.js';
 
 export const effects = { fire, water, air, earth, lightning };
+export const VERSION = '0.1.0';
+
+/* Adoption ping: one tiny request per page per effect, so the author can see which sites use it and which
+   effects. It sends only the effect name and the library version; the server reads the site's domain from the
+   request's Origin header. No cookies, nothing about visitors. Skipped on localhost. Turn it off with
+   { telemetry: false }. */
+const PING = 'https://weather-the-draft.vercel.app/api/ping';
+const pinged = new Set();
+function ping(effect) {
+  if (pinged.has(effect)) return;
+  pinged.add(effect);
+  try {
+    const h = location.hostname;
+    if (!h || h === 'localhost' || h.endsWith('.local') || /^[\d.]+$|^\[/.test(h) || h === 'weather-the-draft.vercel.app') return;
+    navigator.sendBeacon?.(PING, JSON.stringify({ e: effect, v: VERSION }));
+  } catch { /* never let the ping affect the page */ }
+}
+let credited = false;
+function credit() {
+  if (credited || typeof console === 'undefined') return;
+  credited = true;
+  console.info(`%cweather-the-draft ${VERSION}%c by Bright Kumedzro · https://weather-the-draft.vercel.app`, 'font-weight:600', 'color:#888');
+}
 
 const VS = `#version 300 es
 in vec2 aPos; out vec2 vUv;
@@ -64,6 +87,8 @@ function fitInto(c, src, w, h, fit, bg) {
  * @param {'cover'|'contain'|'fill'} [o.fit='cover']  how the images fill the target
  * @param {string} [o.background='#0b0b0c']  shown behind images that don't fill the target
  * @param {(p:number)=>void} [o.onProgress]  called every frame with progress (0 to 1; the draft is gone by about 0.9)
+ * @param {boolean} [o.telemetry=true]  send the anonymous adoption ping described above
+ * @param {boolean} [o.credit=true]  print one line crediting the library in the browser console
  *
  * Anything inside the target stays on top of the effect, so it works as a background behind your own content.
  */
@@ -267,6 +292,8 @@ export function reveal(target, o = {}) {
   const ready = Promise.all([load(o.from), load(o.to)]).then((s) => {
     if (dead) return;
     srcs = s;
+    if (o.telemetry !== false) ping(o.effect || 'fire');
+    if (o.credit !== false) credit();
     resize();
     readScroll(); ch.p = ch.pTarget;
     ro.observe(host); io.observe(host);
