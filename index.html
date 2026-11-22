@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Weather the draft · Bright Kumedzro</title>
+  <meta name="description" content="Four scroll-driven WebGL reveals. Water, air, earth and lightning each take a pencil wireframe apart and leave the finished design.">
+  <meta name="theme-color" content="#0b0b0c">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Weather the draft">
+  <meta property="og:description" content="Flood it, blow it away, break it, strike it. Four scroll-driven WebGL2 reveals by Bright Kumedzro.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="bk-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <main>
+    <header class="intro">
+      <a class="pill back" href="https://www.brightkumedzro.com/playground">← Playground</a>
+      <p class="eyebrow">Playground · Experiment</p>
+      <h1>Weather the draft</h1>
+      <p class="lede"><a href="https://burn-the-draft.vercel.app/">Burn the draft</a> gave a wireframe to fire. These are the other four elements. Each one takes the same pencil sketch apart in its own way and leaves the finished design behind.</p>
+      <nav class="chapters" aria-label="Chapters">
+        <a href="#water" style="--c:#2dd4bf"><span>01</span>Water</a>
+        <a href="#air" style="--c:#a5b4fc"><span>02</span>Air</a>
+        <a href="#earth" style="--c:#e9a85a"><span>03</span>Earth</a>
+        <a href="#lightning" style="--c:#a78bfa"><span>04</span>Lightning</a>
+      </nav>
+      <p class="cue">Scroll to begin</p>
+    </header>
+
+    <section id="water" class="track" data-el="water" aria-label="Water. Scroll to flood the wireframe and reveal the finished design."></section>
+    <section id="air" class="track" data-el="air" aria-label="Air. Scroll to blow the wireframe away and reveal the finished design."></section>
+    <section id="earth" class="track" data-el="earth" aria-label="Earth. Scroll to break the wireframe apart and reveal the finished design."></section>
+    <section id="lightning" class="track" data-el="lightning" aria-label="Lightning. Scroll to strike the wireframe and reveal the finished design. Contains brief flashes."></section>
+
+    <section class="after">
+      <p class="eyebrow">Playground · Experiment</p>
+      <h2>Four more ways to lose a draft</h2>
+      <p>Every chapter holds the same two drawings: a pencil wireframe on paper and the finished design underneath. A WebGL2 shader gives each pixel a fuel value and decides, pixel by pixel, which drawing you see. Scrolling pushes the front through the fuel. Each element shapes that fuel differently and does different damage at the edge.</p>
+      <dl class="elements">
+        <div style="--c:#2dd4bf">
+          <dt>Water</dt>
+          <dd>A tide rises from the bottom of the page. Ahead of it the paper soaks up water: it greys, and the pencil bleeds. Below the waterline the finished design wavers through moving water, with caustic light drifting across it.</dd>
+        </div>
+        <div style="--c:#a5b4fc">
+          <dt>Air</dt>
+          <dd>Wind comes in from the left. The paper flutters before the gust arrives. Then the wind strips it off in streaks and carries it away. Each paper fleck keeps the colour of the bit of sketch it tore from.</dd>
+        </div>
+        <div style="--c:#e9a85a">
+          <dt>Earth</dt>
+          <dd>The page splits into plates. Hairline cracks open along their edges first. Then each plate sinks into the dark, shedding pebbles and dust. The whole plate goes at once because its timing comes from its centre. Scroll fast and the ground shakes.</dd>
+        </div>
+        <div style="--c:#a78bfa">
+          <dt>Lightning</dt>
+          <dd>Four bolts grow as branching random walks, and each one gets its own distance field. When your scroll reaches a bolt, it strikes. The bolt flashes and the reveal spreads out from the channel it burned.</dd>
+        </div>
+      </dl>
+      <p>Click or tap the paper in any chapter to drop a stone, send a gust, start a quake or call down a bolt. Scroll back up and the draft comes back.</p>
+      <div class="actions">
+        <button id="again" class="btn primary" type="button">Run it again</button>
+        <a class="btn" href="https://burn-the-draft.vercel.app/">Burn the draft</a>
+        <a class="btn" href="https://www.brightkumedzro.com/playground">More on the playground</a>
+      </div>
+      <p class="small">Raw WebGL2 and canvas, no libraries. One WebGL canvas draws all four chapters, each with its own fragment shader. Without WebGL2 each chapter falls back to a wipe. With reduced motion on, they cross-fade, and the lightning chapter doesn't flash.</p>
+      <p class="small foot">© 2026 Bright Kumedzro</p>
+    </section>
+  </main>
+</body>
+</html>
