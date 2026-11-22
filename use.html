@@ -41,6 +41,12 @@
     code { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: .92em; }
     p code, li code, td code { background: #17171a; border: 1px solid #26262b; border-radius: 6px; padding: 1px 6px; }
     .k { color: #c4b5fd; } .s { color: #86efac; } .c { color: #71717a; }
+    .figures { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 26px 0; margin: 8px 0 36px; }
+    .figures dd { margin: 0; }
+    .figures .n { font-size: clamp(1.7rem, 4vw, 2.2rem); line-height: 1; font-weight: 500; letter-spacing: -.03em; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .figures .l { margin-top: 8px; font-size: 13px; line-height: 1.4; color: var(--soft); }
+    .figures .l a { color: var(--accent); }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
     table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
     th, td { text-align: left; vertical-align: top; padding: 12px 10px; border-bottom: 1px solid var(--line); color: #d4d4d8; }
     th { color: var(--soft); font-weight: 600; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
@@ -54,6 +60,12 @@
     <p class="eyebrow">Weather the draft · Library</p>
     <h1>Use it in your project</h1>
     <p class="lede">Any of the five effects, between any two images: a sketch and the final design, a before and an after, a photo and its edit. One import, no dependencies.</p>
+
+    <dl class="figures" id="figures" aria-live="polite">
+      <div><dt class="sr">Sites using it</dt><dd class="n">…</dd><dd class="l">sites using it</dd></div>
+      <div><dt class="sr">Page loads</dt><dd class="n">…</dd><dd class="l">page loads</dd></div>
+      <div><dt class="sr">Active this week</dt><dd class="n">…</dd><dd class="l">active this week · <a href="/stats">see more</a></dd></div>
+    </dl>
 
     <div id="demo" class="demo" role="img" aria-label="Live demo: the sketch is taken away by the chosen effect to reveal the finished design."></div>
     <div class="controls">
@@ -138,7 +150,7 @@ fx.destroy();        <span class="c">// remove the canvases and listeners</span>
     </ul>
 
     <h2>Telemetry</h2>
-    <p>So I can see whether anyone uses this, the library sends one tiny request per page per effect. It contains the effect name and the library version. The server records your site's domain from the request itself. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. Turn it off with <code>telemetry: false</code>.</p>
+    <p>So I can see whether anyone uses this, the library sends one tiny request per page per effect. It contains the effect name and the library version. The server records your site's domain from the request itself. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. The totals are public at <a href="/stats" style="color:var(--accent)">/stats</a>; no domain is ever shown. Turn it off with <code>telemetry: false</code>.</p>
 
     <h2>License and credit</h2>
     <p>MIT licensed: use it in anything, commercial or not. Keeping the copyright notice in the code is the only requirement. If it helps your project, a link back to <a href="/" style="color:var(--accent)">weather-the-draft.vercel.app</a> is appreciated, never required.</p>
@@ -167,6 +179,12 @@ fx.destroy();        <span class="c">// remove the canvases and listeners</span>
     slider.addEventListener('input', () => fx.progress(Number(slider.value)));
     document.querySelector('#play').addEventListener('click', () => fx.play());
     make('fire');
+
+    // live adoption numbers, the same ones as /stats
+    fetch('/api/stats').then((r) => (r.ok ? r.json() : Promise.reject())).then(({ totals: t }) => {
+      const v = [t.sites, t.loads, t.active7].map((n) => Number(n).toLocaleString('en'));
+      document.querySelectorAll('#figures .n').forEach((el, i) => { el.textContent = v[i]; });
+    }).catch(() => document.querySelector('#figures').remove());
   </script>
 </body>
 </html>

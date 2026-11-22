@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Adoption · Weather the draft</title>
+  <title>Who's using it · Weather the draft</title>
+  <meta name="description" content="Live adoption numbers for the Weather the draft library: sites using it, page loads and which effects people pick.">
+  <link rel="canonical" href="https://weather-the-draft.vercel.app/stats">
   <link rel="icon" href="/bk-mark.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,22 +13,18 @@
   <link rel="stylesheet" href="/style.css">
   <style>
     :root { --surface: #121214; --grid: #232328; --mark: #33adff; --muted: #8b8b93; }
-    .wrap { max-width: 1040px; margin: 0 auto; padding: 56px 16px 80px; }
-    .wrap h1 { font-size: clamp(30px, 5vw, 44px); margin: 0 0 6px; }
-    .sub { color: var(--soft); margin: 0 0 32px; font-size: 14px; }
-    .gate { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0; max-width: 520px; }
-    .gate input { flex: 1 1 260px; font: 15px "Plus Jakarta Sans", system-ui; color: var(--ink); background: var(--surface); border: 1px solid #2e2e33; border-radius: 999px; padding: 12px 16px; }
-    .gate input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-    .err { color: #ff8a80; font-size: 14px; }
-    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 8px 0 28px; }
-    .tile { background: var(--surface); border: 1px solid var(--grid); border-radius: 16px; padding: 18px 18px 16px; }
-    .tile .label { color: var(--muted); font-size: 13px; font-weight: 500; }
-    .tile .value { font-size: 34px; font-weight: 700; letter-spacing: -.02em; margin-top: 6px; font-variant-numeric: tabular-nums; }
-    .tile .note { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 56px 16px 80px; }
+    .wrap h1 { font-size: clamp(32px, 6vw, 52px); margin: 0 0 10px; }
+    .sub { color: #d4d4d8; margin: 0 0 8px; max-width: 640px; }
+    /* the headline numbers: big figure, one line under it, between two hairlines */
+    .figures { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 24px; border-top: 1px solid var(--grid); border-bottom: 1px solid var(--grid); padding: 32px 0; margin: 36px 0 40px; }
+    @media (min-width: 720px) { .figures { grid-template-columns: repeat(4, 1fr); } }
+    .figures dd { margin: 0; }
+    .figures .n { font-size: clamp(1.9rem, 4vw, 2.4rem); line-height: 1; font-weight: 500; letter-spacing: -.03em; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .figures .l { margin-top: 8px; font-size: 13px; line-height: 1.4; color: var(--soft); }
     .card { background: var(--surface); border: 1px solid var(--grid); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
     .card h2 { font-size: 15px; font-weight: 600; margin: 0 0 2px; letter-spacing: 0; }
     .card .cap { color: var(--muted); font-size: 12px; margin: 0 0 16px; }
-    [hidden] { display: none !important; }
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     @media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
     .chart { position: relative; }
@@ -40,80 +37,55 @@
     .meter .track { height: 10px; background: var(--grid); border-radius: 0 4px 4px 0; position: relative; }
     .meter .fill { position: absolute; inset: 0 auto 0 0; background: var(--mark); border-radius: 0 4px 4px 0; }
     .meter .fig { text-align: right; font-variant-numeric: tabular-nums; color: var(--soft); }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--grid); }
-    th { color: var(--muted); font-weight: 600; font-size: 12px; }
-    td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
-    td a { color: var(--ink); }
-    .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--mark); margin-right: 6px; }
-    .empty { color: var(--muted); font-size: 14px; padding: 8px 0; }
+    .empty { color: var(--muted); font-size: 14px; padding: 4px 0; }
+    .fine { color: var(--muted); font-size: 13px; margin-top: 28px; }
+    .fine a { color: var(--accent); }
     .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   </style>
 </head>
 <body>
   <main class="wrap">
-    <a class="pill" href="/" style="display:inline-block;margin-bottom:32px">← Weather the draft</a>
-    <h1>Adoption</h1>
-    <p class="sub">Sites running the library, from its anonymous ping: one per page per effect, domain only. Localhost and this site aren't counted.</p>
+    <a class="pill" href="/use" style="display:inline-block;margin-bottom:32px">← Use it in your project</a>
+    <p class="eyebrow">Weather the draft · Library</p>
+    <h1>Who's using it</h1>
+    <p class="sub">Live numbers from sites running the library. They update every few minutes.</p>
 
-    <form class="gate" id="gate">
-      <label class="sr" for="token">Stats token</label>
-      <input id="token" type="password" placeholder="Stats token" autocomplete="current-password" required>
-      <button class="btn primary" type="submit">Show</button>
-      <p class="err" id="err" hidden></p>
-    </form>
+    <dl class="figures" id="figures" aria-live="polite">
+      <div><dt class="sr">Sites using it</dt><dd class="n">…</dd><dd class="l">sites using it</dd></div>
+      <div><dt class="sr">Active this week</dt><dd class="n">…</dd><dd class="l">active this week</dd></div>
+      <div><dt class="sr">Page loads</dt><dd class="n">…</dd><dd class="l">page loads</dd></div>
+      <div><dt class="sr">Still using it</dt><dd class="n">…</dd><dd class="l">still using it after four weeks</dd></div>
+    </dl>
 
-    <div id="out" hidden>
-      <div class="kpis" id="kpis"></div>
+    <div class="card">
+      <h2>Active sites per day</h2>
+      <p class="cap">Sites that loaded it each day, last 30 days</p>
+      <div class="chart" id="daily"></div>
+    </div>
+    <div class="grid2">
       <div class="card">
-        <h2>Active sites per day</h2>
-        <p class="cap">Distinct sites that loaded it each day, last 30 days</p>
-        <div class="chart" id="daily"></div>
-      </div>
-      <div class="grid2">
-        <div class="card">
-          <h2>Effects</h2>
-          <p class="cap">Page loads by effect, all time</p>
-          <div class="meters" id="effects"></div>
-        </div>
-        <div class="card">
-          <h2>Versions</h2>
-          <p class="cap">Page loads by library version, all time</p>
-          <div class="meters" id="versions"></div>
-        </div>
+        <h2>Effects</h2>
+        <p class="cap">Page loads by effect, all time</p>
+        <div class="meters" id="effects"></div>
       </div>
       <div class="card">
-        <h2>Sites</h2>
-        <p class="cap">Top 100 by page loads</p>
-        <div style="overflow-x:auto"><table id="sites"></table></div>
+        <h2>Versions</h2>
+        <p class="cap">Page loads by library version, all time</p>
+        <div class="meters" id="versions"></div>
       </div>
     </div>
+    <p class="fine">Counted from the library's anonymous ping: one request per page per effect, with the effect and version. Sites are counted by domain, and no domain is ever shown here. Localhost and this site aren't counted. <a href="/use">Turn it off with <code>telemetry: false</code></a>.</p>
   </main>
 
   <script>
     const $ = (s) => document.querySelector(s);
     const fmt = (n) => Number(n).toLocaleString('en');
-    const date = (t) => (t ? new Date(t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—');
     const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-    let token = '';
-    try { token = localStorage.getItem('wtd-stats-token') || ''; } catch {}
 
-    async function load() {
-      const res = await fetch('/api/stats', { headers: { Authorization: `Bearer ${token}` } });
-      if (res.status === 401) throw new Error('That token isn’t right.');
-      if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || `Error ${res.status}`);
-      return res.json();
-    }
-
-    function tiles(t) {
-      const ret = t.retention28 == null ? '—' : `${Math.round(t.retention28 * 100)}%`;
-      $('#kpis').innerHTML = [
-        ['Sites using it', fmt(t.sites), 'all time'],
-        ['Active this week', fmt(t.active7), `${fmt(t.active30)} in the last 30 days`],
-        ['New this week', fmt(t.new7), 'first load in the last 7 days'],
-        ['Still using it', ret, t.cohort28 ? `of ${fmt(t.cohort28)} sites 4+ weeks old` : 'no sites 4+ weeks old yet'],
-        ['Page loads', fmt(t.loads), 'all time'],
-      ].map(([l, v, n]) => `<div class="tile"><div class="label">${l}</div><div class="value">${v}</div><div class="note">${n}</div></div>`).join('');
+    function figures(t) {
+      const vals = [fmt(t.sites), fmt(t.active7), fmt(t.loads), t.retention28 == null ? '—' : `${Math.round(t.retention28 * 100)}%`];
+      $('#figures').querySelectorAll('.n').forEach((el, i) => { el.textContent = vals[i]; });
+      if (t.retention28 == null) $('#figures').querySelectorAll('.l')[3].textContent = 'still using it after four weeks (once sites are four weeks old)';
     }
 
     function columns(daily) {
@@ -133,12 +105,11 @@
       el.innerHTML = svg + '</svg><div class="tip"></div>';
       const tip = el.querySelector('.tip');
       el.querySelectorAll('rect[data-i]').forEach((r) => {
-        const show = () => {
+        r.addEventListener('pointerenter', () => {
           const d = daily[+r.dataset.i], bx = (+r.getAttribute('x') + slot / 2) / W * el.clientWidth;
-          tip.innerHTML = `${date(d.day)}<br><b>${fmt(d.sites)}</b> sites · ${fmt(d.loads)} loads`;
-          tip.style.left = `${bx}px`; tip.style.top = `${y(d.sites) / H * 220 - 8}px`; tip.style.opacity = 1;
-        };
-        r.addEventListener('pointerenter', show);
+          tip.innerHTML = `${new Date(d.day).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}<br><b>${fmt(d.sites)}</b> sites · ${fmt(d.loads)} loads`;
+          tip.style.left = `${bx}px`; tip.style.top = `${y(d.sites) - 8}px`; tip.style.opacity = 1;
+        });
         r.addEventListener('pointerleave', () => { tip.style.opacity = 0; });
       });
     }
@@ -151,28 +122,13 @@
         : '<p class="empty">Nothing yet.</p>';
     }
 
-    function sites(list) {
-      $('#sites').innerHTML = list.length
-        ? `<thead><tr><th>Site</th><th class="num">Page loads</th><th>First seen</th><th>Last seen</th></tr></thead><tbody>` +
-          list.map((s) => `<tr><td>${s.active7 ? '<span class="dot" title="Active this week"></span>' : ''}<a href="https://${esc(s.site)}" target="_blank" rel="noreferrer noopener">${esc(s.site)}</a></td><td class="num">${fmt(s.loads)}</td><td>${date(s.first)}</td><td>${date(s.last)}</td></tr>`).join('') + '</tbody>'
-        : '<tbody><tr><td class="empty">No sites yet. They appear here once someone runs the library on a live site.</td></tr></tbody>';
-    }
-
-    async function show() {
-      $('#err').hidden = true;
-      try {
-        const d = await load();
-        try { localStorage.setItem('wtd-stats-token', token); } catch {}
-        $('#gate').hidden = true; $('#out').hidden = false;
-        tiles(d.totals); columns(d.daily); meters($('#effects'), d.effects); meters($('#versions'), d.versions); sites(d.sites);
-        addEventListener('resize', () => columns(d.daily));
-      } catch (e) {
-        $('#err').textContent = e.message; $('#err').hidden = false;
-      }
-    }
-
-    $('#gate').addEventListener('submit', (e) => { e.preventDefault(); token = $('#token').value.trim(); show(); });
-    if (token) show();
+    fetch('/api/stats').then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then((d) => {
+      figures(d.totals); columns(d.daily); meters($('#effects'), d.effects); meters($('#versions'), d.versions);
+      addEventListener('resize', () => columns(d.daily));
+    }).catch(() => {
+      $('#figures').querySelectorAll('.n').forEach((el) => { el.textContent = '—'; });
+      $('#daily').innerHTML = '<p class="empty">The numbers couldn’t load right now.</p>';
+    });
   </script>
 </body>
 </html>

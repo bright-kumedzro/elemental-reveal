@@ -1,4 +1,5 @@
-// GET /api/stats: adoption numbers for the dashboard at /stats. Needs the STATS_TOKEN as a bearer token.
+// GET /api/stats: public adoption totals for /stats and /use. Cached at the edge for a few minutes.
+// The list of individual sites is never public; it's only included with the STATS_TOKEN as a bearer token.
 import { timingSafeEqual } from 'node:crypto';
 import { configured, db } from './_db.js';
 
@@ -10,8 +11,12 @@ function authorised(req) {
 }
 
 export async function GET(req) {
-  const headers = { 'Cache-Control': 'no-store', 'Content-Type': 'application/json' };
-  if (!authorised(req)) return new Response(JSON.stringify({ error: 'unauthorised' }), { status: 401, headers });
+  const owner = authorised(req);
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Cache-Control': owner ? 'no-store' : 'public, s-maxage=300, stale-while-revalidate=600',
+  };
   if (!configured) return new Response(JSON.stringify({ error: 'database not connected' }), { status: 503, headers });
 
   const sql = await db();
@@ -36,12 +41,11 @@ export async function GET(req) {
       group by d order by d`,
     sql`select effect as k, sum(loads)::int as v from wtd_daily group by effect`,
     sql`select version as k, sum(loads)::int as v from wtd_daily group by version`,
-    sql`
+    owner ? sql`
       select s.site, s.loads::int as loads,
              extract(epoch from s.first_seen) * 1000 as first,
-             extract(epoch from s.last_seen) * 1000 as last,
-             exists(select 1 from wtd_daily w where w.site = s.site and w.day > current_date - 7) as active7
-      from wtd_sites s order by s.loads desc limit 100`,
+             extract(epoch from s.last_seen) * 1000 as last
+      from wtd_sites s order by s.loads desc limit 100` : Promise.resolve(null),
   ]);
 
   const kv = (rows) => Object.fromEntries(rows.map((r) => [r.k, r.v]));
@@ -55,6 +59,6 @@ export async function GET(req) {
     daily,
     effects: kv(effects),
     versions: kv(versions),
-    sites: sites.map((s) => ({ ...s, first: Number(s.first), last: Number(s.last) })),
+    ...(sites ? { sites: sites.map((s) => ({ ...s, first: Number(s.first), last: Number(s.last) })) } : {}),
   }), { status: 200, headers });
 }

@@ -57,7 +57,7 @@ The element needs a size. Anything you put inside it stays on top of the effect,
 
 ## Telemetry
 
-So I can see whether anyone uses this, the library sends one tiny request per page per effect to `weather-the-draft.vercel.app/api/ping`. It contains the effect name and the library version. The server records your site's domain from the request's `Origin` header. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. Turn it off with `telemetry: false`.
+So I can see whether anyone uses this, the library sends one tiny request per page per effect to `weather-the-draft.vercel.app/api/ping`. It contains the effect name and the library version. The server records your site's domain from the request's `Origin` header. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. The totals are public at [weather-the-draft.vercel.app/stats](https://weather-the-draft.vercel.app/stats); no domain is ever shown. Turn it off with `telemetry: false`.
 
 ## Credit
 
@@ -91,7 +91,7 @@ vercel deploy --prod
 
 `?capture=<effect>&p=<progress>&t=<ms>` shows one chapter full screen on a virtual clock. For fire, `&comet=<ms>` places the comet partway through its flight. `window.__capture.prime(p, t)` and `window.__capture.frame(p, t, 0)` render frame by frame, which is how the covers and card loops are made.
 
-`/api/ping` records adoption in Neon Postgres (connected through the Vercel Marketplace, free plan). `/stats` shows it, behind the `STATS_TOKEN` environment variable.
+`/api/ping` records adoption in Neon Postgres (connected through the Vercel Marketplace, free plan). `/stats` shows the public totals. The list of individual sites is only returned by `/api/stats` with the `STATS_TOKEN` environment variable as a bearer token.
 
 burn-the-draft.vercel.app redirects to `/fire`.
 
