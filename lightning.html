@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Strike the draft · Bright Kumedzro</title>
+  <meta name="description" content="Lightning strikes a pencil wireframe and the finished design spreads out from every bolt. Click to call down your own.">
+  <meta name="theme-color" content="#0b0b0c">
+  <link rel="canonical" href="https://weather-the-draft.vercel.app/lightning">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://weather-the-draft.vercel.app/lightning">
+  <meta property="og:title" content="Strike the draft">
+  <meta property="og:description" content="Lightning strikes a pencil wireframe and the finished design spreads out from every bolt. Click to call down your own.">
+  <meta property="og:image" content="https://weather-the-draft.vercel.app/og/lightning.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://weather-the-draft.vercel.app/og/lightning.png">
+  <link rel="icon" href="/bk-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/js/main.js"></script>
+</head>
+<body>
+  <main>
+    <section id="lightning" class="track" data-el="lightning" aria-label="Lightning. Scroll to strike the wireframe and reveal the finished design. Contains brief flashes."></section>
+
+    <section class="after" style="--c:#a78bfa">
+      <p class="eyebrow">Playground · Weather the draft</p>
+      <h1>Strike the draft</h1>
+      <p>Four bolts grow as branching random walks, and each one gets its own distance field. When your scroll reaches a bolt, it strikes.</p>
+      <p>The bolt flashes, and the reveal spreads out from the channel it burned.</p>
+      <p>Click the paper to call down your own bolt. Scroll back up and the draft comes back.</p>
+      <div class="actions">
+        <button id="again" class="btn primary" type="button">Run it again</button>
+        <a class="btn" href="/">All five in a row</a>
+        <a class="btn" href="/use">Use it in your project</a>
+        <a class="btn" href="https://www.brightkumedzro.com/playground">More on the playground</a>
+      </div>
+      <p class="others-label">The other elements</p>
+      <nav class="chapters" aria-label="The other elements">
+        <a href="/fire" style="--c:#ff7a1a"><span>01</span>Fire</a>
+        <a href="/water" style="--c:#2dd4bf"><span>02</span>Water</a>
+        <a href="/air" style="--c:#a5b4fc"><span>03</span>Air</a>
+        <a href="/earth" style="--c:#e9a85a"><span>04</span>Earth</a>
+      </nav>
+      <p class="small">Raw WebGL2 and canvas, no libraries. Without WebGL2 it falls back to a wipe. With reduced motion on it cross-fades instead, with no flashes.</p>
+      <p class="small foot">© 2026 Bright Kumedzro</p>
+    </section>
+  </main>
+</body>
+</html>

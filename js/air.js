@@ -15,7 +15,7 @@ function fleck(ch, x, y, vx, vy) {
 
 const air = {
   id: 'air',
-  num: '02',
+  num: '03',
   label: 'Air',
   hud: 'Draft blown away',
   hint: 'Scroll to blow the draft away',

@@ -1,0 +1,38 @@
+{
+  "name": "weather-the-draft",
+  "version": "0.1.0",
+  "description": "Five scroll-driven WebGL2 reveals (fire, water, air, earth, lightning) between any two images. No dependencies.",
+  "type": "module",
+  "main": "js/lib.js",
+  "module": "js/lib.js",
+  "exports": {
+    ".": "./js/lib.js"
+  },
+  "files": [
+    "js/lib.js",
+    "js/core.js",
+    "js/fire.js",
+    "js/water.js",
+    "js/air.js",
+    "js/earth.js",
+    "js/lightning.js"
+  ],
+  "keywords": [
+    "webgl",
+    "webgl2",
+    "shader",
+    "reveal",
+    "scroll",
+    "fire",
+    "water",
+    "transition",
+    "effect"
+  ],
+  "author": "Bright Kumedzro",
+  "license": "MIT",
+  "homepage": "https://weather-the-draft.vercel.app/use",
+  "scripts": {
+    "pages": "node scripts/pages.mjs",
+    "serve": "python -m http.server 5179"
+  }
+}

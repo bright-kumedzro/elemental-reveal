@@ -690,7 +690,7 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
       document.fonts.load(`800 64px "Plus Jakarta Sans"`), document.fonts.load(`700 15px "Plus Jakarta Sans"`),
       document.fonts.load(`400 16px "Plus Jakarta Sans"`), document.fonts.load('700 40px Caveat'), document.fonts.load('500 24px Caveat'),
     ]).catch(() => {});
-    const img = new Promise((res) => { const im = new Image(); im.onload = () => { mark = im; res(); }; im.onerror = res; im.src = 'bk-mark.png'; });
+    const img = new Promise((res) => { const im = new Image(); im.onload = () => { mark = im; res(); }; im.onerror = res; im.src = '/bk-mark.png'; });
     await Promise.race([Promise.all([fonts, img]), new Promise((r) => setTimeout(r, 2500))]);
 
     if (capture) {
@@ -728,11 +728,16 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
     if (capture) {
       const ch = chapters.find((c) => c.el.id === capture) || chapters[0];
       window.__capture = {
+        ch,
+        /* Let the element set up state it would normally build over time (e.g. the comet having landed). */
+        prime(pv, tMs) { ch.el.prime?.(ch, tMs, pv, params); },
+        /* Render at progress pv, time tMs. steps > 0 adds a short run-up so particles and strikes exist;
+           steps = 0 renders one frame, for frame-by-frame video. */
         frame(pv, tMs, steps = 24) {
           frozen = true; if (raf) cancelAnimationFrame(raf); raf = 0;
           chapters.forEach((c) => { c.visible = c === ch; });
           ch.near = true; if (!ch.tex) ch.paint();
-          for (let i = steps; i >= 0; i--) {             // a short run-up so particles and strikes exist
+          for (let i = steps; i >= 0; i--) {
             const pt = Math.max(0, pv - i * 0.003);
             ch.pTarget = pt; ch.p = pt;
             drawAll(1 / 30, tMs - i * 33);
@@ -741,7 +746,9 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
         fire(u, v, p0, bornMs) { ch.seeds.push({ u, v, p0, born: bornMs }); },
       };
       if (params.has('p')) {
-        window.__capture.frame(parseFloat(params.get('p')), parseFloat(params.get('t') || '4000'));
+        const pv = Number(params.get('p')), tMs = Number(params.get('t') || '4000');
+        window.__capture.prime(pv, tMs - 800);
+        window.__capture.frame(pv, tMs);
         window.__captured = true;
       }
     }

@@ -114,7 +114,7 @@ function sample(S, arr, u, v, c) {
 
 const lightning = {
   id: 'lightning',
-  num: '04',
+  num: '05',
   label: 'Lightning',
   hud: 'Draft struck',
   hint: 'Scroll to strike the draft',

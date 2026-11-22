@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Use it in your project · Weather the draft</title>
+  <meta name="description" content="Drop any of the five Weather the draft reveals into your own page: fire, water, air, earth or lightning, between any two images. One import, no dependencies.">
+  <meta name="theme-color" content="#0b0b0c">
+  <link rel="canonical" href="https://weather-the-draft.vercel.app/use">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Weather the draft: use it in your project">
+  <meta property="og:description" content="Fire, water, air, earth or lightning between any two images. One import, no dependencies.">
+  <meta property="og:image" content="https://weather-the-draft.vercel.app/og/weather.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/bk-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .docs { max-width: 860px; margin: 0 auto; padding: 72px 16px 80px; }
+    .docs .back { display: inline-block; margin-bottom: 40px; }
+    .docs p, .docs li { color: #d4d4d8; }
+    .docs h2 { font-size: clamp(24px, 4vw, 32px); margin: 64px 0 16px; letter-spacing: -.02em; }
+    .demo { position: relative; aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: #111; cursor: crosshair; touch-action: pan-y; }
+    .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 16px 0 0; }
+    .seg { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+    .seg button {
+      font: 600 14px/1 "Plus Jakarta Sans", system-ui, sans-serif; color: var(--ink); background: transparent;
+      border: 1px solid #2e2e33; border-radius: 999px; padding: 10px 14px; cursor: pointer;
+    }
+    .seg button[aria-pressed="true"] { background: var(--ink); color: #0b0b0c; border-color: var(--ink); }
+    .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .slider { display: flex; align-items: center; gap: 10px; flex: 1 1 220px; color: var(--soft); font-size: 13px; }
+    .slider input { flex: 1; accent-color: var(--accent); }
+    .hintline { color: var(--soft); font-size: 13px; margin-top: 10px; }
+    pre {
+      background: #111114; border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; overflow-x: auto;
+      font: 13.5px/1.65 "JetBrains Mono", ui-monospace, monospace; color: #e4e4e7; margin: 16px 0;
+    }
+    code { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: .92em; }
+    p code, li code, td code { background: #17171a; border: 1px solid #26262b; border-radius: 6px; padding: 1px 6px; }
+    .k { color: #c4b5fd; } .s { color: #86efac; } .c { color: #71717a; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+    th, td { text-align: left; vertical-align: top; padding: 12px 10px; border-bottom: 1px solid var(--line); color: #d4d4d8; }
+    th { color: var(--soft); font-weight: 600; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    td:first-child { white-space: nowrap; }
+    .table-wrap { overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <main class="docs">
+    <a class="pill back" href="/">← Weather the draft</a>
+    <p class="eyebrow">Weather the draft · Library</p>
+    <h1>Use it in your project</h1>
+    <p class="lede">Any of the five effects, between any two images: a sketch and the final design, a before and an after, a photo and its edit. One import, no dependencies.</p>
+
+    <div id="demo" class="demo" role="img" aria-label="Live demo: the sketch is taken away by the chosen effect to reveal the finished design."></div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Effect">
+        <button type="button" data-effect="fire" aria-pressed="true">Fire</button>
+        <button type="button" data-effect="water" aria-pressed="false">Water</button>
+        <button type="button" data-effect="air" aria-pressed="false">Air</button>
+        <button type="button" data-effect="earth" aria-pressed="false">Earth</button>
+        <button type="button" data-effect="lightning" aria-pressed="false">Lightning</button>
+      </div>
+      <label class="slider">Progress <input id="p" type="range" min="0" max="1" step="0.001" value="0"></label>
+    </div>
+    <p class="hintline">Drag the slider, or press play. Click the image to throw fire, spill water, send a gust, start a quake or call down a bolt.
+      <button id="play" class="btn" type="button" style="padding:8px 14px;font-size:13px;margin-left:6px">Play</button></p>
+
+    <h2>Add it</h2>
+    <p>Give an element a size, then call <code>reveal</code> on it with the two images.</p>
+<pre><span class="c">&lt;!-- the effect fills this box; anything you put inside stays on top --&gt;</span>
+&lt;div id="hero" style="height: 80vh"&gt;&lt;/div&gt;
+
+&lt;script type="module"&gt;
+  <span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'https://weather-the-draft.vercel.app/js/lib.js'</span>;
+
+  reveal(<span class="s">'#hero'</span>, {
+    effect: <span class="s">'water'</span>,          <span class="c">// fire · water · air · earth · lightning</span>
+    from: <span class="s">'/sketch.png'</span>,      <span class="c">// what gets taken away</span>
+    to: <span class="s">'/final.png'</span>,        <span class="c">// what's revealed</span>
+  });
+&lt;/script&gt;</pre>
+    <p>By default it follows the scroll: the reveal runs as the element rises through the screen. Images from another domain need CORS headers, or they can't be drawn into WebGL.</p>
+
+    <h2>Three ways to drive it</h2>
+<pre><span class="c">// 1. Scroll (default). Or pin it in a tall wrapper, like the chapters on this site:</span>
+reveal(<span class="s">'#stage'</span>, { effect: <span class="s">'fire'</span>, from, to, track: <span class="s">'#tall-wrapper'</span> });
+<span class="c">//    #tall-wrapper { height: 400vh }   #stage { position: sticky; top: 0; height: 100vh }</span>
+
+<span class="c">// 2. Plays once when it comes into view</span>
+reveal(<span class="s">'#card'</span>, { effect: <span class="s">'lightning'</span>, from, to, progress: <span class="s">'auto'</span>, duration: <span class="s">3000</span> });
+
+<span class="c">// 3. You set it: a slider, a video's currentTime, a step in a form…</span>
+<span class="k">const</span> fx = reveal(<span class="s">'#box'</span>, { effect: <span class="s">'earth'</span>, from, to, progress: <span class="s">'manual'</span> });
+fx.progress(<span class="s">0.5</span>);</pre>
+
+    <h2>Options</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Option</th><th>Default</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><code>effect</code></td><td><code>'fire'</code></td><td><code>'fire'</code>, <code>'water'</code>, <code>'air'</code>, <code>'earth'</code> or <code>'lightning'</code>.</td></tr>
+          <tr><td><code>from</code></td><td>required</td><td>What gets taken away: an image URL, or an <code>&lt;img&gt;</code>, <code>&lt;canvas&gt;</code> or <code>&lt;video&gt;</code>.</td></tr>
+          <tr><td><code>to</code></td><td>required</td><td>What's revealed underneath. Same types as <code>from</code>.</td></tr>
+          <tr><td><code>progress</code></td><td><code>'scroll'</code></td><td><code>'scroll'</code> follows the page, <code>'auto'</code> plays once when it comes into view, and <code>'manual'</code> waits for <code>fx.progress(p)</code>.</td></tr>
+          <tr><td><code>track</code></td><td>none</td><td>Scroll mode: a tall wrapper the element is pinned inside. Progress runs from the wrapper's top reaching the top of the screen to its bottom reaching the bottom.</td></tr>
+          <tr><td><code>duration</code></td><td><code>3500</code></td><td>Auto mode: how long it takes, in milliseconds.</td></tr>
+          <tr><td><code>interactive</code></td><td><code>true</code></td><td>Hover and click effects.</td></tr>
+          <tr><td><code>fit</code></td><td><code>'cover'</code></td><td>How the images fill the element: <code>'cover'</code>, <code>'contain'</code> or <code>'fill'</code>, like CSS <code>object-fit</code>.</td></tr>
+          <tr><td><code>background</code></td><td><code>'#0b0b0c'</code></td><td>Shown behind images that don't fill the element.</td></tr>
+          <tr><td><code>onProgress</code></td><td>none</td><td>Called every frame with progress from 0 to 1. The draft is gone by about 0.9.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>What you get back</h2>
+<pre><span class="k">const</span> fx = reveal(…);
+<span class="k">await</span> fx.ready;      <span class="c">// both images loaded, first frame drawn</span>
+fx.progress();       <span class="c">// read progress</span>
+fx.progress(<span class="s">0.3</span>);    <span class="c">// set it (switches to manual)</span>
+fx.play();           <span class="c">// run it from the start over `duration`</span>
+fx.reset();          <span class="c">// put the draft back and clear clicks</span>
+fx.destroy();        <span class="c">// remove the canvases and listeners</span></pre>
+
+    <h2>Good to know</h2>
+    <ul>
+      <li>Each call gets its own WebGL2 canvas. Browsers cap how many can run at once (often around 16), so a few per page is fine. Call <code>destroy()</code> on ones you're done with.</li>
+      <li>Without WebGL2 it falls back to a wipe. With reduced motion turned on, it cross-fades, so lightning doesn't flash.</li>
+      <li>Anything inside the element stays on top of the effect, so it works as a background behind your own headline or buttons.</li>
+    </ul>
+    <p class="small" style="color:var(--soft);margin-top:48px">© 2026 Bright Kumedzro · <a href="/" style="color:var(--accent)">weather-the-draft.vercel.app</a></p>
+  </main>
+
+  <script type="module">
+    import { reveal } from '/js/lib.js';
+    const slider = document.querySelector('#p');
+    let fx;
+    function make(effect) {
+      fx?.destroy();
+      fx = reveal('#demo', {
+        effect, from: '/demo/sketch.jpg', to: '/demo/final.jpg', progress: 'manual', duration: 4500,
+        onProgress: (p) => { if (document.activeElement !== slider) slider.value = p; },
+      });
+      fx.progress(Number(slider.value));
+    }
+    for (const b of document.querySelectorAll('[data-effect]')) {
+      b.addEventListener('click', () => {
+        document.querySelectorAll('[data-effect]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        slider.value = 0;
+        make(b.dataset.effect);
+      });
+    }
+    slider.addEventListener('input', () => fx.progress(Number(slider.value)));
+    document.querySelector('#play').addEventListener('click', () => fx.play());
+    make('fire');
+  </script>
+</body>
+</html>
