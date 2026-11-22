@@ -33,6 +33,13 @@
   "author": "Bright Kumedzro",
   "license": "MIT",
   "homepage": "https://weather-the-draft.vercel.app/use",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bright-kumedzro/weather-the-draft.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bright-kumedzro/weather-the-draft/issues"
+  },
   "scripts": {
     "pages": "node scripts/pages.mjs",
     "serve": "python -m http.server 5179"
