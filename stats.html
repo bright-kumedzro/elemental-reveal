@@ -26,7 +26,8 @@
     .tile .note { color: var(--muted); font-size: 12px; margin-top: 2px; }
     .card { background: var(--surface); border: 1px solid var(--grid); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
     .card h2 { font-size: 15px; font-weight: 600; margin: 0 0 2px; letter-spacing: 0; }
-    .card .hint { color: var(--muted); font-size: 12px; margin: 0 0 16px; }
+    .card .cap { color: var(--muted); font-size: 12px; margin: 0 0 16px; }
+    [hidden] { display: none !important; }
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     @media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
     .chart { position: relative; }
@@ -66,24 +67,24 @@
       <div class="kpis" id="kpis"></div>
       <div class="card">
         <h2>Active sites per day</h2>
-        <p class="hint">Distinct sites that loaded it each day, last 30 days</p>
+        <p class="cap">Distinct sites that loaded it each day, last 30 days</p>
         <div class="chart" id="daily"></div>
       </div>
       <div class="grid2">
         <div class="card">
           <h2>Effects</h2>
-          <p class="hint">Page loads by effect, all time</p>
+          <p class="cap">Page loads by effect, all time</p>
           <div class="meters" id="effects"></div>
         </div>
         <div class="card">
           <h2>Versions</h2>
-          <p class="hint">Page loads by library version, all time</p>
+          <p class="cap">Page loads by library version, all time</p>
           <div class="meters" id="versions"></div>
         </div>
       </div>
       <div class="card">
         <h2>Sites</h2>
-        <p class="hint">Top 100 by page loads</p>
+        <p class="cap">Top 100 by page loads</p>
         <div style="overflow-x:auto"><table id="sites"></table></div>
       </div>
     </div>
@@ -116,7 +117,7 @@
     }
 
     function columns(daily) {
-      const el = $('#daily'), W = el.clientWidth || 800, H = 220, padL = 32, padB = 22, padT = 8;
+      const el = $('#daily'), W = el.clientWidth || 800, H = 220, padL = 32, padB = 22, padT = 14;
       const max = Math.max(1, ...daily.map((d) => d.sites));
       const step = Math.max(1, Math.ceil(max / 4)), top = step * 4;
       const slot = (W - padL) / daily.length, bw = Math.min(24, slot - 2);
@@ -127,7 +128,7 @@
         const x = padL + i * slot + (slot - bw) / 2, h = H - padB - y(d.sites), r = Math.min(4, h / 2, bw / 2);
         if (d.sites > 0) svg += `<path d="M${x},${H - padB} v${-(h - r)} q0,${-r} ${r},${-r} h${bw - 2 * r} q${r},0 ${r},${r} v${h - r} z" fill="var(--mark)"/>`;
         svg += `<rect data-i="${i}" x="${padL + i * slot}" y="${padT}" width="${slot}" height="${H - padT}" fill="transparent"/>`;
-        if (i % 7 === 0 || i === daily.length - 1) svg += `<text class="axis" x="${x + bw / 2}" y="${H - 6}" text-anchor="middle">${new Date(d.day).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</text>`;
+        if ((daily.length - 1 - i) % 7 === 0) svg += `<text class="axis" x="${x + bw / 2}" y="${H - 6}" text-anchor="middle">${new Date(d.day).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</text>`;
       });
       el.innerHTML = svg + '</svg><div class="tip"></div>';
       const tip = el.querySelector('.tip');
