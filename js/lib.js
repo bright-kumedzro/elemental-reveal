@@ -1,10 +1,10 @@
-/* Weather the draft, as a drop-in library.
+/* Elemental Reveal, as a drop-in library.
 
    reveal(target, { effect, from, to, … }) turns any element into a reveal: `from` (an image, canvas or video) is
    burned, washed, blown, broken or struck away to show `to` underneath. Progress can follow scroll, play on its
    own when the element comes into view, or be set by you.
 
-     import { reveal } from 'https://weather-the-draft.vercel.app/js/lib.js';
+     import { reveal } from 'https://elemental-reveal.vercel.app/js/lib.js';
      const fx = reveal('#hero', { effect: 'water', from: '/sketch.png', to: '/final.png' });
 
    Each call gets its own canvas inside the target. No dependencies, no build step. */
@@ -22,14 +22,14 @@ export const VERSION = '0.1.0';
    effects. It sends only the effect name and the library version; the server reads the site's domain from the
    request's Origin header. No cookies, nothing about visitors. Skipped on localhost. Turn it off with
    { telemetry: false }. */
-const PING = 'https://weather-the-draft.vercel.app/api/ping';
+const PING = 'https://elemental-reveal.vercel.app/api/ping';
 const pinged = new Set();
 function ping(effect) {
   if (pinged.has(effect)) return;
   pinged.add(effect);
   try {
     const h = location.hostname;
-    if (!h || h === 'localhost' || h.endsWith('.local') || /^[\d.]+$|^\[/.test(h) || h === 'weather-the-draft.vercel.app') return;
+    if (!h || h === 'localhost' || h.endsWith('.local') || /^[\d.]+$|^\[/.test(h) || h === 'elemental-reveal.vercel.app' || h === 'weather-the-draft.vercel.app') return;
     navigator.sendBeacon?.(PING, JSON.stringify({ e: effect, v: VERSION }));
   } catch { /* never let the ping affect the page */ }
 }
@@ -37,7 +37,7 @@ let credited = false;
 function credit() {
   if (credited || typeof console === 'undefined') return;
   credited = true;
-  console.info(`%cweather-the-draft ${VERSION}%c by Bright Kumedzro · https://weather-the-draft.vercel.app`, 'font-weight:600', 'color:#888');
+  console.info(`%celemental-reveal ${VERSION}%c by Bright Kumedzro · https://elemental-reveal.vercel.app`, 'font-weight:600', 'color:#888');
 }
 
 const VS = `#version 300 es
@@ -50,7 +50,7 @@ function load(src) {
     return new Promise((res, rej) => {
       const im = new Image();
       im.crossOrigin = 'anonymous';
-      im.onload = () => res(im); im.onerror = () => rej(new Error(`weather-the-draft: could not load ${src}`));
+      im.onload = () => res(im); im.onerror = () => rej(new Error(`elemental-reveal: could not load ${src}`));
       im.src = src;
     });
   }
@@ -81,7 +81,7 @@ function fitInto(c, src, w, h, fit, bg) {
  *        manual: you drive it with fx.progress(p)
  * @param {HTMLElement|string} [o.track]  scroll mode only: a tall wrapper the target is pinned inside
  *        (position: sticky). Progress then runs from the wrapper's top reaching the top of the viewport to
- *        its bottom reaching the bottom, like the chapters on weather-the-draft.vercel.app.
+ *        its bottom reaching the bottom, like the chapters on elemental-reveal.vercel.app.
  * @param {number} [o.duration=3500]  auto mode: how long it takes, ms
  * @param {boolean} [o.interactive=true]  hover and click effects (throw fire, spill water, gusts, quakes, bolts)
  * @param {'cover'|'contain'|'fill'} [o.fit='cover']  how the images fill the target
@@ -94,9 +94,9 @@ function fitInto(c, src, w, h, fit, bg) {
  */
 export function reveal(target, o = {}) {
   const host = typeof target === 'string' ? document.querySelector(target) : target;
-  if (!host) throw new Error(`weather-the-draft: no element matches ${target}`);
+  if (!host) throw new Error(`elemental-reveal: no element matches ${target}`);
   const el = effects[o.effect || 'fire'];
-  if (!el) throw new Error(`weather-the-draft: unknown effect "${o.effect}". Use one of ${Object.keys(effects).join(', ')}.`);
+  if (!el) throw new Error(`elemental-reveal: unknown effect "${o.effect}". Use one of ${Object.keys(effects).join(', ')}.`);
   let mode = o.progress || 'scroll';
   const fit = o.fit || 'cover', bg = o.background || '#0b0b0c';
   const interactive = o.interactive !== false;

@@ -1,4 +1,4 @@
-/* Weather the draft: the shared engine.
+/* Elemental Reveal: the shared engine.
    Four chapters (water, air, earth, lightning) each take a pencil wireframe apart and leave the finished design.
    Every chapter paints the same two drawings from one layout (the draft on paper, the final on dark) and uploads
    them as textures. One fixed WebGL2 canvas sits behind the page; each frame, every chapter on screen is drawn into

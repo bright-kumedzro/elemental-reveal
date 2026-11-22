@@ -1,17 +1,17 @@
-# Weather the draft
+# Elemental Reveal
 
 Five WebGL2 reveals between any two images: **fire, water, air, earth and lightning**. Each one takes the first image apart in its own way and leaves the second underneath. Drive it with scroll, let it play on its own, or set the progress yourself. No dependencies.
 
-**Live demo and docs:** https://weather-the-draft.vercel.app/use · **See all five:** https://weather-the-draft.vercel.app
+**Live demo and docs:** https://elemental-reveal.vercel.app/use · **See all five:** https://elemental-reveal.vercel.app
 
 ## Install
 
 ```sh
-npm install weather-the-draft
+npm install @brightkumedzro/elemental-reveal
 ```
 
 ```js
-import { reveal } from 'weather-the-draft';
+import { reveal } from '@brightkumedzro/elemental-reveal';
 
 reveal('#hero', { effect: 'water', from: '/sketch.png', to: '/final.png' });
 ```
@@ -21,7 +21,7 @@ Or with no build step, straight from a CDN. Pin the version so updates never cha
 ```html
 <div id="hero" style="height: 80vh"></div>
 <script type="module">
-  import { reveal } from 'https://cdn.jsdelivr.net/npm/weather-the-draft@0.1/js/lib.js';
+  import { reveal } from 'https://cdn.jsdelivr.net/npm/@brightkumedzro/elemental-reveal@0.1/js/lib.js';
   reveal('#hero', { effect: 'fire', from: '/sketch.png', to: '/final.png' });
 </script>
 ```
@@ -57,11 +57,11 @@ The element needs a size. Anything you put inside it stays on top of the effect,
 
 ## Telemetry
 
-So I can see whether anyone uses this, the library sends one tiny request per page per effect to `weather-the-draft.vercel.app/api/ping`. It contains the effect name and the library version. The server records your site's domain from the request's `Origin` header. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. The totals are public at [weather-the-draft.vercel.app/stats](https://weather-the-draft.vercel.app/stats); no domain is ever shown. Turn it off with `telemetry: false`.
+So I can see whether anyone uses this, the library sends one tiny request per page per effect to `elemental-reveal.vercel.app/api/ping`. It contains the effect name and the library version. The server records your site's domain from the request's `Origin` header. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. The totals are public at [elemental-reveal.vercel.app/stats](https://elemental-reveal.vercel.app/stats); no domain is ever shown. Turn it off with `telemetry: false`.
 
 ## Credit
 
-MIT licensed, so use it anywhere. Keeping the copyright notice in the code is the only requirement. If it helps your project, a link back to [weather-the-draft.vercel.app](https://weather-the-draft.vercel.app) is appreciated, never required.
+MIT licensed, so use it anywhere. Keeping the copyright notice in the code is the only requirement. If it helps your project, a link back to [elemental-reveal.vercel.app](https://elemental-reveal.vercel.app) is appreciated, never required.
 
 ---
 

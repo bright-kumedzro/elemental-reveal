@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Use it in your project · Weather the draft</title>
-  <meta name="description" content="Drop any of the five Weather the draft reveals into your own page: fire, water, air, earth or lightning, between any two images. One import, no dependencies.">
+  <title>Use it in your project · Elemental Reveal</title>
+  <meta name="description" content="Drop any of the five Elemental Reveal reveals into your own page: fire, water, air, earth or lightning, between any two images. One import, no dependencies.">
   <meta name="theme-color" content="#0b0b0c">
-  <link rel="canonical" href="https://weather-the-draft.vercel.app/use">
+  <link rel="canonical" href="https://elemental-reveal.vercel.app/use">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Weather the draft: use it in your project">
+  <meta property="og:title" content="Elemental Reveal: use it in your project">
   <meta property="og:description" content="Fire, water, air, earth or lightning between any two images. One import, no dependencies.">
-  <meta property="og:image" content="https://weather-the-draft.vercel.app/og/weather.png">
+  <meta property="og:image" content="https://elemental-reveal.vercel.app/og/elemental.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/bk-mark.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,8 +56,8 @@
 </head>
 <body>
   <main class="docs">
-    <a class="pill back" href="/">← Weather the draft</a>
-    <p class="eyebrow">Weather the draft · Library</p>
+    <a class="pill back" href="/">← Elemental Reveal</a>
+    <p class="eyebrow">Elemental Reveal · Library</p>
     <h1>Use it in your project</h1>
     <p class="lede">Any of the five effects, between any two images: a sketch and the final design, a before and an after, a photo and its edit. One import, no dependencies.</p>
 
@@ -83,13 +83,13 @@
 
     <h2>Add it</h2>
     <p>Install it from npm, or import it straight from a CDN with no build step. Give an element a size, then call <code>reveal</code> on it with the two images.</p>
-<pre>npm install weather-the-draft</pre>
+<pre>npm install @brightkumedzro/elemental-reveal</pre>
 <pre><span class="c">&lt;!-- the effect fills this box; anything you put inside stays on top --&gt;</span>
 &lt;div id="hero" style="height: 80vh"&gt;&lt;/div&gt;
 
 &lt;script type="module"&gt;
-  <span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'https://cdn.jsdelivr.net/npm/weather-the-draft@0.1/js/lib.js'</span>;
-  <span class="c">// or, after npm install: import { reveal } from 'weather-the-draft';</span>
+  <span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'https://cdn.jsdelivr.net/npm/@brightkumedzro/elemental-reveal@0.1/js/lib.js'</span>;
+  <span class="c">// or, after npm install: import { reveal } from '@brightkumedzro/elemental-reveal';</span>
 
   reveal(<span class="s">'#hero'</span>, {
     effect: <span class="s">'water'</span>,          <span class="c">// fire · water · air · earth · lightning</span>
@@ -153,8 +153,8 @@ fx.destroy();        <span class="c">// remove the canvases and listeners</span>
     <p>So I can see whether anyone uses this, the library sends one tiny request per page per effect. It contains the effect name and the library version. The server records your site's domain from the request itself. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. The totals are public at <a href="/stats" style="color:var(--accent)">/stats</a>; no domain is ever shown. Turn it off with <code>telemetry: false</code>.</p>
 
     <h2>License and credit</h2>
-    <p>MIT licensed: use it in anything, commercial or not. Keeping the copyright notice in the code is the only requirement. If it helps your project, a link back to <a href="/" style="color:var(--accent)">weather-the-draft.vercel.app</a> is appreciated, never required.</p>
-    <p class="small" style="color:var(--soft);margin-top:48px">© 2026 Bright Kumedzro · <a href="/" style="color:var(--accent)">weather-the-draft.vercel.app</a></p>
+    <p>MIT licensed: use it in anything, commercial or not. Keeping the copyright notice in the code is the only requirement. If it helps your project, a link back to <a href="/" style="color:var(--accent)">elemental-reveal.vercel.app</a> is appreciated, never required.</p>
+    <p class="small" style="color:var(--soft);margin-top:48px">© 2026 Bright Kumedzro · <a href="/" style="color:var(--accent)">elemental-reveal.vercel.app</a></p>
   </main>
 
   <script type="module">

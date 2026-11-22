@@ -1,5 +1,5 @@
 {
-  "name": "weather-the-draft",
+  "name": "@brightkumedzro/elemental-reveal",
   "version": "0.1.0",
   "description": "Five scroll-driven WebGL2 reveals (fire, water, air, earth, lightning) between any two images. No dependencies.",
   "type": "module",
@@ -32,19 +32,22 @@
   ],
   "author": "Bright Kumedzro",
   "license": "MIT",
-  "homepage": "https://weather-the-draft.vercel.app/use",
+  "homepage": "https://elemental-reveal.vercel.app/use",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bright-kumedzro/weather-the-draft.git"
+    "url": "git+https://github.com/bright-kumedzro/elemental-reveal.git"
   },
   "bugs": {
-    "url": "https://github.com/bright-kumedzro/weather-the-draft/issues"
+    "url": "https://github.com/bright-kumedzro/elemental-reveal/issues"
   },
   "scripts": {
     "pages": "node scripts/pages.mjs",
     "serve": "python -m http.server 5179"
   },
   "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@neondatabase/serverless": "^1.2.1"
   }

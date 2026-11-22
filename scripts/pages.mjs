@@ -3,7 +3,7 @@
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-const SITE = 'https://weather-the-draft.vercel.app';
+const SITE = 'https://elemental-reveal.vercel.app';
 const PLAYGROUND = 'https://www.brightkumedzro.com/playground';
 const root = fileURLToPath(new URL('..', import.meta.url));
 
@@ -104,11 +104,11 @@ const chip = (e, href) => `<a href="${href}" style="--c:${e.color}"><span>${e.nu
 const smallPrint = 'Raw WebGL2 and canvas, no libraries. Without WebGL2 it falls back to a wipe. With reduced motion on it cross-fades instead, with no flashes.';
 
 /* All five, one after another */
-const index = `${head({ title: 'Weather the draft', description: 'Five scroll-driven WebGL reveals. Fire, water, air, earth and lightning each take a pencil wireframe apart and leave the finished design.', path: '/', image: 'weather' })}
+const index = `${head({ title: 'Elemental Reveal', description: 'Five scroll-driven WebGL reveals. Fire, water, air, earth and lightning each take a pencil wireframe apart and leave the finished design.', path: '/', image: 'elemental' })}
     <header class="intro">
       <a class="pill back" href="${PLAYGROUND}">← Playground</a>
       <p class="eyebrow">Playground · Experiment</p>
-      <h1>Weather the draft</h1>
+      <h1>Elemental Reveal</h1>
       <p class="lede">Five elements, one pencil sketch. Fire, water, air, earth and lightning each take the same wireframe apart in their own way and leave the finished design behind.</p>
       <nav class="chapters" aria-label="Chapters">
         ${ELEMENTS.map((e) => chip(e, `#${e.id}`)).join('\n        ')}
@@ -145,7 +145,7 @@ for (const e of ELEMENTS) {
 ${track(e)}
 
     <section class="after" style="--c:${e.color}">
-      <p class="eyebrow">Playground · Weather the draft</p>
+      <p class="eyebrow">Playground · Elemental Reveal</p>
       <h1>${e.name}</h1>
 ${e.body.map((p) => `      <p>${p}</p>`).join('\n')}
       <p>${e.play} Scroll back up and the draft comes back.</p>
