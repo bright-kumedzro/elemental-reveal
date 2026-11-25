@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Use it in your project · Elemental Reveal</title>
-  <meta name="description" content="Drop any of the five Elemental Reveal reveals into your own page: fire, water, air, earth or lightning, between any two images. One import, no dependencies.">
+  <title>Use it in your project · Reveal</title>
+  <meta name="description" content="Drop any of the eleven Reveal effects into your own page, between any two images: the elemental pack (fire, water, air, earth, lightning) and the shinobi pack (clone, vortex, spiral, blade, storm, twister). One import, no dependencies.">
   <meta name="theme-color" content="#0b0b0c">
   <link rel="canonical" href="https://elemental-reveal.vercel.app/use">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Elemental Reveal: use it in your project">
-  <meta property="og:description" content="Fire, water, air, earth or lightning between any two images. One import, no dependencies.">
+  <meta property="og:title" content="Reveal: use it in your project">
+  <meta property="og:description" content="Eleven scroll-driven reveals between any two images, in two packs. One import, no dependencies.">
   <meta property="og:image" content="https://elemental-reveal.vercel.app/og/elemental.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/bk-mark.png" type="image/png">
@@ -56,10 +56,10 @@
 </head>
 <body>
   <main class="docs">
-    <a class="pill back" href="/">← Elemental Reveal</a>
-    <p class="eyebrow">Elemental Reveal · Library</p>
+    <a class="pill back" href="/">← Reveal</a>
+    <p class="eyebrow">Reveal · Library</p>
     <h1>Use it in your project</h1>
-    <p class="lede">Any of the five effects, between any two images: a sketch and the final design, a before and an after, a photo and its edit. One import, no dependencies.</p>
+    <p class="lede">Any of the eleven effects, from either pack, between any two images: a sketch and the final design, a before and an after, a photo and its edit. One import, no dependencies.</p>
 
     <dl class="figures" id="figures" aria-live="polite">
       <div><dt class="sr">Sites using it</dt><dd class="n">…</dd><dd class="l">sites using it</dd></div>
@@ -76,28 +76,43 @@
         <button type="button" data-effect="earth" aria-pressed="false">Earth</button>
         <button type="button" data-effect="lightning" aria-pressed="false">Lightning</button>
       </div>
+      <div class="seg" role="group" aria-label="Shinobi effect">
+        <button type="button" data-effect="clone" aria-pressed="false">Clone</button>
+        <button type="button" data-effect="vortex" aria-pressed="false">Vortex</button>
+        <button type="button" data-effect="spiral" aria-pressed="false">Spiral</button>
+        <button type="button" data-effect="blade" aria-pressed="false">Blade</button>
+        <button type="button" data-effect="storm" aria-pressed="false">Storm</button>
+        <button type="button" data-effect="twister" aria-pressed="false">Twister</button>
+      </div>
       <label class="slider">Progress <input id="p" type="range" min="0" max="1" step="0.001" value="0"></label>
     </div>
-    <p class="hintline">Drag the slider, or press play. Click the image to throw fire, spill water, send a gust, start a quake or call down a bolt.
+    <p class="hintline">Drag the slider, or press play. Click the image too: every effect does something different where you click.
       <button id="play" class="btn" type="button" style="padding:8px 14px;font-size:13px;margin-left:6px">Play</button></p>
 
     <h2>Add it</h2>
     <p>Install it from npm, or import it straight from a CDN with no build step. Give an element a size, then call <code>reveal</code> on it with the two images.</p>
-<pre>npm install @brightkumedzro/elemental-reveal</pre>
+<pre>npm install @brightkumedzro/reveal</pre>
 <pre><span class="c">&lt;!-- the effect fills this box; anything you put inside stays on top --&gt;</span>
 &lt;div id="hero" style="height: 80vh"&gt;&lt;/div&gt;
 
 &lt;script type="module"&gt;
-  <span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'https://cdn.jsdelivr.net/npm/@brightkumedzro/elemental-reveal@0.2/js/lib.js'</span>;
-  <span class="c">// or, after npm install: import { reveal } from '@brightkumedzro/elemental-reveal';</span>
+  <span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'https://cdn.jsdelivr.net/npm/@brightkumedzro/reveal@1/js/lib.js'</span>;
+  <span class="c">// or, after npm install: import { reveal } from '@brightkumedzro/reveal';</span>
 
   reveal(<span class="s">'#hero'</span>, {
-    effect: <span class="s">'water'</span>,          <span class="c">// fire · water · air · earth · lightning</span>
+    effect: <span class="s">'water'</span>,          <span class="c">// any of the eleven, by name</span>
     from: <span class="s">'/sketch.png'</span>,      <span class="c">// what gets taken away</span>
     to: <span class="s">'/final.png'</span>,        <span class="c">// what's revealed</span>
   });
 &lt;/script&gt;</pre>
     <p>By default it follows the scroll: the reveal runs as the element rises through the screen. The version in the URL is pinned, so an update never changes your page until you bump it. Images from another domain need CORS headers, or they can't be drawn into WebGL.</p>
+
+    <h2>Just one pack</h2>
+    <p>The main import has every effect. If you only use one pack, import that pack instead for a smaller bundle:</p>
+<pre><span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/elemental'</span>;   <span class="c">// fire · water · air · earth · lightning</span>
+<span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/shinobi'</span>;     <span class="c">// clone · vortex · spiral · blade · storm · twister</span>
+<span class="c">// from the CDN: …/@brightkumedzro/reveal@1/js/elemental/index.js or …/js/shinobi/index.js</span></pre>
+    <p>Coming from <code>@brightkumedzro/elemental-reveal</code>? It's the same library under a new name. Swap the import for <code>@brightkumedzro/reveal/elemental</code> and everything works as before.</p>
 
     <h2>Three ways to drive it</h2>
 <pre><span class="c">// 1. Scroll (default). Or pin it in a tall wrapper, like the chapters on this site:</span>
@@ -116,7 +131,7 @@ fx.progress(<span class="s">0.5</span>);</pre>
       <table>
         <thead><tr><th>Option</th><th>Default</th><th>What it does</th></tr></thead>
         <tbody>
-          <tr><td><code>effect</code></td><td><code>'fire'</code></td><td><code>'fire'</code>, <code>'water'</code>, <code>'air'</code>, <code>'earth'</code> or <code>'lightning'</code>.</td></tr>
+          <tr><td><code>effect</code></td><td><code>'fire'</code></td><td><code>'fire'</code>, <code>'water'</code>, <code>'air'</code>, <code>'earth'</code>, <code>'lightning'</code> (elemental) or <code>'clone'</code>, <code>'vortex'</code>, <code>'spiral'</code>, <code>'blade'</code>, <code>'storm'</code>, <code>'twister'</code> (shinobi). A pack's import defaults to its first effect.</td></tr>
           <tr><td><code>from</code></td><td>required</td><td>What gets taken away: an image URL, or an <code>&lt;img&gt;</code>, <code>&lt;canvas&gt;</code> or <code>&lt;video&gt;</code>.</td></tr>
           <tr><td><code>to</code></td><td>required</td><td>What's revealed underneath. Same types as <code>from</code>.</td></tr>
           <tr><td><code>progress</code></td><td><code>'scroll'</code></td><td><code>'scroll'</code> follows the page, <code>'auto'</code> plays once when it comes into view, and <code>'manual'</code> waits for <code>fx.progress(p)</code>.</td></tr>
@@ -128,7 +143,7 @@ fx.progress(<span class="s">0.5</span>);</pre>
           <tr><td><code>sound</code></td><td><code>'off'</code></td><td>Synthesised sound, no audio files. <code>'on'</code> starts at the visitor's first click, tap or key press. <code>'toggle'</code> waits for <code>fx.sound(true)</code> or any button with a <code>data-reveal-sound</code> attribute.</td></tr>
           <tr><td><code>onProgress</code></td><td>none</td><td>Called every frame with progress from 0 to 1. The draft is gone by about 0.9.</td></tr>
           <tr><td><code>telemetry</code></td><td><code>false</code></td><td>Opt in to the anonymous adoption ping (see below) with <code>true</code>.</td></tr>
-          <tr><td><code>showcase</code></td><td><code>false</code></td><td>Ask to be listed under “Made with Elemental Reveal” on <a href="/stats" style="color:var(--accent)">/stats</a>. Sends the ping too; your site appears once it’s approved.</td></tr>
+          <tr><td><code>showcase</code></td><td><code>false</code></td><td>Ask to be listed under “Made with Reveal” on <a href="/stats" style="color:var(--accent)">/stats</a>. Sends the ping too; your site appears once it’s approved.</td></tr>
           <tr><td><code>credit</code></td><td><code>true</code></td><td>One line crediting the library in the browser console. <code>false</code> turns it off.</td></tr>
         </tbody>
       </table>

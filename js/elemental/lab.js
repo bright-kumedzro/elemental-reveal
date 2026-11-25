@@ -84,4 +84,4 @@ function panel(name) {
   return root;
 }
 
-document.querySelector('#panels').append(...Object.keys(RECIPES).map(panel));
+document.querySelector('#elemental-panels').append(...Object.keys(RECIPES).map(panel));

@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Elemental Reveal · Bright Kumedzro</title>
-  <meta name="description" content="Five scroll-driven WebGL reveals. Fire, water, air, earth and lightning each take a pencil wireframe apart and leave the finished design.">
+  <title>Reveal · Bright Kumedzro</title>
+  <meta name="description" content="Scroll-driven WebGL reveals that take a pencil wireframe apart and leave the finished design, in two packs: elemental and shinobi. One library, eleven effects.">
   <meta name="theme-color" content="#0b0b0c">
   <link rel="canonical" href="https://elemental-reveal.vercel.app/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://elemental-reveal.vercel.app/">
-  <meta property="og:title" content="Elemental Reveal">
-  <meta property="og:description" content="Five scroll-driven WebGL reveals. Fire, water, air, earth and lightning each take a pencil wireframe apart and leave the finished design.">
+  <meta property="og:title" content="Reveal">
+  <meta property="og:description" content="Scroll-driven WebGL reveals that take a pencil wireframe apart and leave the finished design, in two packs: elemental and shinobi. One library, eleven effects.">
   <meta property="og:image" content="https://elemental-reveal.vercel.app/og/elemental.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -21,65 +21,49 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
-  <script type="module" src="/js/main.js"></script>
 </head>
 <body>
   <main>
     <header class="intro">
       <a class="pill back" href="https://www.brightkumedzro.com/playground">← Playground</a>
-      <p class="eyebrow">Playground · Experiment</p>
-      <h1>Elemental Reveal</h1>
-      <p class="lede">Five elements, one pencil sketch. Fire, water, air, earth and lightning each take the same wireframe apart in their own way and leave the finished design behind.</p>
-      <nav class="chapters" aria-label="Chapters">
-        <a href="#fire" style="--c:#ff7a1a"><span>01</span>Fire</a>
-        <a href="#water" style="--c:#2dd4bf"><span>02</span>Water</a>
-        <a href="#air" style="--c:#a5b4fc"><span>03</span>Air</a>
-        <a href="#earth" style="--c:#e9a85a"><span>04</span>Earth</a>
-        <a href="#lightning" style="--c:#a78bfa"><span>05</span>Lightning</a>
-      </nav>
-      <button class="pill snd" type="button" data-sound-toggle aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="x" d="m16 9 6 6m0-6-6 6"/></svg><span class="snd-label">Sound off</span></button>
-      <p class="cue">Scroll to begin</p>
+      <p class="eyebrow">Playground · Library</p>
+      <h1>Reveal</h1>
+      <p class="lede">Eleven ways to take a first draft apart and leave the finished design behind, in two packs. Pick a pack to see every effect in a row, or open one on its own.</p>
     </header>
-
-    <section id="fire" class="track" data-el="fire" aria-label="Fire. Scroll to call down a comet and burn the wireframe away to reveal the finished design. Contains a brief flash."></section>
-    <section id="water" class="track" data-el="water" aria-label="Water. Scroll to let water run down the wireframe and wash it away to reveal the finished design."></section>
-    <section id="air" class="track" data-el="air" aria-label="Air. Scroll to blow the wireframe away and reveal the finished design."></section>
-    <section id="earth" class="track" data-el="earth" aria-label="Earth. Scroll to break the wireframe apart and reveal the finished design."></section>
-    <section id="lightning" class="track" data-el="lightning" aria-label="Lightning. Scroll to strike the wireframe and reveal the finished design. Contains brief flashes."></section>
-
-    <section class="after">
-      <p class="eyebrow">Playground · Experiment</p>
-      <h2>Five ways to lose a draft</h2>
-      <p>Every chapter holds the same two drawings: a pencil wireframe on paper and the finished design underneath. A WebGL2 shader gives each pixel a fuel value and decides, pixel by pixel, which drawing you see. Scrolling pushes the front through the fuel. Each element shapes that fuel differently and does different damage at the edge.</p>
-      <dl class="elements">
-        <div style="--c:#ff7a1a">
-          <dt><a href="/fire">Fire · Burn the draft</a></dt>
-          <dd>The first scroll calls down a comet. It streaks in trailing fire, lights up the page as it comes, and hits: a flash, a shockwave that bends everything it crosses, and a blast crater that catches. From there the fire spreads as you scroll. Ahead of the fire the paper browns and chars. Flames rise off the burning edge, torn into tongues by heat rising through them. Embers lift away, and the finished design wavers in the heat behind it. Move over the paper and fire follows your hand. Click and a fireball arcs up from below and starts a new fire where it lands.</dd>
-        </div>
-        <div style="--c:#2dd4bf">
-          <dt><a href="/water">Water · Wash the draft</a></dt>
-          <dd>Water pours in from the top and runs down the page. Each rivulet swells to a rounded head and widens until it merges with its neighbours. The paper ahead wicks the water up and greys, and the pencil runs. In the water, ripples flow downhill and bend the finished design underneath. The sketch’s pigment washes out just behind the front. Click the paper to spill some: it pools where it lands, then runs down.</dd>
-        </div>
-        <div style="--c:#a5b4fc">
-          <dt><a href="/air">Air · Scatter the draft</a></dt>
-          <dd>Wind comes in from the left. The paper flutters before the gust arrives. Then the wind strips it off in streaks and carries it away. Each paper fleck keeps the colour of the bit of sketch it tore from. Click the paper to send a gust: it blows a hole outward from where you clicked.</dd>
-        </div>
-        <div style="--c:#e9a85a">
-          <dt><a href="/earth">Earth · Break the draft</a></dt>
-          <dd>Cracks race out from the epicentre along jagged fault lines, with hairlines branching off them. Each chunk works loose and rattles, then breaks away and falls down the page, turning as it drops. Behind each one is a shadowed hole with the finished design at the bottom. Scroll fast and the ground shakes. Click the paper to start a new quake.</dd>
-        </div>
-        <div style="--c:#a78bfa">
-          <dt><a href="/lightning">Lightning · Strike the draft</a></dt>
-          <dd>Four bolts grow as branching random walks, and each one gets its own distance field. When your scroll reaches a bolt, it strikes. The bolt flashes, and the reveal spreads out from the channel it burned. Click the paper to call down your own bolt.</dd>
-        </div>
-      </dl>
-      <p>Scroll back up in any chapter and the draft comes back. Each element also has a page of its own.</p>
+    <section class="after packs">
+      <div class="pack" style="--c:#33adff">
+        <p class="eyebrow">Elemental pack · 5 effects</p>
+        <h2><a href="/elemental">Elemental</a></h2>
+        <p>Five elements, one pencil sketch. Fire, water, air, earth and lightning each take the same wireframe apart in their own way and leave the finished design behind.</p>
+        <nav class="chapters" aria-label="Elemental effects">
+          <a href="/fire" style="--c:#ff7a1a"><span>01</span>Fire</a>
+          <a href="/water" style="--c:#2dd4bf"><span>02</span>Water</a>
+          <a href="/air" style="--c:#a5b4fc"><span>03</span>Air</a>
+          <a href="/earth" style="--c:#e9a85a"><span>04</span>Earth</a>
+          <a href="/lightning" style="--c:#a78bfa"><span>05</span>Lightning</a>
+        </nav>
+        <div class="actions"><a class="btn primary" href="/elemental">See all five in a row</a></div>
+      </div>
+      <div class="pack" style="--c:#ff8a3d">
+        <p class="eyebrow">Shinobi pack · 6 effects</p>
+        <h2><a href="/shinobi">Shinobi</a></h2>
+        <p>Six techniques, one pencil sketch. A crowd of clones goes up in smoke one by one, a sand vortex grinds the draft away, a spinning sphere drills straight through it, a lightning blade runs it through, a wall of dust scours it off and a growing twister tears it up. Each leaves the finished design behind.</p>
+        <nav class="chapters" aria-label="Shinobi effects">
+          <a href="/clone" style="--c:#ff8a3d"><span>01</span>Shadow Clone</a>
+          <a href="/vortex" style="--c:#e6b35c"><span>02</span>Sand Vortex</a>
+          <a href="/spiral" style="--c:#5ad1ff"><span>03</span>Spiral Sphere</a>
+          <a href="/blade" style="--c:#3d8bff"><span>04</span>Lightning Blade</a>
+          <a href="/storm" style="--c:#d2593c"><span>05</span>Sandstorm</a>
+          <a href="/twister" style="--c:#c4ad84"><span>06</span>Sand Tornado</a>
+        </nav>
+        <div class="actions"><a class="btn primary" href="/shinobi">See all six in a row</a></div>
+      </div>
       <div class="actions">
-        <button id="again" class="btn primary" type="button">Run it again</button>
-        <a class="btn" href="/use">Use it in your project</a>
+        <a class="btn primary" href="/use">Use it in your project</a>
+        <a class="btn" href="/stats">Who's using it</a>
         <a class="btn" href="https://www.brightkumedzro.com/playground">More on the playground</a>
       </div>
-      <p class="small">Raw WebGL2 and canvas, no libraries. Without WebGL2 it falls back to a wipe. With reduced motion on it cross-fades instead, with no flashes. Sound is off until you turn it on, and every sound is synthesised in the browser with Web Audio, so there are no audio files. One WebGL canvas draws all five chapters, each with its own fragment shader.</p>
+      <p class="small">Raw WebGL2 and canvas, no libraries. Without WebGL2 it falls back to a wipe. With reduced motion on it cross-fades instead, with no flashes. Sound is off until you turn it on, and every sound is synthesised in the browser with Web Audio, so there are no audio files.</p>
       <p class="small foot">© 2026 Bright Kumedzro</p>
     </section>
   </main>

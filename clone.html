@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Shadow Clone · Bright Kumedzro</title>
+  <meta name="description" content="A pencil wireframe splits into nine clones of itself, and each one goes up in a puff of smoke until only the finished design is left. Click a clone to dispel it.">
+  <meta name="theme-color" content="#0b0b0c">
+  <link rel="canonical" href="https://elemental-reveal.vercel.app/clone">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://elemental-reveal.vercel.app/clone">
+  <meta property="og:title" content="Shadow Clone">
+  <meta property="og:description" content="A pencil wireframe splits into nine clones of itself, and each one goes up in a puff of smoke until only the finished design is left. Click a clone to dispel it.">
+  <link rel="icon" href="/bk-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/js/main.js"></script>
+</head>
+<body class="shinobi">
+  <main>
+    <section id="clone" class="track" data-el="clone" aria-label="Shadow Clone. Scroll to split the wireframe into clones and dispel them one by one to reveal the finished design."></section>
+
+    <section class="after" style="--c:#ff8a3d">
+      <p class="eyebrow">Reveal · Shinobi pack</p>
+      <h1>Shadow Clone</h1>
+      <p>The sketch starts to tremble and its lines double, a shadow of itself pulling away. Then it splits: a puff of smoke covers the page and nine clones fly out of it, each a whole copy of the draft, stacked and overlapping.</p>
+      <p>Keep scrolling and the clone on top goes up in smoke, showing whatever is under it, one after another, until only the finished design is left.</p>
+      <p>Click a clone to dispel it early. Scroll back up and they come back. With sound on, every clone goes with a poof. Scroll back up and the draft comes back.</p>
+      <div class="actions">
+        <button id="again" class="btn primary" type="button">Run it again</button>
+        <a class="btn" href="/shinobi">All six in a row</a>
+        <a class="btn" href="/use">Use it in your project</a>
+      </div>
+      <p class="others-label">The other techniques</p>
+      <nav class="chapters" aria-label="The other techniques">
+        <a href="/clone" style="--c:#ff8a3d"><span>01</span>Shadow Clone</a>
+        <a href="/vortex" style="--c:#e6b35c"><span>02</span>Sand Vortex</a>
+        <a href="/spiral" style="--c:#5ad1ff"><span>03</span>Spiral Sphere</a>
+        <a href="/blade" style="--c:#3d8bff"><span>04</span>Lightning Blade</a>
+        <a href="/storm" style="--c:#d2593c"><span>05</span>Sandstorm</a>
+        <a href="/twister" style="--c:#c4ad84"><span>06</span>Sand Tornado</a>
+      </nav>
+      <p class="small">Raw WebGL2 and canvas, no libraries. Without WebGL2 it falls back to a wipe. With reduced motion on it cross-fades instead, with no flashes. Sound is off until you turn it on, and every sound is synthesised in the browser with Web Audio, so there are no audio files.</p>
+      <p class="small credit">Anime-inspired techniques, every effect written from scratch.</p>
+      <p class="small foot">© 2026 Bright Kumedzro</p>
+    </section>
+  </main>
+</body>
+</html>

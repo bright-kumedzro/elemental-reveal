@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Who's using it · Elemental Reveal</title>
-  <meta name="description" content="Live adoption numbers for the Elemental Reveal library: sites using it, page loads and which effects people pick.">
+  <title>Who's using it · Reveal</title>
+  <meta name="description" content="Live adoption numbers for the Reveal library (and the Elemental Reveal package it grew from): sites using it, page loads and which effects people pick.">
   <link rel="canonical" href="https://elemental-reveal.vercel.app/stats">
   <link rel="icon" href="/bk-mark.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,7 +62,7 @@
 <body>
   <main class="wrap">
     <a class="pill" href="/use" style="display:inline-block;margin-bottom:32px">← Use it in your project</a>
-    <p class="eyebrow">Elemental Reveal · Library</p>
+    <p class="eyebrow">Reveal · Library</p>
     <h1>Who's using it</h1>
     <p class="sub">Live numbers from sites running the library. They update every few minutes.</p>
 
@@ -92,7 +92,7 @@
     </div>
     <p class="fine">Counted from the library's anonymous ping, which sites opt in to with <code>telemetry: true</code> (it was on by default before 0.2.0): one request per page per effect, with the effect and version. Sites are counted by domain, and no domain is shown unless the site asked to be in the showcase. Localhost and this site aren't counted.</p>
 
-    <h2 class="sec" id="showcase-title">Made with Elemental Reveal</h2>
+    <h2 class="sec" id="showcase-title">Made with Reveal</h2>
     <p class="sub">Sites that asked to be listed, and still use it.</p>
     <div class="show" id="showcase" aria-labelledby="showcase-title"></div>
     <div class="card join">
@@ -211,7 +211,7 @@
     /* the showcase */
     fetch('/api/showcase').then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then(({ sites }) => {
       $('#showcase').innerHTML = sites.length
-        ? sites.map((s) => `<a href="https://${esc(s.site)}" target="_blank" rel="noopener"><b>${esc(s.site)}</b><span>${s.effects.map(esc).join(' · ') || 'Elemental Reveal'} · since ${new Date(s.since).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</span></a>`).join('')
+        ? sites.map((s) => `<a href="https://${esc(s.site)}" target="_blank" rel="noopener"><b>${esc(s.site)}</b><span>${s.effects.map(esc).join(' · ') || 'Reveal'} · since ${new Date(s.since).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</span></a>`).join('')
         : '<p class="empty">No sites listed yet. Yours could be the first.</p>';
     }).catch(() => { $('#showcase').innerHTML = '<p class="empty">The showcase couldn’t load right now.</p>'; });
 

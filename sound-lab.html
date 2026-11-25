@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sound Lab · Elemental Reveal</title>
+  <title>Sound Lab · Reveal</title>
   <meta name="robots" content="noindex">
   <link rel="icon" href="/bk-mark.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -26,15 +26,24 @@
     .grid output { color: var(--accent); font-variant-numeric: tabular-nums; }
     .grid input[type=range] { width: 100%; accent-color: var(--accent); }
     .btn { padding: 11px 16px; font-size: 14px; }
+    .pack-title { margin: 56px 0 0; font-size: clamp(24px, 4vw, 34px); }
   </style>
-  <script type="module" src="/js/lab.js"></script>
+  <script type="module" src="/js/elemental/lab.js"></script>
+  <script type="module" src="/js/shinobi/lab.js"></script>
 </head>
 <body>
   <main class="lab">
-    <a class="pill" href="/">← Elemental Reveal</a>
+    <a class="pill" href="/">← Reveal</a>
     <h1 style="margin-top:28px">Sound lab</h1>
-    <p>Tune each element by ear. Pick a starting point, start the bed and move the sliders: you hear every change live. Changes are saved in this browser, and while the site runs on localhost the effects play your version too. When it sounds right, press <strong>Copy settings</strong> and paste the numbers back to Claude to make them the defaults.</p>
-    <div id="panels"></div>
+    <p>Tune each effect by ear. Pick a starting point, start the bed and move the sliders: you hear every change live. Changes are saved in this browser, and while the site runs on localhost the effects play your version too. When it sounds right, press <strong>Copy settings</strong> and paste the numbers back to Claude to make them the defaults.</p>
+    <h2 class="pack-title">Elemental pack</h2>
+    <div id="elemental-panels"></div>
+    <h2 class="pack-title">Shinobi pack</h2>
+    <section id="poof"></section>
+    <section id="whir"></section>
+    <section id="crackle"></section>
+    <section id="storm"></section>
+    <section id="twister"></section>
   </main>
 </body>
 </html>
