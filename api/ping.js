@@ -1,5 +1,6 @@
 // POST /api/ping: the library calls this once per page per effect (see ping() in js/lib.js).
 // It records the site's domain (from the Origin header), the effect and the library version. Nothing else.
+// With { s: 1 } the site is also asking to be listed in the showcase, which only happens once the owner approves it.
 import { configured, db } from './_db.js';
 
 const EFFECTS = new Set(['fire', 'water', 'air', 'earth', 'lightning']);
@@ -36,6 +37,7 @@ export async function POST(req) {
     await sql`
       insert into wtd_daily (day, site, effect, version) values (current_date, ${site}, ${effect}, ${version})
       on conflict (day, site, effect, version) do update set loads = wtd_daily.loads + 1`;
+    if (body.s === 1) await sql`update wtd_sites set showcase = 'requested' where site = ${site} and showcase is null`;
   } catch {
     // the ping is best-effort; never fail the caller
   }

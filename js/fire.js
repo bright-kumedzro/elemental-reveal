@@ -4,7 +4,8 @@
    embers glow in the burnt edge and lift away. Behind it the finished design wavers in the heat.
    Bend it: move over the paper and fire follows your hand; click and a fireball flies up from below and lights
    a new fire where it lands. Scroll back to the top and the comet can come again. */
-import { fbm, seedFuel, rand, fine, lite } from './core.js';
+import { fbm, seedFuel, rand, fine, lite, DONE } from './core.js';
+import { bed, hit, whoosh } from './sfx.js';
 
 const IMPACT = [0.4, 0.42];                // where the comet lands (uv)
 const START = [1.28, 1.32], CTRL = [0.98, 0.84];
@@ -71,8 +72,12 @@ const fire = {
   onFrame(ch, now) {
     const S = ch.s, home = ch.seeds[0];
     if (ch.p < 0.004) { S.launched = 0; S.impact = 0; home.off = -10; }   // back at the top: it can come again
-    else if (!S.launched) S.launched = now;
-    if (S.launched && !S.impact && now - S.launched >= FLIGHT) impact(ch, now);
+    else if (!S.launched) { S.launched = now; whoosh(ch, 'fire', FLIGHT / 1000, 0.8); }
+    if (S.launched && !S.impact && now - S.launched >= FLIGHT) { impact(ch, now); hit(ch, 'fire', 1); }
+    for (const s of ch.seeds) if (s.hitAt && !s.landed && now >= s.hitAt) { s.landed = true; hit(ch, 'fire', 0.35); }
+    // the fire roars while it burns, louder the harder you scroll
+    const burning = (S.impact && ch.p < DONE + 0.02) || ch.seeds.some((s) => s.landed && now - s.hitAt < 2500);
+    bed(ch, 'fire', burning ? 1 : 0, Math.min(1, ch.speed * 6));
     if (S.impact) {
       // the spread catches up with your scroll over a second or so, so a fast scroller still sees it run
       const g = easeOut(Math.min(1, (now - S.impact) / 1400));
@@ -84,6 +89,7 @@ const fire = {
 
   onClick(ch, seed, q, now) {
     seed.hitAt = now + BALL; seed.born = now + BALL; seed.off = -10;
+    whoosh(ch, 'fire', BALL / 1000, 0.5);
     (ch.s.balls ||= []).push({ x0: ch.W * 0.5 + rand(-60, 60), y0: ch.H + 30, x1: q.x, y1: q.y, t0: now, done: false });
   },
 

@@ -21,7 +21,7 @@ Or with no build step, straight from a CDN. Pin the version so updates never cha
 ```html
 <div id="hero" style="height: 80vh"></div>
 <script type="module">
-  import { reveal } from 'https://cdn.jsdelivr.net/npm/@brightkumedzro/elemental-reveal@0.1/js/lib.js';
+  import { reveal } from 'https://cdn.jsdelivr.net/npm/@brightkumedzro/elemental-reveal@0.2/js/lib.js';
   reveal('#hero', { effect: 'fire', from: '/sketch.png', to: '/final.png' });
 </script>
 ```
@@ -41,11 +41,28 @@ The element needs a size. Anything you put inside it stays on top of the effect,
 | `interactive` | `true` | Hover and click effects: throw fire, spill water, send a gust, start a quake, call down a bolt |
 | `fit` | `'cover'` | `'cover'`, `'contain'` or `'fill'`, like CSS `object-fit` |
 | `background` | `'#0b0b0c'` | Shown behind images that don't fill the element |
+| `sound` | `'off'` | Synthesised sound, no audio files. `'on'` starts at the visitor's first click, tap or key press (browsers block sound before one); `'toggle'` waits for `fx.sound(true)` or a `[data-reveal-sound]` button |
 | `onProgress` | none | Called every frame with progress from 0 to 1 (the draft is gone by about 0.9) |
-| `telemetry` | `true` | The anonymous adoption ping, described below |
+| `telemetry` | `false` | Opt in to the anonymous adoption ping, described below |
+| `showcase` | `false` | Ask to be listed under "Made with Elemental Reveal" at [/stats](https://elemental-reveal.vercel.app/stats). Sends the ping too; your site appears once it is approved |
 | `credit` | `true` | One line crediting the library in the browser console |
 
-`reveal()` returns `{ ready, progress(p?), play(), reset(), destroy() }`.
+`reveal()` returns `{ ready, progress(p?), play(), reset(), sound(on?), destroy() }`.
+
+## Sound
+
+Each element has its own sound, synthesised with Web Audio: fire roars and the comet lands with a boom, water rushes, the wind gusts, the ground grinds and quakes, and lightning crackles and thunders. It is off unless you ask for it, and it gets louder the harder the visitor scrolls.
+
+```html
+<button data-reveal-sound aria-pressed="false">Sound</button>
+<script type="module">
+  import { reveal } from '@brightkumedzro/elemental-reveal';
+  const fx = reveal('#hero', { effect: 'earth', from: '/sketch.png', to: '/final.png', sound: 'toggle' });
+  // any [data-reveal-sound] button turns it on and off, or do it yourself: fx.sound(true)
+</script>
+```
+
+Every reveal on a page shares one sound switch, and the visitor's choice is remembered. A reveal goes quiet when it scrolls out of view.
 
 ## Good to know
 
@@ -57,7 +74,7 @@ The element needs a size. Anything you put inside it stays on top of the effect,
 
 ## Telemetry
 
-So I can see whether anyone uses this, the library sends one tiny request per page per effect to `elemental-reveal.vercel.app/api/ping`. It contains the effect name and the library version. The server records your site's domain from the request's `Origin` header. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. The totals are public at [elemental-reveal.vercel.app/stats](https://elemental-reveal.vercel.app/stats); no domain is ever shown. Turn it off with `telemetry: false`.
+Off by default. If you turn it on with `telemetry: true` (thank you), the library sends one tiny request per page per effect to `elemental-reveal.vercel.app/api/ping`. It contains the effect name and the library version. The server records your site's domain from the request's `Origin` header. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. The totals are public at [elemental-reveal.vercel.app/stats](https://elemental-reveal.vercel.app/stats); no domain is shown unless you ask to be in the showcase with `showcase: true`. Versions before 0.2.0 sent it by default.
 
 ## Credit
 
@@ -79,19 +96,19 @@ MIT licensed, so use it anywhere. Keeping the copyright notice in the code is th
 
 - Each chapter paints two drawings from one layout, the draft and the final, and uploads them as textures. One fixed WebGL2 canvas draws every chapter on screen into its own rectangle, each with its own fragment shader. Textures load when a chapter comes near and are freed when it's well away.
 - Each element's shader gives every pixel a fuel value, and progress pushes the front through it. A JS copy of each fuel function, using the same integer-hash noise, tells the particles where the front is.
-- `js/core.js` is the engine and site drawing; `js/lib.js` is the library; each effect is one file in `js/`.
+- `js/core.js` is the engine and site drawing; `js/lib.js` is the library; each effect is one file in `js/`. `js/sound.js` holds the sound switch and `js/sfx.js` the five sound recipes, which `sound-lab.html` tunes by ear.
 
 ### Develop
 
 ```sh
-python -m http.server 5179          # then open http://127.0.0.1:5179
+python -m http.server 5179          # then open http://127.0.0.1:5179 (and /sound-lab to tune the sounds)
 node scripts/pages.mjs              # rewrite index.html and the five element pages from their copy
 vercel deploy --prod
 ```
 
 `?capture=<effect>&p=<progress>&t=<ms>` shows one chapter full screen on a virtual clock. For fire, `&comet=<ms>` places the comet partway through its flight. `window.__capture.prime(p, t)` and `window.__capture.frame(p, t, 0)` render frame by frame, which is how the covers and card loops are made.
 
-`/api/ping` records adoption in Neon Postgres (connected through the Vercel Marketplace, free plan). `/stats` shows the public totals. The list of individual sites is only returned by `/api/stats` with the `STATS_TOKEN` environment variable as a bearer token.
+`/api/ping` records adoption in Neon Postgres (connected through the Vercel Marketplace, free plan). `/stats` shows the public totals. The list of individual sites is only returned by `/api/stats` with the `STATS_TOKEN` environment variable as a bearer token. `/api/signals` gathers npm downloads, jsDelivr CDN requests, npm dependents and GitHub stars for the same page, cached for an hour. `/api/showcase` lists the sites that asked to be shown (`showcase: true`) and that you approved: open `/stats#owner`, paste the `STATS_TOKEN`, and approve or hide each request.
 
 burn-the-draft.vercel.app redirects to `/fire`.
 

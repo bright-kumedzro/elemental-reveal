@@ -42,7 +42,7 @@ export async function GET(req) {
     sql`select effect as k, sum(loads)::int as v from wtd_daily group by effect`,
     sql`select version as k, sum(loads)::int as v from wtd_daily group by version`,
     owner ? sql`
-      select s.site, s.loads::int as loads,
+      select s.site, s.loads::int as loads, s.showcase,
              extract(epoch from s.first_seen) * 1000 as first,
              extract(epoch from s.last_seen) * 1000 as last
       from wtd_sites s order by s.loads desc limit 100` : Promise.resolve(null),

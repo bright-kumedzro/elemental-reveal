@@ -4,6 +4,7 @@
    outward from the channel it burned. Click to call down your own (up to four, in a second texture).
    Flashes are brief, small, and rate-limited; with reduced motion on, this chapter cross-fades like the rest. */
 import { fbm, rng, ign, rand, lite, fine, DONE } from './core.js';
+import { bed, hit } from './sfx.js';
 
 const STRIKES = [
   { u: 0.36, v: 0.48, p: 0.03, seed: 21 },
@@ -101,6 +102,8 @@ function glow(t, dp, now, i) {
 function strike(ch, now, polys, which, i) {
   const S = ch.s;
   S['strike' + which][i] = now;
+  // thunder, but not a pile-up of it when a fast scroll sets off several bolts at once
+  if (now - (S.thunderAt ?? -1e9) > 250) { S.thunderAt = now; hit(ch, 'lightning', which === 'A' ? 1 : 0.7); }
   if (now - S.flashAt > 420) S.flashAt = now;          // never more than ~2 flashes a second
   const pts = polys.flatMap((p) => p.pts), end = polys[polys.length - 1].pts.at(-1);
   for (let k = 0; k < 18; k++) spark(ch, end[0] * ch.H, (1 - end[1]) * ch.H, 1.6);
@@ -205,6 +208,9 @@ const lightning = {
       S.gB[c] = seed ? glow(now - S.strikeB[c], ch.p - seed.p0, now, c + 4) : 0;
     }
     S.armed = true;                                      // bolts already passed on load don't all strike at once
+    // the air hums and crackles while the storm is on
+    const storm = (ch.p >= STRIKES[0].p && ch.p < DONE + 0.02) || ch.seeds.some((s) => s.born && now - s.born < 1500);
+    bed(ch, 'lightning', storm ? 1 : 0, Math.min(1, ch.speed * 6));
     S.flash = Math.exp(-Math.max(0, now - S.flashAt) / 110);
   },
 

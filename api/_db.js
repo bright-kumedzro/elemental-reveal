@@ -6,7 +6,8 @@ export const configured = Boolean(process.env.DATABASE_URL);
 
 let sql = null, ready = null;
 
-/** The query function, with the two tables created on first use. */
+/** The query function, with the two tables created on first use. wtd_sites.showcase is null, 'requested' (the site
+    asked to be listed with showcase: true), 'approved' or 'hidden' (both set by the owner). */
 export async function db() {
   sql ||= neon(process.env.DATABASE_URL);
   ready ||= Promise.all([
@@ -24,7 +25,7 @@ export async function db() {
       loads integer not null default 1,
       primary key (day, site, effect, version)
     )`,
-  ]).catch((e) => { ready = null; throw e; });
+  ]).then(() => sql`alter table wtd_sites add column if not exists showcase text`).catch((e) => { ready = null; throw e; });
   await ready;
   return sql;
 }

@@ -7,6 +7,7 @@
    it here, and checks the inverse-transformed point really lies inside that chunk.
    Scroll fast and the ground shakes. Click to start a new quake. */
 import { fbm, vn, hh, seedFuel, rand, lite, DONE } from './core.js';
+import { bed, hit } from './sfx.js';
 
 const CS = 5.2;       // stones per unit of page height
 const FALLK = 0.2;    // fuel a chunk takes to fall out of sight
@@ -74,10 +75,13 @@ const earth = {
     }
   },
 
-  onClick(ch, seed, q, now) { ch.s.kick = now; },
+  onClick(ch, seed, q, now) { ch.s.kick = now; hit(ch, 'earth', 0.7); },
   burst(ch, x, y) { for (let i = 0; i < 22; i++) pebble(ch, x, y, 1.7); for (let i = 0; i < 6; i++) dust(ch, x, y); },
   onFrame(ch, now) {
     if (ch.s.kick) ch.quake = Math.max(ch.quake, Math.exp(-(now - ch.s.kick) / 280));
+    // the ground grinds while it breaks, harder the harder you scroll (or the fresher a quake you started)
+    const breaking = (ch.p > 0.004 && ch.p < DONE + 0.02) || (ch.s.kick && now - ch.s.kick < 2000);
+    bed(ch, 'earth', breaking ? 1 : 0, Math.min(1, Math.max(ch.speed * 6, ch.s.kick ? Math.exp(-(now - ch.s.kick) / 600) : 0)));
   },
   setUniforms(ch, gl, loc) {
     // only pay for the falling-chunk scan while something can be falling

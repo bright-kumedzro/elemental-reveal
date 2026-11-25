@@ -1,7 +1,7 @@
 {
   "name": "@brightkumedzro/elemental-reveal",
-  "version": "0.1.0",
-  "description": "Five scroll-driven WebGL2 reveals (fire, water, air, earth, lightning) between any two images. No dependencies.",
+  "version": "0.2.0",
+  "description": "Five scroll-driven WebGL2 reveals (fire, water, air, earth, lightning) between any two images. Optional synthesised sound. No dependencies.",
   "type": "module",
   "main": "js/lib.js",
   "module": "js/lib.js",
@@ -16,6 +16,8 @@
     "js/air.js",
     "js/earth.js",
     "js/lightning.js",
+    "js/sound.js",
+    "js/sfx.js",
     "LICENSE",
     "README.md"
   ],
@@ -28,7 +30,9 @@
     "fire",
     "water",
     "transition",
-    "effect"
+    "effect",
+    "sound",
+    "web-audio"
   ],
   "author": "Bright Kumedzro",
   "license": "MIT",

@@ -41,6 +41,22 @@
     .fine { color: var(--muted); font-size: 13px; margin-top: 28px; }
     .fine a { color: var(--accent); }
     .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .sec { font-size: clamp(22px, 3.4vw, 30px); margin: 56px 0 6px; }
+    .figures .l a { color: inherit; }
+    .show { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin: 20px 0 16px; }
+    .show a { display: block; background: var(--surface); border: 1px solid var(--grid); border-radius: 14px; padding: 16px; color: var(--ink); text-decoration: none; transition: border-color .15s; }
+    .show a:hover, .show a:focus-visible { border-color: var(--mark); outline: none; }
+    .show b { display: block; font-weight: 600; overflow-wrap: anywhere; }
+    .show span { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; }
+    .join pre { margin: 0; overflow-x: auto; background: #0b0b0c; border: 1px solid var(--grid); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #d4d4d8; }
+    .join pre b { color: var(--mark); font-weight: 600; }
+    .owner { margin-top: 40px; }
+    .owner .bar { display: flex; gap: 8px; flex-wrap: wrap; }
+    .owner input { flex: 1; min-width: 180px; background: #0b0b0c; color: var(--ink); border: 1px solid #2e2e33; border-radius: 10px; padding: 9px 12px; font: inherit; }
+    .owner table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13px; }
+    .owner td { padding: 8px 6px; border-top: 1px solid var(--grid); vertical-align: middle; }
+    .owner td:last-child { text-align: right; white-space: nowrap; }
+    .owner button.small { padding: 5px 10px; font-size: 12px; margin-left: 6px; }
   </style>
 </head>
 <body>
@@ -74,7 +90,44 @@
         <div class="meters" id="versions"></div>
       </div>
     </div>
-    <p class="fine">Counted from the library's anonymous ping: one request per page per effect, with the effect and version. Sites are counted by domain, and no domain is ever shown here. Localhost and this site aren't counted. <a href="/use">Turn it off with <code>telemetry: false</code></a>.</p>
+    <p class="fine">Counted from the library's anonymous ping, which sites opt in to with <code>telemetry: true</code> (it was on by default before 0.2.0): one request per page per effect, with the effect and version. Sites are counted by domain, and no domain is shown unless the site asked to be in the showcase. Localhost and this site aren't counted.</p>
+
+    <h2 class="sec" id="showcase-title">Made with Elemental Reveal</h2>
+    <p class="sub">Sites that asked to be listed, and still use it.</p>
+    <div class="show" id="showcase" aria-labelledby="showcase-title"></div>
+    <div class="card join">
+      <h2>Using it? Get your site listed</h2>
+      <p class="cap" style="margin-bottom:10px">Add <code>showcase: true</code>. It sends the anonymous ping and asks to be listed; your site shows up here once it's approved.</p>
+<pre>reveal('#hero', { effect: 'fire', from: '/sketch.png', to: '/final.png', <b>showcase: true</b> });</pre>
+    </div>
+
+    <h2 class="sec">Other signals</h2>
+    <p class="sub">From outside the ping, so they count people who never turn it on. They update hourly.</p>
+    <dl class="figures" id="signals">
+      <div><dt class="sr">npm downloads this week</dt><dd class="n">…</dd><dd class="l">npm downloads this week</dd></div>
+      <div><dt class="sr">CDN requests</dt><dd class="n">…</dd><dd class="l">CDN requests, last 30 days</dd></div>
+      <div><dt class="sr">Packages depending on it</dt><dd class="n">…</dd><dd class="l">packages on npm depending on it</dd></div>
+      <div><dt class="sr">GitHub stars</dt><dd class="n">…</dd><dd class="l"><a id="gh" href="https://github.com/bright-kumedzro/elemental-reveal">GitHub stars</a></dd></div>
+    </dl>
+    <div class="grid2">
+      <div class="card">
+        <h2>npm downloads per week</h2>
+        <p class="cap">Last 12 weeks. Every download counts, including registry mirrors, security scanners and bots, which pile in when a version comes out. Watch the trend, not the spike.</p>
+        <div class="chart" id="npm"></div>
+      </div>
+      <div class="card">
+        <h2>CDN requests per day</h2>
+        <p class="cap">Files served by jsDelivr, last 30 days: pages loading it with no build step.</p>
+        <div class="chart" id="cdn"></div>
+      </div>
+    </div>
+
+    <section class="card owner" id="owner" hidden>
+      <h2>Owner: showcase requests</h2>
+      <p class="cap">Your STATS_TOKEN stays in this browser only.</p>
+      <form id="owner-form" class="bar"><input id="token" type="password" placeholder="STATS_TOKEN" aria-label="Stats token" autocomplete="off"><button class="btn" type="submit">Load</button></form>
+      <div id="owner-list"></div>
+    </section>
   </main>
 
   <script>
@@ -87,31 +140,38 @@
       $('#figures').querySelectorAll('.n').forEach((el, i) => { el.textContent = vals[i]; });
     }
 
-    function columns(daily) {
-      const el = $('#daily'), W = el.clientWidth || 800, H = 220, padL = 32, padB = 22, padT = 14;
-      const max = Math.max(1, ...daily.map((d) => d.sites));
+    const day = (s, o = { day: 'numeric', month: 'short' }) => new Date(s + 'T00:00:00Z').toLocaleDateString('en-GB', { ...o, timeZone: 'UTC' });
+
+    /* Columns: rows of data, how to read a row's value, which rows get an axis label, and a tooltip per row. */
+    function columns(el, rows, { value, every = 7, label, tip: tipText, aria }) {
+      const W = el.clientWidth || 800, H = 220, padL = 32, padB = 22, padT = 14;
+      const max = Math.max(1, ...rows.map(value));
       const step = Math.max(1, Math.ceil(max / 4)), top = step * 4;
-      const slot = (W - padL) / daily.length, bw = Math.min(24, slot - 2);
+      const slot = (W - padL) / rows.length, bw = Math.min(24, slot - 2);
       const y = (v) => H - padB - (v / top) * (H - padB - padT);
-      let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Active sites per day for the last 30 days">`;
+      let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(aria)}">`;
       for (let v = 0; v <= top; v += step) svg += `<line x1="${padL}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)" stroke-width="1"/><text class="axis" x="${padL - 8}" y="${y(v) + 4}" text-anchor="end">${fmt(v)}</text>`;
-      daily.forEach((d, i) => {
-        const x = padL + i * slot + (slot - bw) / 2, h = H - padB - y(d.sites), r = Math.min(4, h / 2, bw / 2);
-        if (d.sites > 0) svg += `<path d="M${x},${H - padB} v${-(h - r)} q0,${-r} ${r},${-r} h${bw - 2 * r} q${r},0 ${r},${r} v${h - r} z" fill="var(--mark)"/>`;
+      rows.forEach((d, i) => {
+        const x = padL + i * slot + (slot - bw) / 2, h = H - padB - y(value(d)), r = Math.min(4, h / 2, bw / 2);
+        if (value(d) > 0) svg += `<path d="M${x},${H - padB} v${-(h - r)} q0,${-r} ${r},${-r} h${bw - 2 * r} q${r},0 ${r},${r} v${h - r} z" fill="var(--mark)"/>`;
         svg += `<rect data-i="${i}" x="${padL + i * slot}" y="${padT}" width="${slot}" height="${H - padT}" fill="transparent"/>`;
-        if ((daily.length - 1 - i) % 7 === 0) svg += `<text class="axis" x="${x + bw / 2}" y="${H - 6}" text-anchor="middle">${new Date(d.day).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</text>`;
+        if ((rows.length - 1 - i) % every === 0) svg += `<text class="axis" x="${x + bw / 2}" y="${H - 6}" text-anchor="middle">${esc(label(d))}</text>`;
       });
       el.innerHTML = svg + '</svg><div class="tip"></div>';
       const tip = el.querySelector('.tip');
       el.querySelectorAll('rect[data-i]').forEach((r) => {
         r.addEventListener('pointerenter', () => {
-          const d = daily[+r.dataset.i], bx = (+r.getAttribute('x') + slot / 2) / W * el.clientWidth;
-          tip.innerHTML = `${new Date(d.day).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}<br><b>${fmt(d.sites)}</b> sites · ${fmt(d.loads)} loads`;
-          tip.style.left = `${bx}px`; tip.style.top = `${y(d.sites) - 8}px`; tip.style.opacity = 1;
+          const d = rows[+r.dataset.i], bx = (+r.getAttribute('x') + slot / 2) / W * el.clientWidth;
+          tip.innerHTML = tipText(d);
+          tip.style.left = `${bx}px`; tip.style.top = `${y(value(d)) - 8}px`; tip.style.opacity = 1;
         });
         r.addEventListener('pointerleave', () => { tip.style.opacity = 0; });
       });
     }
+    const drawDaily = (daily) => columns($('#daily'), daily, {
+      value: (d) => d.sites, label: (d) => day(d.day), aria: 'Active sites per day for the last 30 days',
+      tip: (d) => `${day(d.day, { day: 'numeric', month: 'short', year: 'numeric' })}<br><b>${fmt(d.sites)}</b> sites · ${fmt(d.loads)} loads`,
+    });
 
     function meters(el, obj) {
       const rows = Object.entries(obj).sort((a, b) => b[1] - a[1]);
@@ -121,13 +181,66 @@
         : '<p class="empty">Nothing yet.</p>';
     }
 
+    const redraw = [];
+    addEventListener('resize', () => redraw.forEach((f) => f()));
+
     fetch('/api/stats').then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then((d) => {
-      figures(d.totals); columns(d.daily); meters($('#effects'), d.effects); meters($('#versions'), d.versions);
-      addEventListener('resize', () => columns(d.daily));
+      figures(d.totals); drawDaily(d.daily); meters($('#effects'), d.effects); meters($('#versions'), d.versions);
+      redraw.push(() => drawDaily(d.daily));
     }).catch(() => {
       $('#figures').querySelectorAll('.n').forEach((el) => { el.textContent = '—'; });
       $('#daily').innerHTML = '<p class="empty">The numbers couldn’t load right now.</p>';
     });
+
+    /* other signals: npm, jsDelivr and GitHub, gathered by /api/signals */
+    fetch('/api/signals').then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then((s) => {
+      const weeks = s.npm?.weeks || [], cdn = s.jsdelivr?.daily || [];
+      const vals = [weeks.length ? fmt(weeks.at(-1).downloads) : '—', s.jsdelivr ? fmt(s.jsdelivr.total) : '—', s.npm?.dependents != null ? fmt(s.npm.dependents) : '—', s.github ? fmt(s.github.stars) : '—'];
+      $('#signals').querySelectorAll('.n').forEach((el, i) => { el.textContent = vals[i]; });
+      const npmChart = () => (weeks.length ? columns($('#npm'), weeks, {
+        value: (w) => w.downloads, every: 3, label: (w) => day(w.week), aria: 'npm downloads per week for the last 12 weeks',
+        tip: (w) => `Week of ${day(w.week, { day: 'numeric', month: 'short', year: 'numeric' })}<br><b>${fmt(w.downloads)}</b> downloads`,
+      }) : ($('#npm').innerHTML = '<p class="empty">npm didn’t answer.</p>'));
+      const cdnChart = () => (cdn.length ? columns($('#cdn'), cdn, {
+        value: (d) => d.hits, label: (d) => day(d.day), aria: 'CDN requests per day for the last 30 days',
+        tip: (d) => `${day(d.day, { day: 'numeric', month: 'short', year: 'numeric' })}<br><b>${fmt(d.hits)}</b> requests`,
+      }) : ($('#cdn').innerHTML = '<p class="empty">jsDelivr didn’t answer.</p>'));
+      npmChart(); cdnChart(); redraw.push(npmChart, cdnChart);
+    }).catch(() => { $('#signals').querySelectorAll('.n').forEach((el) => { el.textContent = '—'; }); });
+
+    /* the showcase */
+    fetch('/api/showcase').then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then(({ sites }) => {
+      $('#showcase').innerHTML = sites.length
+        ? sites.map((s) => `<a href="https://${esc(s.site)}" target="_blank" rel="noopener"><b>${esc(s.site)}</b><span>${s.effects.map(esc).join(' · ') || 'Elemental Reveal'} · since ${new Date(s.since).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</span></a>`).join('')
+        : '<p class="empty">No sites listed yet. Yours could be the first.</p>';
+    }).catch(() => { $('#showcase').innerHTML = '<p class="empty">The showcase couldn’t load right now.</p>'; });
+
+    /* owner mode (/stats#owner): approve or hide showcase requests. The token stays in this browser. */
+    if (location.hash === '#owner') {
+      const box = $('#owner'), KEY = 'er-stats-token';
+      box.hidden = false;
+      let token = ''; try { token = localStorage.getItem(KEY) || ''; } catch { /* private mode */ }
+      $('#token').value = token;
+      const call = (url, opts = {}) => fetch(url, { ...opts, headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } });
+      async function load() {
+        const r = await call('/api/stats');
+        if (!r.ok) { $('#owner-list').innerHTML = '<p class="empty">That token didn’t work.</p>'; return; }
+        try { localStorage.setItem(KEY, token); } catch { /* private mode */ }
+        const sites = ((await r.json()).sites || []).filter((s) => s.showcase);
+        $('#owner-list').innerHTML = sites.length
+          ? `<table>${sites.map((s) => `<tr><td><a href="https://${esc(s.site)}" target="_blank" rel="noopener" style="color:var(--accent)">${esc(s.site)}</a></td><td>${esc(s.showcase)}</td><td>${fmt(s.loads)} loads</td><td><button class="btn small" data-site="${esc(s.site)}" data-status="approved">Approve</button><button class="btn small" data-site="${esc(s.site)}" data-status="hidden">Hide</button></td></tr>`).join('')}</table>`
+          : '<p class="empty">No requests yet.</p>';
+      }
+      $('#owner-form').addEventListener('submit', (e) => { e.preventDefault(); token = $('#token').value.trim(); load(); });
+      $('#owner-list').addEventListener('click', async (e) => {
+        const b = e.target.closest('button[data-site]');
+        if (!b) return;
+        b.disabled = true;
+        await call('/api/showcase', { method: 'POST', body: JSON.stringify({ site: b.dataset.site, status: b.dataset.status }) });
+        load();
+      });
+      if (token) load();
+    }
   </script>
 </body>
 </html>

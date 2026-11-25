@@ -88,7 +88,7 @@
 &lt;div id="hero" style="height: 80vh"&gt;&lt;/div&gt;
 
 &lt;script type="module"&gt;
-  <span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'https://cdn.jsdelivr.net/npm/@brightkumedzro/elemental-reveal@0.1/js/lib.js'</span>;
+  <span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'https://cdn.jsdelivr.net/npm/@brightkumedzro/elemental-reveal@0.2/js/lib.js'</span>;
   <span class="c">// or, after npm install: import { reveal } from '@brightkumedzro/elemental-reveal';</span>
 
   reveal(<span class="s">'#hero'</span>, {
@@ -125,8 +125,10 @@ fx.progress(<span class="s">0.5</span>);</pre>
           <tr><td><code>interactive</code></td><td><code>true</code></td><td>Hover and click effects.</td></tr>
           <tr><td><code>fit</code></td><td><code>'cover'</code></td><td>How the images fill the element: <code>'cover'</code>, <code>'contain'</code> or <code>'fill'</code>, like CSS <code>object-fit</code>.</td></tr>
           <tr><td><code>background</code></td><td><code>'#0b0b0c'</code></td><td>Shown behind images that don't fill the element.</td></tr>
+          <tr><td><code>sound</code></td><td><code>'off'</code></td><td>Synthesised sound, no audio files. <code>'on'</code> starts at the visitor's first click, tap or key press. <code>'toggle'</code> waits for <code>fx.sound(true)</code> or any button with a <code>data-reveal-sound</code> attribute.</td></tr>
           <tr><td><code>onProgress</code></td><td>none</td><td>Called every frame with progress from 0 to 1. The draft is gone by about 0.9.</td></tr>
-          <tr><td><code>telemetry</code></td><td><code>true</code></td><td>The anonymous adoption ping (see below). <code>false</code> turns it off.</td></tr>
+          <tr><td><code>telemetry</code></td><td><code>false</code></td><td>Opt in to the anonymous adoption ping (see below) with <code>true</code>.</td></tr>
+          <tr><td><code>showcase</code></td><td><code>false</code></td><td>Ask to be listed under “Made with Elemental Reveal” on <a href="/stats" style="color:var(--accent)">/stats</a>. Sends the ping too; your site appears once it’s approved.</td></tr>
           <tr><td><code>credit</code></td><td><code>true</code></td><td>One line crediting the library in the browser console. <code>false</code> turns it off.</td></tr>
         </tbody>
       </table>
@@ -139,6 +141,7 @@ fx.progress();       <span class="c">// read progress</span>
 fx.progress(<span class="s">0.3</span>);    <span class="c">// set it (switches to manual)</span>
 fx.play();           <span class="c">// run it from the start over `duration`</span>
 fx.reset();          <span class="c">// put the draft back and clear clicks</span>
+fx.sound(<span class="k">true</span>);      <span class="c">// turn sound on or off for every reveal on the page</span>
 fx.destroy();        <span class="c">// remove the canvases and listeners</span></pre>
 
     <h2>Good to know</h2>
@@ -150,7 +153,7 @@ fx.destroy();        <span class="c">// remove the canvases and listeners</span>
     </ul>
 
     <h2>Telemetry</h2>
-    <p>So I can see whether anyone uses this, the library sends one tiny request per page per effect. It contains the effect name and the library version. The server records your site's domain from the request itself. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. The totals are public at <a href="/stats" style="color:var(--accent)">/stats</a>; no domain is ever shown. Turn it off with <code>telemetry: false</code>.</p>
+    <p>Off by default. If you turn it on with <code>telemetry: true</code> (thank you), the library sends one tiny request per page per effect. It contains the effect name and the library version. The server records your site's domain from the request itself. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. The totals are public at <a href="/stats" style="color:var(--accent)">/stats</a>; no domain is shown unless you ask to be in the showcase with <code>showcase: true</code>. Versions before 0.2.0 sent it by default.</p>
 
     <h2>License and credit</h2>
     <p>MIT licensed: use it in anything, commercial or not. Keeping the copyright notice in the code is the only requirement. If it helps your project, a link back to <a href="/" style="color:var(--accent)">elemental-reveal.vercel.app</a> is appreciated, never required.</p>

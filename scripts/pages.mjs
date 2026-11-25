@@ -101,7 +101,9 @@ const foot = `
 const track = (e) => `    <section id="${e.id}" class="track" data-el="${e.id}" aria-label="${esc(e.aria)}"></section>`;
 const chip = (e, href) => `<a href="${href}" style="--c:${e.color}"><span>${e.num}</span>${e.label}</a>`;
 
-const smallPrint = 'Raw WebGL2 and canvas, no libraries. Without WebGL2 it falls back to a wipe. With reduced motion on it cross-fades instead, with no flashes.';
+const smallPrint = 'Raw WebGL2 and canvas, no libraries. Without WebGL2 it falls back to a wipe. With reduced motion on it cross-fades instead, with no flashes. Sound is off until you turn it on, and every sound is synthesised in the browser with Web Audio, so there are no audio files.';
+const SPEAKER = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="x" d="m16 9 6 6m0-6-6 6"/></svg>';
+const SOUND_BTN = `<button class="pill snd" type="button" data-sound-toggle aria-pressed="false">${SPEAKER}<span class="snd-label">Sound off</span></button>`;
 
 /* All five, one after another */
 const index = `${head({ title: 'Elemental Reveal', description: 'Five scroll-driven WebGL reveals. Fire, water, air, earth and lightning each take a pencil wireframe apart and leave the finished design.', path: '/', image: 'elemental' })}
@@ -113,6 +115,7 @@ const index = `${head({ title: 'Elemental Reveal', description: 'Five scroll-dri
       <nav class="chapters" aria-label="Chapters">
         ${ELEMENTS.map((e) => chip(e, `#${e.id}`)).join('\n        ')}
       </nav>
+      ${SOUND_BTN}
       <p class="cue">Scroll to begin</p>
     </header>
 

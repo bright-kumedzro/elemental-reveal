@@ -14,23 +14,41 @@ import water from './water.js';
 import air from './air.js';
 import earth from './earth.js';
 import lightning from './lightning.js';
+import { createSound } from './sound.js';
 
 export const effects = { fire, water, air, earth, lightning };
-export const VERSION = '0.1.0';
+export const VERSION = '0.2.0';
 
-/* Adoption ping: one tiny request per page per effect, so the author can see which sites use it and which
+/* Sound is off unless you ask for it, and every reveal on the page shares one audio output. Any button on the
+   page with a data-reveal-sound attribute turns it on and off (and gets aria-pressed to match). */
+let pageSound = null;
+function soundFor(mode) {
+  if (!mode || mode === 'off') return null;
+  if (!pageSound) {
+    pageSound = createSound(mode === 'on' ? 'on' : 'toggle');
+    const wire = () => {
+      const buttons = [...document.querySelectorAll('[data-reveal-sound]')];
+      buttons.forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); pageSound.toggle(); }));
+      pageSound.onChange((on) => buttons.forEach((b) => b.setAttribute('aria-pressed', String(on))));
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire, { once: true }); else wire();
+  }
+  return pageSound;
+}
+
+/* Adoption ping, off unless you opt in with { telemetry: true }: one tiny request per page per effect, so the
+   author can see which sites use it and which
    effects. It sends only the effect name and the library version; the server reads the site's domain from the
-   request's Origin header. No cookies, nothing about visitors. Skipped on localhost. Turn it off with
-   { telemetry: false }. */
+   request's Origin header. No cookies, nothing about visitors. Skipped on localhost. */
 const PING = 'https://elemental-reveal.vercel.app/api/ping';
 const pinged = new Set();
-function ping(effect) {
+function ping(effect, showcase) {
   if (pinged.has(effect)) return;
   pinged.add(effect);
   try {
     const h = location.hostname;
     if (!h || h === 'localhost' || h.endsWith('.local') || /^[\d.]+$|^\[/.test(h) || h === 'elemental-reveal.vercel.app' || h === 'weather-the-draft.vercel.app') return;
-    navigator.sendBeacon?.(PING, JSON.stringify({ e: effect, v: VERSION }));
+    navigator.sendBeacon?.(PING, JSON.stringify(showcase ? { e: effect, v: VERSION, s: 1 } : { e: effect, v: VERSION }));
   } catch { /* never let the ping affect the page */ }
 }
 let credited = false;
@@ -87,7 +105,13 @@ function fitInto(c, src, w, h, fit, bg) {
  * @param {'cover'|'contain'|'fill'} [o.fit='cover']  how the images fill the target
  * @param {string} [o.background='#0b0b0c']  shown behind images that don't fill the target
  * @param {(p:number)=>void} [o.onProgress]  called every frame with progress (0 to 1; the draft is gone by about 0.9)
- * @param {boolean} [o.telemetry=true]  send the anonymous adoption ping described above
+ * @param {'off'|'on'|'toggle'} [o.sound='off']  synthesised sound for the effect (no audio files)
+ *        off:    silent
+ *        on:     starts at the visitor's first click, tap or key press (browsers block sound before one)
+ *        toggle: ready, but silent until fx.sound(true) or a [data-reveal-sound] button turns it on
+ * @param {boolean} [o.telemetry=false]  opt in to the anonymous adoption ping described above
+ * @param {boolean} [o.showcase=false]  ask to be listed in the showcase at elemental-reveal.vercel.app/stats
+ *        (sends the ping too; the listing appears once the author approves it)
  * @param {boolean} [o.credit=true]  print one line crediting the library in the browser console
  *
  * Anything inside the target stays on top of the effect, so it works as a background behind your own content.
@@ -117,7 +141,7 @@ export function reveal(target, o = {}) {
   const loc = {};
   const ch = {
     el, gl, W: 1, H: 1, AR: 1, K: 1, DPR: 1, p: 0, pPrev: 0, pTarget: 0, speed: 0, quake: 0,
-    seeds: [el.home()], ptr: { u: 0.5, v: 0.5, on: 0, target: 0 }, parts: [], s: {}, low: null,
+    seeds: [el.home()], ptr: { u: 0.5, v: 0.5, on: 0, target: 0 }, parts: [], s: {}, low: null, sound: soundFor(o.sound === true ? 'toggle' : o.sound),
     seedBuf: new Float32Array(MAX_SEEDS * 4),
   };
   ch.spawn = (q) => { if (ch.parts.length < (lite ? 180 : 420)) ch.parts.push(q); };
@@ -284,6 +308,7 @@ export function reveal(target, o = {}) {
   const ro = new ResizeObserver(() => { if (srcs) { resize(); wake(); } });
   const io = new IntersectionObserver(([en]) => {
     visible = en.isIntersecting;
+    if (!visible) ch.bed?.silence();                // out of sight, out of earshot
     if (visible && mode === 'auto' && !autoStart && srcs) autoStart = performance.now();
     if (visible) wake();
   });
@@ -292,7 +317,7 @@ export function reveal(target, o = {}) {
   const ready = Promise.all([load(o.from), load(o.to)]).then((s) => {
     if (dead) return;
     srcs = s;
-    if (o.telemetry !== false) ping(o.effect || 'fire');
+    if (o.telemetry === true || o.showcase === true) ping(o.effect || 'fire', o.showcase === true);
     if (o.credit !== false) credit();
     resize();
     readScroll(); ch.p = ch.pTarget;
@@ -309,10 +334,13 @@ export function reveal(target, o = {}) {
     /** Auto mode: play from the start. */
     play() { mode = 'auto'; ch.p = ch.pTarget = 0; this.reset(); autoStart = performance.now(); wake(); return this; },
     /** Put the draft back and clear clicks. */
-    reset() { ch.seeds = [el.home()]; ch.parts.length = 0; el.reset?.(ch); wake(); return this; },
+    reset() { ch.seeds = [el.home()]; ch.parts.length = 0; ch.bed?.silence(); el.reset?.(ch); wake(); return this; },
+    /** Read whether sound is on, or turn it on or off for every reveal on the page. Needs the sound option. */
+    sound(on) { if (on === undefined) return !!ch.sound?.on; ch.sound?.set(on); wake(); return this; },
     /** Remove the canvases and listeners. */
     destroy() {
       dead = true; if (raf) cancelAnimationFrame(raf);
+      ch.bed?.dispose(); ch.bed = null;
       ro.disconnect(); io.disconnect(); window.removeEventListener('scroll', readScroll);
       host.removeEventListener('pointermove', onMove); host.removeEventListener('pointerleave', onLeave); host.removeEventListener('click', onClick);
       gl?.getExtension('WEBGL_lose_context')?.loseContext();

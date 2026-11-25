@@ -6,6 +6,7 @@
    bulges and catches the light, and the sketch's pigment is dragged down and dissolved just behind the front.
    Click to spill some: it pools where it lands, then runs down. */
 import { fbm, vn, ign, rand, lite, DONE, MAX_SEEDS } from './core.js';
+import { bed, hit } from './sfx.js';
 
 const SRC = 0.12;    // the water enters this far above the page
 const W0 = 0.038;    // half-width of a rivulet's blunt head
@@ -93,6 +94,9 @@ const water = {
 
   onFrame(ch, now) {
     for (const s of ch.seeds) if (s.born) s.off = 0.45 * easeOut(Math.min(1, (now - s.born) / 2600));   // a spill keeps running
+    // it rushes while it pours, louder the harder you scroll, and a spill runs on for a while
+    const pouring = (ch.p > 0.004 && ch.p < DONE + 0.02) || ch.seeds.some((s) => s.born && now - s.born < 2600);
+    bed(ch, 'water', pouring ? 1 : 0, Math.min(1, ch.speed * 6));
   },
 
   emit(ch, x, y, d, act) {
@@ -102,7 +106,7 @@ const water = {
     }
   },
 
-  onClick(ch, seed, q, now) { (ch.s.rings ||= []).push({ x: q.x, y: q.y, t: now }); },
+  onClick(ch, seed, q, now) { (ch.s.rings ||= []).push({ x: q.x, y: q.y, t: now }); hit(ch, 'water', 0.5); },
   burst(ch, x, y) { for (let i = 0; i < 18; i++) splash(ch, x, y, 1); },
   reset(ch) { ch.s.rings = []; },
 

@@ -1,7 +1,8 @@
 /* Air: wind comes in from the left. The paper flutters before the gust arrives, then it is stripped off in
    streaks, smeared downwind before it lets go. Paper flecks keep the colour of the bit of sketch they tore from.
    Click to send a gust: it blows a hole outward from where you clicked. */
-import { fbm, seedFuel, rand } from './core.js';
+import { fbm, seedFuel, rand, DONE } from './core.js';
+import { bed, whoosh } from './sfx.js';
 
 const LEAD = 0.45;   // the wind front starts this far left of the page
 
@@ -44,6 +45,13 @@ const air = {
   emit(ch, x, y, d, act) {
     if (d > 0 && d < 0.06) { if (Math.random() < act * 0.55) fleck(ch, x, y, rand(40, 110), rand(-50, 10)); }
     else if (d > 0.15 && Math.random() < 0.012) ch.spawn({ k: 1, x, y, vx: rand(500, 900), len: rand(40, 140), age: 0, life: rand(0.3, 0.7) });
+  },
+
+  onClick(ch) { whoosh(ch, 'air', 0.7, 1); },
+  // the wind blows while it strips the page, harder the harder you scroll
+  onFrame(ch, now) {
+    const blowing = (ch.p > 0.004 && ch.p < DONE + 0.02) || ch.seeds.some((s) => s.born && now - s.born < 1500);
+    bed(ch, 'air', blowing ? 1 : 0, Math.min(1, ch.speed * 6));
   },
 
   burst(ch, x, y) {

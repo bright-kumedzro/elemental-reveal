@@ -6,6 +6,8 @@
    An element module supplies the shader, a JS mirror of its fuel function (so particles know where the front is),
    and its particles. Modes per chapter: gl (WebGL2) · clip (no WebGL2: CSS wipe) · fade (reduced motion). */
 
+import { createSound } from './sound.js';
+
 // Safe to import where there is no window (server rendering); the effects only run in the browser.
 const mq = (q) => typeof matchMedia === 'function' && matchMedia(q).matches;
 export const reduce = mq('(prefers-reduced-motion: reduce)');
@@ -372,7 +374,12 @@ function drawFinal(c, L, th, mark) {
 }
 
 /* ---------- engine ---------- */
-export function boot(defs) {
+const SPEAKER = '<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="x" d="m16 9 6 6m0-6-6 6"/></svg>';
+
+/* opts.sound: 'toggle' (default: controls shown, starts off) · 'on' (starts at the first click or key) · 'off'
+   (no sound, no controls). Returns { sound } for turning it on or off from code. */
+export function boot(defs, opts = {}) {
+  const sound = createSound(opts.sound);
   const params = new URLSearchParams(location.search);
   const capture = params.get('capture');
   const root = document.documentElement;
@@ -433,14 +440,14 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
       <canvas class="c-final" aria-hidden="true"></canvas>
       <canvas class="c-draft" aria-hidden="true"></canvas>
       <p class="pill hint">${el.hint}<span class="extra"> · <span class="fine">click</span><span class="coarse">tap</span> ${el.clickHint}</span></p>
-      <div class="hud"><span class="pill chap"><i></i>${el.num} · ${el.label}</span><span class="pill pct">${el.hud} 0%</span></div>
+      <div class="hud"><span class="pill chap"><i></i>${el.num} · ${el.label}</span><span class="hud-r">${sound.enabled ? `<button class="pill snd" type="button" data-sound-toggle aria-pressed="false" aria-label="Sound">${SPEAKER}</button>` : ''}<span class="pill pct"><span class="lbl">${el.hud} </span><b>0%</b></span></span></div>
     </div>`;
     const stage = sec.querySelector('.stage');
     const draftC = stage.querySelector('.c-draft'), finalC = stage.querySelector('.c-final');
-    const pctEl = stage.querySelector('.pct'), hintEl = stage.querySelector('.hint');
+    const pctEl = stage.querySelector('.pct b'), hintEl = stage.querySelector('.hint');
 
     const ch = {
-      el, sec, stage, gl,
+      el, sec, stage, gl, sound,
       W: 1, H: 1, AR: 1, K: 1, DPR: 1,
       p: 0, pPrev: 0, pTarget: 0, speed: 0, quake: 0,
       seeds: [el.home()], ptr: { u: 0.5, v: 0.5, on: 0, target: 0 }, parts: [], s: {},
@@ -602,12 +609,12 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
 
     ch.hud = () => {
       const pct = Math.round(Math.min(1, ch.p / DONE) * 100);
-      if (pct !== ch.pctShown) { pctEl.textContent = `${el.hud} ${pct}%`; ch.pctShown = pct; }
+      if (pct !== ch.pctShown) { pctEl.textContent = `${pct}%`; ch.pctShown = pct; }
       const gone = ch.p > 0.04 || (ch.touched && ch.p > 0.01);
       if (gone !== ch.hintGone) { hintEl.classList.toggle('gone', gone); ch.hintGone = gone; }
     };
 
-    ch.reset = () => { ch.seeds = [el.home()]; ch.parts.length = 0; el.reset?.(ch); };
+    ch.reset = () => { ch.seeds = [el.home()]; ch.parts.length = 0; ch.bed?.silence(); el.reset?.(ch); };
 
     ch.toFallback = () => {
       ch.mode = reduce ? 'fade' : 'clip'; ch.tex = null; ch.parts.length = 0;
@@ -626,7 +633,7 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
     });
     stage.addEventListener('pointerleave', () => { ch.ptr.target = 0; });
     stage.addEventListener('click', (e) => {
-      if (ch.mode !== 'gl' || e.target.closest('a')) return;
+      if (ch.mode !== 'gl' || e.target.closest('a, button')) return;
       const q = toUV(e), now = performance.now();
       if (el.fuel(ch, q.u, q.v, now) >= 0) return;                 // already gone here
       const lit = ch.seeds.filter((s) => s.born);
@@ -719,7 +726,14 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
     new ResizeObserver(onResize).observe(chapters[0].stage);
 
     const bySec = new Map(chapters.map((ch) => [ch.sec, ch])), byStage = new Map(chapters.map((ch) => [ch.stage, ch]));
-    const vis = new IntersectionObserver((es) => { for (const e of es) byStage.get(e.target).visible = e.isIntersecting; wake(); });
+    const vis = new IntersectionObserver((es) => {
+      for (const e of es) {
+        const ch = byStage.get(e.target);
+        ch.visible = e.isIntersecting;
+        if (!ch.visible) ch.bed?.silence();          // out of sight, out of earshot
+      }
+      wake();
+    });
     const near = new IntersectionObserver((es) => {
       for (const e of es) if (e.isIntersecting) { const ch = bySec.get(e.target); ch.near = true; if (ch.dirty || !ch.tex) ch.paint(); }
     }, { rootMargin: '100% 0px' });
@@ -727,6 +741,16 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
       for (const e of es) if (!e.isIntersecting) { const ch = bySec.get(e.target); if (ch.mode === 'gl') { ch.near = false; ch.release(); } }
     }, { rootMargin: '250% 0px' });
     for (const ch of chapters) { vis.observe(ch.stage); near.observe(ch.sec); far.observe(ch.sec); }
+
+    // every [data-sound-toggle] on the page turns sound on and off, and shows which it is
+    const toggles = [...document.querySelectorAll('[data-sound-toggle]')];
+    if (!sound.enabled) toggles.forEach((b) => { b.hidden = true; });
+    toggles.forEach((b) => b.addEventListener('click', (e) => { e.stopPropagation(); sound.toggle(); wake(); }));
+    sound.onChange((on) => toggles.forEach((b) => {
+      b.setAttribute('aria-pressed', String(on));
+      b.classList.toggle('on', on);
+      const t = b.querySelector('.snd-label'); if (t) t.textContent = on ? 'Sound on' : 'Sound off';
+    }));
 
     document.fonts.addEventListener?.('loadingdone', () => { chapters.forEach((ch) => { ch.dirty = true; ch.paint(); }); wake(); });
     document.querySelector('#again')?.addEventListener('click', () => {
@@ -766,4 +790,5 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
   }
 
   start();
+  return { sound };
 }
