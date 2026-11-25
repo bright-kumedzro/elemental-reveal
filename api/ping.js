@@ -3,7 +3,8 @@
 // With { s: 1 } the site is also asking to be listed in the showcase, which only happens once the owner approves it.
 import { configured, db } from './_db.js';
 
-const EFFECTS = new Set(['fire', 'water', 'air', 'earth', 'lightning']);
+// every effect in both packs (old elemental-reveal pings only ever send the first five)
+const EFFECTS = new Set(['fire', 'water', 'air', 'earth', 'lightning', 'clone', 'vortex', 'spiral', 'blade', 'storm', 'twister']);
 const CORS = { 'Access-Control-Allow-Origin': '*' };
 const MAX_SITES = 100000;   // a ceiling, in case someone floods it with made-up domains
 
@@ -24,7 +25,9 @@ export async function POST(req) {
   let body = {};
   try { body = JSON.parse(await req.text()); } catch { /* keep defaults */ }
   const effect = EFFECTS.has(body.e) ? body.e : 'unknown';
-  const version = typeof body.v === 'string' && /^[\w.-]{1,20}$/.test(body.v) ? body.v : 'unknown';
+  const v = typeof body.v === 'string' && /^[\w.-]{1,20}$/.test(body.v) ? body.v : 'unknown';
+  // @brightkumedzro/reveal sends p: 'reveal'; the old elemental-reveal sends no p. Kept apart in the version column.
+  const version = body.p === 'reveal' ? `reveal-${v}` : v;
 
   try {
     const sql = await db();

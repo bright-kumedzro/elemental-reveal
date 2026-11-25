@@ -1,23 +1,19 @@
-/* Elemental Reveal, as a drop-in library.
+/* Reveal, the library. makeReveal(effects) gives you a reveal() for a set of effects; the package's entries bind it:
+   js/lib.js to every effect, js/elemental/index.js and js/shinobi/index.js to one pack each.
 
    reveal(target, { effect, from, to, … }) turns any element into a reveal: `from` (an image, canvas or video) is
-   burned, washed, blown, broken or struck away to show `to` underneath. Progress can follow scroll, play on its
-   own when the element comes into view, or be set by you.
+   taken apart by the effect to show `to` underneath. Progress can follow scroll, play on its own when the element
+   comes into view, or be set by you.
 
-     import { reveal } from 'https://elemental-reveal.vercel.app/js/lib.js';
-     const fx = reveal('#hero', { effect: 'water', from: '/sketch.png', to: '/final.png' });
+     import { reveal } from '@brightkumedzro/reveal';
+     const fx = reveal('#hero', { effect: 'storm', from: '/sketch.png', to: '/final.png' });
 
    Each call gets its own canvas inside the target. No dependencies, no build step. */
 import { GLSL_HEAD, MAX_SEEDS, OCT, DONE, ign, clamp, reduce, fine, lite } from './core.js';
-import fire from './fire.js';
-import water from './water.js';
-import air from './air.js';
-import earth from './earth.js';
-import lightning from './lightning.js';
 import { createSound } from './sound.js';
 
-export const effects = { fire, water, air, earth, lightning };
-export const VERSION = '0.2.0';
+export const VERSION = '1.0.0';
+const PKG = 'reveal';
 
 /* Sound is off unless you ask for it, and every reveal on the page shares one audio output. Any button on the
    page with a data-reveal-sound attribute turns it on and off (and gets aria-pressed to match). */
@@ -37,9 +33,10 @@ function soundFor(mode) {
 }
 
 /* Adoption ping, off unless you opt in with { telemetry: true }: one tiny request per page per effect, so the
-   author can see which sites use it and which
-   effects. It sends only the effect name and the library version; the server reads the site's domain from the
+   author can see which sites use it and which effects. It sends only the effect name, the package and the
+   library version; the server reads the site's domain from the
    request's Origin header. No cookies, nothing about visitors. Skipped on localhost. */
+// one constant, so the stats server can move domains without touching anything else
 const PING = 'https://elemental-reveal.vercel.app/api/ping';
 const pinged = new Set();
 function ping(effect, showcase) {
@@ -48,14 +45,16 @@ function ping(effect, showcase) {
   try {
     const h = location.hostname;
     if (!h || h === 'localhost' || h.endsWith('.local') || /^[\d.]+$|^\[/.test(h) || h === 'elemental-reveal.vercel.app' || h === 'weather-the-draft.vercel.app') return;
-    navigator.sendBeacon?.(PING, JSON.stringify(showcase ? { e: effect, v: VERSION, s: 1 } : { e: effect, v: VERSION }));
+    const body = { e: effect, v: VERSION, p: PKG };
+    if (showcase) body.s = 1;
+    navigator.sendBeacon?.(PING, JSON.stringify(body));
   } catch { /* never let the ping affect the page */ }
 }
 let credited = false;
 function credit() {
   if (credited || typeof console === 'undefined') return;
   credited = true;
-  console.info(`%celemental-reveal ${VERSION}%c by Bright Kumedzro · https://elemental-reveal.vercel.app`, 'font-weight:600', 'color:#888');
+  console.info(`%c@brightkumedzro/reveal ${VERSION}%c by Bright Kumedzro · https://elemental-reveal.vercel.app`, 'font-weight:600', 'color:#888');
 }
 
 const VS = `#version 300 es
@@ -116,11 +115,14 @@ function fitInto(c, src, w, h, fit, bg) {
  *
  * Anything inside the target stays on top of the effect, so it works as a background behind your own content.
  */
-export function reveal(target, o = {}) {
+export function makeReveal(effects) {
+  const first = Object.keys(effects)[0];
+  return function reveal(target, o = {}) {
+  const name = o.effect || first;
   const host = typeof target === 'string' ? document.querySelector(target) : target;
   if (!host) throw new Error(`elemental-reveal: no element matches ${target}`);
-  const el = effects[o.effect || 'fire'];
-  if (!el) throw new Error(`elemental-reveal: unknown effect "${o.effect}". Use one of ${Object.keys(effects).join(', ')}.`);
+  const el = effects[name];
+  if (!el) throw new Error(`reveal: unknown effect "${o.effect}". Use one of ${Object.keys(effects).join(', ')}.`);
   let mode = o.progress || 'scroll';
   const fit = o.fit || 'cover', bg = o.background || '#0b0b0c';
   const interactive = o.interactive !== false;
@@ -182,6 +184,7 @@ export function reveal(target, o = {}) {
     } else gl = null;
   }
   ch.gl = gl;
+  ch.mode = gl ? 'gl' : reduce ? 'fade' : 'clip';   // some effects check this before making sound
   const glMode = !!gl;
   glc.style.display = glMode ? 'block' : 'none';
   draftC.style.visibility = finalC.style.visibility = glMode ? 'hidden' : 'visible';
@@ -210,7 +213,12 @@ export function reveal(target, o = {}) {
   function upload() {
     if (!glMode) return;
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    [draftC, finalC].forEach((c, i) => { gl.activeTexture(gl.TEXTURE0 + i); gl.bindTexture(gl.TEXTURE_2D, ch.tex[i]); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c); });
+    [draftC, finalC].forEach((c, i) => {
+      gl.activeTexture(gl.TEXTURE0 + i); gl.bindTexture(gl.TEXTURE_2D, ch.tex[i]);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c);
+      // an effect that draws the images smaller than the element asks for mipmaps, so they don't shimmer
+      if (el.mips) { gl.generateMipmap(gl.TEXTURE_2D); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR); }
+    });
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
   }
 
@@ -308,7 +316,7 @@ export function reveal(target, o = {}) {
   const ro = new ResizeObserver(() => { if (srcs) { resize(); wake(); } });
   const io = new IntersectionObserver(([en]) => {
     visible = en.isIntersecting;
-    if (!visible) ch.bed?.silence();                // out of sight, out of earshot
+    if (!visible) { ch.bed?.silence(); el.quiet?.(ch); }   // out of sight, out of earshot
     if (visible && mode === 'auto' && !autoStart && srcs) autoStart = performance.now();
     if (visible) wake();
   });
@@ -317,7 +325,7 @@ export function reveal(target, o = {}) {
   const ready = Promise.all([load(o.from), load(o.to)]).then((s) => {
     if (dead) return;
     srcs = s;
-    if (o.telemetry === true || o.showcase === true) ping(o.effect || 'fire', o.showcase === true);
+    if (o.telemetry === true || o.showcase === true) ping(name, o.showcase === true);
     if (o.credit !== false) credit();
     resize();
     readScroll(); ch.p = ch.pTarget;
@@ -341,12 +349,13 @@ export function reveal(target, o = {}) {
     destroy() {
       dead = true; if (raf) cancelAnimationFrame(raf);
       ch.bed?.dispose(); ch.bed = null;
+      el.quiet?.(ch);
+      for (const v of Object.values(ch.s)) if (typeof v?.dispose === 'function') v.dispose();   // an effect's own running sounds
       ro.disconnect(); io.disconnect(); window.removeEventListener('scroll', readScroll);
       host.removeEventListener('pointermove', onMove); host.removeEventListener('pointerleave', onLeave); host.removeEventListener('click', onClick);
       gl?.getExtension('WEBGL_lose_context')?.loseContext();
       wrap.remove();
     },
   };
+  };
 }
-
-export default reveal;
