@@ -6,7 +6,7 @@
    leaving a shadowed hole. To draw a falling chunk, each pixel scans upward for a chunk whose fall has carried
    it here, and checks the inverse-transformed point really lies inside that chunk.
    Scroll fast and the ground shakes. Click to start a new quake. */
-import { fbm, vn, hh, seedFuel, rand, lite, DONE } from './core.js';
+import { fbm, vn, hh, seedFuel, rand, lite, DONE } from '../core.js';
 import { bed, hit } from './sfx.js';
 
 const CS = 5.2;       // stones per unit of page height

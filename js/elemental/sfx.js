@@ -3,9 +3,9 @@
      wobble), climbing with how hard you scroll;
    - the hit: a one-shot for the big moments (a sharp crack, a burst of noise falling away, a pitch drop, a room).
    sound-lab.html edits the numbers live; on localhost the effects play whatever the lab last saved. */
-import { env, noiseSource } from './sound.js';
+import { env, noiseSource } from '../sound.js';
 
-const LAB = 'elemental-reveal:sfx:';
+const LAB = 'reveal:elemental:sfx:';
 const local = typeof location !== 'undefined' && /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
 const cache = {};
 if (local && typeof addEventListener === 'function') addEventListener('storage', (e) => { if (e.key?.startsWith(LAB)) delete cache[e.key.slice(LAB.length)]; });

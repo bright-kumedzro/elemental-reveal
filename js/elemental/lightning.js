@@ -3,7 +3,7 @@
    texture. When scroll progress crosses a bolt's moment it strikes: the bolt flashes and the reveal spreads
    outward from the channel it burned. Click to call down your own (up to four, in a second texture).
    Flashes are brief, small, and rate-limited; with reduced motion on, this chapter cross-fades like the rest. */
-import { fbm, rng, ign, rand, lite, fine, DONE } from './core.js';
+import { fbm, rng, ign, rand, lite, fine, DONE } from '../core.js';
 import { bed, hit } from './sfx.js';
 
 const STRIKES = [

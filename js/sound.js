@@ -6,7 +6,7 @@
      'toggle' (default)  sound controls shown, starts off (or as the visitor last left it)
      'on'                sound controls shown, starts on at the visitor's first click or key press
      'off'               no sound and no controls */
-const KEY = 'elemental-reveal:sound';
+const KEY = 'reveal:sound';
 const LEVEL = 0.7;
 
 export function createSound(mode = 'toggle') {

@@ -1,10 +1,10 @@
-/* Elemental Reveal: the shared engine.
-   Four chapters (water, air, earth, lightning) each take a pencil wireframe apart and leave the finished design.
+/* Reveal: the shared engine behind every effect, in both packs (elemental and shinobi).
+   Each chapter takes a pencil wireframe apart with an effect and leaves the finished design.
    Every chapter paints the same two drawings from one layout (the draft on paper, the final on dark) and uploads
    them as textures. One fixed WebGL2 canvas sits behind the page; each frame, every chapter on screen is drawn into
    its own stage's rectangle with its own fragment shader. A fixed 2D canvas above it carries the particles.
-   An element module supplies the shader, a JS mirror of its fuel function (so particles know where the front is),
-   and its particles. Modes per chapter: gl (WebGL2) · clip (no WebGL2: CSS wipe) · fade (reduced motion). */
+   An effect module supplies the shader, a JS mirror of its fuel function (so particles and clicks know what is
+   still draft), and its particles. Modes per chapter: gl (WebGL2) · clip (no WebGL2: CSS wipe) · fade (reduced motion). */
 
 import { createSound } from './sound.js';
 
@@ -520,6 +520,8 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
           gl.activeTexture(gl.TEXTURE0 + i);
           gl.bindTexture(gl.TEXTURE_2D, ch.tex[i]);
           gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c);
+          // an effect that draws the drawings smaller than the page asks for mipmaps, so they don't shimmer
+          if (el.mips) { gl.generateMipmap(gl.TEXTURE_2D); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR); }
         });
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
         // the GPU has them now; the 2D copies only matter for the fallbacks
@@ -730,7 +732,7 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
       for (const e of es) {
         const ch = byStage.get(e.target);
         ch.visible = e.isIntersecting;
-        if (!ch.visible) ch.bed?.silence();          // out of sight, out of earshot
+        if (!ch.visible) { ch.bed?.silence(); ch.el.quiet?.(ch); }   // out of sight, out of earshot
       }
       wake();
     });

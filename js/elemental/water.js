@@ -5,7 +5,7 @@
    In the water a flowing texture carries ripples downward, refracting the design underneath; the leading bead
    bulges and catches the light, and the sketch's pigment is dragged down and dissolved just behind the front.
    Click to spill some: it pools where it lands, then runs down. */
-import { fbm, vn, ign, rand, lite, DONE, MAX_SEEDS } from './core.js';
+import { fbm, vn, ign, rand, lite, DONE, MAX_SEEDS } from '../core.js';
 import { bed, hit } from './sfx.js';
 
 const SRC = 0.12;    // the water enters this far above the page

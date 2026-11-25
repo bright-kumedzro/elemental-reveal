@@ -4,7 +4,7 @@
    embers glow in the burnt edge and lift away. Behind it the finished design wavers in the heat.
    Bend it: move over the paper and fire follows your hand; click and a fireball flies up from below and lights
    a new fire where it lands. Scroll back to the top and the comet can come again. */
-import { fbm, seedFuel, rand, fine, lite, DONE } from './core.js';
+import { fbm, seedFuel, rand, fine, lite, DONE } from '../core.js';
 import { bed, hit, whoosh } from './sfx.js';
 
 const IMPACT = [0.4, 0.42];                // where the comet lands (uv)

@@ -1,7 +1,7 @@
 /* Air: wind comes in from the left. The paper flutters before the gust arrives, then it is stripped off in
    streaks, smeared downwind before it lets go. Paper flecks keep the colour of the bit of sketch they tore from.
    Click to send a gust: it blows a hole outward from where you clicked. */
-import { fbm, seedFuel, rand, DONE } from './core.js';
+import { fbm, seedFuel, rand, DONE } from '../core.js';
 import { bed, whoosh } from './sfx.js';
 
 const LEAD = 0.45;   // the wind front starts this far left of the page
