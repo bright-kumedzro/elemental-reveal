@@ -248,7 +248,8 @@ export function makeReveal(effects) {
 
   function frame(now) {
     raf = 0;
-    if (dead) return;
+    // nothing to draw until both images have loaded (progress() before then only sets the target; ready wakes it)
+    if (dead || !srcs) return;
     const dt = Math.min(0.05, (now - (last || now)) / 1000); last = now;
     if (mode === 'auto' && autoStart) ch.pTarget = clamp((now - autoStart) / (o.duration || 3500), 0, 1);
     ch.pPrev = ch.p;
