@@ -37,14 +37,14 @@ function soundFor(mode) {
    library version; the server reads the site's domain from the
    request's Origin header. No cookies, nothing about visitors. Skipped on localhost. */
 // one constant, so the stats server can move domains without touching anything else
-const PING = 'https://elemental-reveal.vercel.app/api/ping';
+const PING = 'https://reveal.brightkumedzro.com/api/ping';
 const pinged = new Set();
 function ping(effect, showcase) {
   if (pinged.has(effect)) return;
   pinged.add(effect);
   try {
     const h = location.hostname;
-    if (!h || h === 'localhost' || h.endsWith('.local') || /^[\d.]+$|^\[/.test(h) || h === 'elemental-reveal.vercel.app' || h === 'weather-the-draft.vercel.app') return;
+    if (!h || h === 'localhost' || h.endsWith('.local') || /^[\d.]+$|^\[/.test(h) || h === 'reveal.brightkumedzro.com' || h === 'elemental-reveal.vercel.app' || h === 'weather-the-draft.vercel.app') return;
     const body = { e: effect, v: VERSION, p: PKG };
     if (showcase) body.s = 1;
     navigator.sendBeacon?.(PING, JSON.stringify(body));
@@ -54,7 +54,7 @@ let credited = false;
 function credit() {
   if (credited || typeof console === 'undefined') return;
   credited = true;
-  console.info(`%c@brightkumedzro/reveal ${VERSION}%c by Bright Kumedzro · https://elemental-reveal.vercel.app`, 'font-weight:600', 'color:#888');
+  console.info(`%c@brightkumedzro/reveal ${VERSION}%c by Bright Kumedzro · https://reveal.brightkumedzro.com`, 'font-weight:600', 'color:#888');
 }
 
 const VS = `#version 300 es
@@ -98,7 +98,7 @@ function fitInto(c, src, w, h, fit, bg) {
  *        manual: you drive it with fx.progress(p)
  * @param {HTMLElement|string} [o.track]  scroll mode only: a tall wrapper the target is pinned inside
  *        (position: sticky). Progress then runs from the wrapper's top reaching the top of the viewport to
- *        its bottom reaching the bottom, like the chapters on elemental-reveal.vercel.app.
+ *        its bottom reaching the bottom, like the chapters on reveal.brightkumedzro.com.
  * @param {number} [o.duration=3500]  auto mode: how long it takes, ms
  * @param {boolean} [o.interactive=true]  hover and click effects (throw fire, spill water, gusts, quakes, bolts)
  * @param {'cover'|'contain'|'fill'} [o.fit='cover']  how the images fill the target
@@ -109,7 +109,7 @@ function fitInto(c, src, w, h, fit, bg) {
  *        on:     starts at the visitor's first click, tap or key press (browsers block sound before one)
  *        toggle: ready, but silent until fx.sound(true) or a [data-reveal-sound] button turns it on
  * @param {boolean} [o.telemetry=false]  opt in to the anonymous adoption ping described above
- * @param {boolean} [o.showcase=false]  ask to be listed in the showcase at elemental-reveal.vercel.app/stats
+ * @param {boolean} [o.showcase=false]  ask to be listed in the showcase at reveal.brightkumedzro.com/stats
  *        (sends the ping too; the listing appears once the author approves it)
  * @param {boolean} [o.credit=true]  print one line crediting the library in the browser console
  *

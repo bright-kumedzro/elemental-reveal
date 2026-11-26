@@ -5,7 +5,7 @@ Scroll-driven WebGL2 reveals between any two images, in two packs. Each effect t
 - **Elemental:** `fire`, `water`, `air`, `earth`, `lightning`
 - **Shinobi:** `clone`, `vortex`, `spiral`, `blade`, `storm`, `twister`
 
-**Live demo and docs:** https://elemental-reveal.vercel.app/use · **See them all:** https://elemental-reveal.vercel.app
+**Live demo and docs:** https://reveal.brightkumedzro.com/use · **See them all:** https://reveal.brightkumedzro.com
 
 ## Install
 
@@ -59,7 +59,7 @@ It's the same library under a new name, with the shinobi pack added. Swap the im
 | `sound` | `'off'` | Synthesised sound, no audio files. `'on'` starts at the visitor's first click, tap or key press (browsers block sound before one); `'toggle'` waits for `fx.sound(true)` or a `[data-reveal-sound]` button |
 | `onProgress` | none | Called every frame with progress from 0 to 1 (the draft is gone by about 0.9) |
 | `telemetry` | `false` | Opt in to the anonymous adoption ping, described below |
-| `showcase` | `false` | Ask to be listed under "Made with Reveal" at [/stats](https://elemental-reveal.vercel.app/stats). Sends the ping too; your site appears once it is approved |
+| `showcase` | `false` | Ask to be listed under "Made with Reveal" at [/stats](https://reveal.brightkumedzro.com/stats). Sends the ping too; your site appears once it is approved |
 | `credit` | `true` | One line crediting the library in the browser console |
 
 `reveal()` returns `{ ready, progress(p?), play(), reset(), sound(on?), destroy() }`. The package also exports `effects` (every effect by name), `packs` (`{ elemental, shinobi }`), `makeReveal(effects)` for your own set, and `VERSION`.
@@ -89,11 +89,11 @@ Every reveal on a page shares one sound switch, and the visitor's choice is reme
 
 ## Telemetry
 
-Off by default. If you turn it on with `telemetry: true` (thank you), the library sends one tiny request per page per effect to `elemental-reveal.vercel.app/api/ping`. It contains the effect name, the package and the library version. The server records your site's domain from the request's `Origin` header. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. The totals are public at [elemental-reveal.vercel.app/stats](https://elemental-reveal.vercel.app/stats); no domain is shown unless you ask to be in the showcase with `showcase: true`. Versions of elemental-reveal before 0.2.0 sent it by default.
+Off by default. If you turn it on with `telemetry: true` (thank you), the library sends one tiny request per page per effect to `reveal.brightkumedzro.com/api/ping`. It contains the effect name, the package and the library version. The server records your site's domain from the request's `Origin` header. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. The totals are public at [reveal.brightkumedzro.com/stats](https://reveal.brightkumedzro.com/stats); no domain is shown unless you ask to be in the showcase with `showcase: true`. Versions of elemental-reveal before 0.2.0 sent it by default.
 
 ## Credit
 
-MIT licensed, so use it anywhere. Keeping the copyright notice in the code is the only requirement. If it helps your project, a link back to [elemental-reveal.vercel.app](https://elemental-reveal.vercel.app) is appreciated, never required. The shinobi pack's techniques are anime-inspired; every effect is written from scratch.
+MIT licensed, so use it anywhere. Keeping the copyright notice in the code is the only requirement. If it helps your project, a link back to [reveal.brightkumedzro.com](https://reveal.brightkumedzro.com) is appreciated, never required. The shinobi pack's techniques are anime-inspired; every effect is written from scratch.
 
 ---
 

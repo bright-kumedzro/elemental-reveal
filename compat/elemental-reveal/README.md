@@ -16,6 +16,6 @@ import { reveal } from '@brightkumedzro/reveal/elemental';
 
 This last version (0.3.0) simply re-exports `@brightkumedzro/reveal/elemental`, so nothing breaks in the meantime. Pages that load 0.1 or 0.2 from a CDN are pinned to those versions and keep working as they are.
 
-Docs and demo: https://elemental-reveal.vercel.app/use
+Docs and demo: https://reveal.brightkumedzro.com/use
 
 MIT © 2026 Bright Kumedzro

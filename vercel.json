@@ -36,6 +36,11 @@
   ],
   "redirects": [
     {
+      "source": "/sand",
+      "destination": "/vortex",
+      "permanent": true
+    },
+    {
       "source": "/:path((?!api/).*)",
       "has": [
         {
@@ -43,7 +48,18 @@
           "value": "weather-the-draft.vercel.app"
         }
       ],
-      "destination": "https://elemental-reveal.vercel.app/:path",
+      "destination": "https://reveal.brightkumedzro.com/:path",
+      "permanent": false
+    },
+    {
+      "source": "/:path((?!api/).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "elemental-reveal.vercel.app"
+        }
+      ],
+      "destination": "https://reveal.brightkumedzro.com/:path",
       "permanent": false
     }
   ]

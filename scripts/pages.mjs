@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { ELEMENTS } from './copy-elemental.mjs';
 import { TECHNIQUES } from './copy-shinobi.mjs';
 
-const SITE = 'https://elemental-reveal.vercel.app';   // the site's address, in one place, for when it moves
+const SITE = 'https://reveal.brightkumedzro.com';   // the site's address, in one place, for when it moves
 const PLAYGROUND = 'https://www.brightkumedzro.com/playground';
 const root = fileURLToPath(new URL('..', import.meta.url));
 

@@ -16,7 +16,7 @@ function siteOf(req) {
   }
 }
 const ignored = (h) => !h || h.length > 253 || !/^[a-z0-9.-]+$/.test(h) || !h.includes('.') ||
-  h.endsWith('.local') || h.endsWith('.localhost') || /^[\d.]+$/.test(h) || h === 'elemental-reveal.vercel.app' || h === 'weather-the-draft.vercel.app';
+  h.endsWith('.local') || h.endsWith('.localhost') || /^[\d.]+$/.test(h) || h === 'reveal.brightkumedzro.com' || h === 'elemental-reveal.vercel.app' || h === 'weather-the-draft.vercel.app';
 
 export async function POST(req) {
   const site = siteOf(req);
