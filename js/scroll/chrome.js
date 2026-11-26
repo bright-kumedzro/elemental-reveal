@@ -6,10 +6,13 @@
      import { chrome } from '@brightkumedzro/reveal/scroll';
      chrome('#title');                                         // defaults: amber from the left, blue from the right
      chrome('.big', { warm: '#ff5a1f', cool: '#2f7bff' });     // your own two lights
+     chrome('.gold', { tint: '#d4af37' });                     // gold metal (or rose gold, or your brand colour)
 
    Options
      warm     '#ff8a3d'   the light flowing in from the left (any CSS colour)
-     cool     '#3d7bff'   the light from the right, and the tint the type settles into
+     cool     '#3d7bff'   the light from the right, and the hint of colour plain chrome settles into
+     tint     none        the colour of the metal itself (any CSS colour): '#d4af37' gold, '#e8a798' rose gold, or a
+                          brand colour. Reflections take the colour and keep their brightness, the glints stay white.
      start    1           where the tracked point of the element is, as a share of the viewport height, when the light starts flowing
      end      0.45        where it is when the type has settled
      at       0.5         which point is tracked, as a share of the element's height (0 top, 0.5 centre, 1 bottom). The
@@ -41,7 +44,8 @@ in vec2 uv; out vec4 o;
 uniform sampler2D M;           // full res. r: letters (anti-aliased), g: height within the line
 uniform sampler2D N;           // half res.  rg: bevel normal xy, b: bloom
 uniform float P, T, SH, GL;    // progress (already eased), time, idle strength, glow
-uniform vec3 W, C;
+uniform vec3 W, C, TN;         // warm light, cool light, the metal's own colour (tint)
+uniform float TA;              // how much of the tint the metal takes (0: plain chrome)
 float hash(vec2 q) { return fract(sin(dot(q, vec2(12.9898, 78.233))) * 43758.5453); }
 float bell(float x, float a, float b) { return smoothstep(a, mix(a, b, .35), x) * (1. - smoothstep(mix(a, b, .65), b, x)); }
 float gau(float x, float w) { x /= w; return exp(-x * x); }
@@ -93,6 +97,13 @@ void main() {
   vec3 rim = mix(vec3(.78, .85, 1.), mix(W, C, uv.x) * 1.1 + .35, .3 * flow);
   vec3 dark = vec3(.03, .034, .044) + rim * fres * .22;
   vec3 col = mix(dark, metal, lit) + rim * fres * .32 * lit;
+  // a tinted metal (gold, rose gold, a brand colour) colours its reflections but keeps their brightness; the glints
+  // added below stay white, which is what keeps it reading as polished rather than painted
+  // (deeper and more saturated in the mid-tones, as real gold is amber where plain chrome is grey)
+  vec3 tc = TN / max(dot(TN, vec3(.3, .59, .11)), .08);
+  vec3 tc2 = tc * tc / max(dot(tc * tc, vec3(.3, .59, .11)), .08);
+  float lum = dot(col, vec3(.3, .59, .11));
+  col = mix(col, pow(lum, 1.3) * mix(tc, tc2, (1. - clamp(lum, 0., 1.)) * .6), TA);
 
   // light: one soft sheen and a few crisp glints sweep along the baseline as it settles, then a slow idle drift
   float sx = mix(-.25, 1.25, smoothstep(.38, .94, P));
@@ -111,6 +122,7 @@ void main() {
   // bloom: soft and even, only where the light is
   float hl = gs * gau(uv.x - sx, .17) * (.4 + .6 * base) + idle * .22 * gau(uv.x - ix, .2) + settle * .02 + flow * lit * .05;
   vec3 hc = mix(vec3(1., .88, .74), vec3(.76, .85, 1.), smoothstep(.2, .8, uv.x));
+  hc = mix(hc, min(tc * .9, vec3(1.)), TA * .7);
   float halo = nb.b * hl * GL * .85;
 
   col = (1. - exp(-col * 1.55)) * 1.06;                            // soft shoulder: no clipping, no harsh whites
@@ -239,9 +251,10 @@ function hex(c) {
   return [r / 255, g / 255, b / 255];
 }
 
-function fallback(el, warm, cool, start, end, at) {
+function fallback(el, warm, cool, tint, start, end, at) {
   const s = el.style, keep = { bg: s.backgroundImage, clip: s.webkitBackgroundClip, bclip: s.backgroundClip, color: s.color, size: s.backgroundSize, pos: s.backgroundPosition };
-  s.backgroundImage = `linear-gradient(100deg, ${warm} 0%, #f4f6fa 22%, #6b7385 38%, #f4f6fa 50%, ${cool} 62%, #e8ecf5 78%, #5a6273 90%, ${cool} 100%)`;
+  const hi = tint ? `color-mix(in srgb, ${tint} 45%, #fff)` : '#f4f6fa', lo = tint ? `color-mix(in srgb, ${tint} 55%, #1a1a1a)` : '#6b7385';
+  s.backgroundImage = `linear-gradient(100deg, ${warm} 0%, ${hi} 22%, ${lo} 38%, ${hi} 50%, ${tint || cool} 62%, ${hi} 78%, ${lo} 90%, ${tint || cool} 100%)`;
   s.backgroundSize = '300% 100%';
   s.webkitBackgroundClip = 'text'; s.backgroundClip = 'text'; s.color = 'transparent';
   const stop = enter(el, (p) => { s.backgroundPosition = `${(1 - p) * 100}% 50%`; }, { from: start, to: end, at });
@@ -250,7 +263,7 @@ function fallback(el, warm, cool, start, end, at) {
 
 const SETTLED_T = 7.3;     // the moment of the drift shown for reduced motion
 
-function one(el, { warm = '#ff8a3d', cool = '#3d7bff', start, end, at, shimmer = 1, glow = 1 } = {}) {
+function one(el, { warm = '#ff8a3d', cool = '#3d7bff', tint = null, start, end, at, shimmer = 1, glow = 1 } = {}) {
   at ??= start === undefined && end === undefined ? 0.5 : 0;
   start ??= at ? 1 : 0.85; end ??= at ? 0.45 : 0.3;
   const s = el.style, keep = { pos: s.position, color: s.color, fill: s.webkitTextFillColor };
@@ -261,7 +274,7 @@ function one(el, { warm = '#ff8a3d', cool = '#3d7bff', start, end, at, shimmer =
   const t0 = performance.now();
 
   // the plain chrome gradient, only while a context is wanted but can't be had (no WebGL2, the budget is full, lost)
-  const fallbackOn = () => { if (!fb && !dead) fb = fallback(el, warm, cool, start, end, at); };
+  const fallbackOn = () => { if (!fb && !dead) fb = fallback(el, warm, cool, tint, start, end, at); };
   const fallbackOff = () => { if (fb) { fb(); fb = null; } };
 
   /* ---------- the WebGL context: held only while the heading is on or near the screen (see ../gpu.js) ---------- */
@@ -291,8 +304,9 @@ function one(el, { warm = '#ff8a3d', cool = '#3d7bff', start, end, at, shimmer =
       return t;
     };
     texM = mk(0); texN = mk(1);
-    U = {}; for (const k of ['M', 'N', 'P', 'T', 'SH', 'GL', 'W', 'C']) U[k] = g.getUniformLocation(prog, k);
+    U = {}; for (const k of ['M', 'N', 'P', 'T', 'SH', 'GL', 'W', 'C', 'TN', 'TA']) U[k] = g.getUniformLocation(prog, k);
     g.uniform1i(U.M, 0); g.uniform1i(U.N, 1); g.uniform3fv(U.W, hex(warm)); g.uniform3fv(U.C, hex(cool));
+    g.uniform3fv(U.TN, tint ? hex(tint) : [1, 1, 1]); g.uniform1f(U.TA, tint ? 0.85 : 0);
     g.uniform1f(U.SH, reduced ? 0 : shimmer); g.uniform1f(U.GL, glow);
     canvas = c; gl = g;
     // the canvas sits over the element, a little larger so the bloom has room

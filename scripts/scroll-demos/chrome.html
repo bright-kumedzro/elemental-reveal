@@ -3,15 +3,33 @@
   <h2>Chrome. <span class="rest">Light flows into your type like reflections sliding over polished metal, and it settles into chrome.</span></h2>
   <div class="sd-stage">
     <p class="sd-chromed" id="chromed">Shipped.</p>
+    <div class="sd-tints" role="group" aria-label="Colour of the metal">
+      <button class="btn" type="button" data-tint="" aria-pressed="true">Chrome</button>
+      <button class="btn" type="button" data-tint="#d4af37" aria-pressed="false"><i style="background:#d4af37"></i>Gold</button>
+      <button class="btn" type="button" data-tint="#e8a798" aria-pressed="false"><i style="background:#e8a798"></i>Rose gold</button>
+      <button class="btn" type="button" data-tint="#33adff" aria-pressed="false"><i style="background:#33adff"></i>Brand blue</button>
+    </div>
   </div>
 <pre class="sd-code"><span class="k">import</span> { chrome } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
-chrome(<span class="s">'#chromed'</span>);   <span class="c">// or your own lights: { warm: '#ff5a1f', cool: '#2f7bff' }</span></pre>
+chrome(<span class="s">'#chromed'</span>);                       <span class="c">// polished chrome</span>
+chrome(<span class="s">'#chromed'</span>, { tint: <span class="s">'#d4af37'</span> });   <span class="c">// gold, rose gold or your brand colour</span>
+chrome(<span class="s">'#chromed'</span>, { warm: <span class="s">'#ff5a1f'</span>, cool: <span class="s">'#2f7bff'</span> });   <span class="c">// your own two lights</span></pre>
   <style>
-    .sd-chrome .sd-stage { min-height: 110vh; display: flex; align-items: center; justify-content: center; }
+    .sd-chrome .sd-stage { min-height: 110vh; display: flex; flex-direction: column; gap: 40px; align-items: center; justify-content: center; }
     .sd-chromed { margin: 0; font-size: clamp(64px, 17vw, 240px); line-height: 1; font-weight: 600; letter-spacing: -.04em; color: var(--ink); text-align: center; }
+    .sd-tints { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 0 16px; }
+    .sd-tints .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; font-size: 13px; }
+    .sd-tints .btn i { width: 10px; height: 10px; border-radius: 50%; }
+    .sd-tints .btn[aria-pressed="true"] { background: var(--ink); color: #0c0c0c; border-color: var(--ink); }
   </style>
   <script type="module">
     import { chrome } from '/js/scroll/chrome.js';
-    chrome('#chromed');
+    let fx = chrome('#chromed');
+    const buttons = document.querySelectorAll('.sd-tints .btn');
+    buttons.forEach((b) => b.addEventListener('click', () => {
+      buttons.forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
+      fx.stop();
+      fx = chrome('#chromed', b.dataset.tint ? { tint: b.dataset.tint } : {});
+    }));
   </script>
 </section>

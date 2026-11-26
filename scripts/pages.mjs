@@ -238,6 +238,17 @@ ${demos}
       <h2>Add them to your page. <span class="rest">One import, then point each effect at your own content.</span></h2>
 <pre class="sd-code"><span class="k">import</span> { words, count, lines, mask, steps, scrub, zoom, chrome } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;</pre>
       <p>Every effect returns <code>{ stop() }</code> to undo itself, shares one scroll listener with the others, and is safe to import during server rendering. With reduced motion turned on, each one simply shows its finished state, and screen readers always get the real text.</p>
+      <h3 class="sd-style-h">Styling</h3>
+      <p>The effects animate your own HTML, so your CSS decides how it looks: any font (Google Fonts, your own or system fonts), size, weight, colour and letter spacing. Style the element as usual, then call the effect on it. Chrome redraws itself when your web fonts finish loading.</p>
+<pre class="sd-code"><span class="c">/* your CSS */</span>
+<span class="k">#title</span> { font: 700 120px/1 <span class="s">'Fraunces'</span>, serif; color: #1d1d1f; }
+
+<span class="c">// your script</span>
+words(<span class="s">'#intro'</span>, { from: <span class="s">'#c7c7cc'</span> });   <span class="c">// lights up to the CSS colour, from this one (or an opacity like 0.2)</span>
+chrome(<span class="s">'#title'</span>, { tint: <span class="s">'#d4af37'</span> });  <span class="c">// the metal's colour; light colours with warm and cool</span>
+mask(<span class="s">'#title'</span>, { src: <span class="s">'/hero.jpg'</span> });   <span class="c">// the picture shows through your type</span></pre>
+      <p>The image reveals (fire, clone, curl and the rest) have no text of their own: any words are part of the two images you give them.</p>
+      <style>.sd-style-h { font-size: 20px; font-weight: 600; margin: 36px 0 10px; color: var(--ink); }</style>
       <div class="actions">
         <a class="btn primary" href="/use">Use it in your project</a>
         <a class="btn" href="/">The image reveals</a>

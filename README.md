@@ -73,6 +73,22 @@ chrome('#title');                                  // light flows into the type 
 
 Each returns `{ stop() }`, they share one scroll listener, and with reduced motion each shows its finished state.
 
+### Styling
+
+The scroll effects animate your own HTML, so your CSS decides how it looks: any font (Google Fonts, self-hosted or system), size, weight, colour and letter spacing. Style the element as usual, then call the effect.
+
+```js
+words('#intro', { from: '#c7c7cc' });     // lights up to the element's CSS colour, from this one (or an opacity like 0.2)
+count('.stat');                           // keeps your font; switches on tabular digits so numbers don't jitter
+mask('#title', { src: '/hero.jpg' });     // the picture shows through your type, in your font
+chrome('#title', { tint: '#d4af37' });    // the metal's colour: gold, rose gold ('#e8a798') or a brand colour
+chrome('#title', { warm: '#ff5a1f', cool: '#2f7bff' });   // the two lights that flow in
+```
+
+Chrome draws the text in the element's own font, size, weight and letter spacing, and redraws when web fonts finish loading. Its other options are `shimmer` and `glow` (strength, default 1; 0 turns the idle sheen off).
+
+The image reveals (fire, clone, curl and the rest) have no text of their own: any words are part of the two images you pass as `from` and `to`.
+
 **Timing on tall elements (phones).** Effects finish while the element is on screen, whatever its height:
 
 - `words` times each word by its own position on screen: a word lights as it crosses a reading band from `start` (0.85 of the viewport height) to `end` (0.5). Offsets are measured once and on resize/font load, never per frame.

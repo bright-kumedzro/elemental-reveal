@@ -1,6 +1,6 @@
 {
   "name": "@brightkumedzro/reveal",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "Scroll effects in one library: WebGL2 reveals between any two images, in three packs (elemental, shinobi, paper), and scrollytelling effects for your own content (words, count, lines, mask, steps, scrub, zoom). Optional synthesised sound. No dependencies, no network requests.",
   "type": "module",
   "main": "js/lib.js",

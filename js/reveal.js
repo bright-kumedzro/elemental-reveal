@@ -18,7 +18,7 @@ import { holder, gpu } from './gpu.js';
 
 export { gpu };
 
-export const VERSION = '1.4.2';
+export const VERSION = '1.5.0';
 
 /* Sound is off unless you ask for it, and every reveal on the page shares one audio output. Any button on the
    page with a data-reveal-sound attribute turns it on and off (and gets aria-pressed to match). */
