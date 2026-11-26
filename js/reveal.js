@@ -255,6 +255,7 @@ export function makeReveal(effects) {
       gl.uniform2f(loc.uPtr, ch.ptr.u * ch.AR, ch.ptr.v);
       el.setUniforms?.(ch, gl, loc, now);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      el.drawGL?.(ch, gl, now);   // an effect can draw its own geometry over the quad (Page Curl's sheet); it restores GL state
 
       fc.setTransform(ch.DPR, 0, 0, ch.DPR, 0, 0);
       fc.clearRect(0, 0, ch.W, ch.H);

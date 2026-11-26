@@ -3,12 +3,12 @@ export const PAPER = [
   {
     id: 'curl', num: '01', label: 'Page Curl', name: 'Turn the draft', color: '#fb7185',
     aria: 'Page Curl. Scroll to turn the wireframe over like a page and reveal the finished design underneath.',
-    summary: 'A pencil wireframe curls back like a page being turned, rolling over itself until the finished design underneath is uncovered. Click to peel a patch back.',
+    summary: 'The wireframe is a page bound at the left edge. Scroll turns it over like a magazine page, bending and catching the light, to uncover the finished design. Click to flick it.',
     body: [
-      'The bottom corner lifts and the sheet starts to roll back over itself. On the roll its front turns away into shadow while its back comes over the top, a highlight running along the spine and the sketch faintly showing through from behind.',
-      'As you scroll the roll sweeps across the page, the turned-over sheet lying back-side up on top, and the finished design is uncovered behind it in the roll\'s soft shadow, until the whole sheet has curled off.',
+      'Scrolling takes hold of the right edge and lifts it. The sheet bends as it rises rather than folding flat: the light runs across the curve, the bend darkens where it tightens, and the sketch shows faintly through the back as it comes over.',
+      'The page is a real simulated sheet with weight and give, so it lags a little behind the hand and settles when you stop. It casts a soft shadow on the finished design as it swings over the spine and lies down off the left edge.',
     ],
-    play: 'Move near a corner and it lifts a little toward your hand. Click to peel a small patch back. With sound on, the paper rustles as it turns, louder the faster you scroll, and flaps as it leaves.',
+    play: 'Move the pointer up or down to choose where the hand holds the edge. At rest, hover near the right and the corner lifts a little. Click to flick the page. With sound on, the paper rustles as it turns, louder the faster you scroll, and flaps as it leaves.',
   },
   {
     id: 'fold', num: '02', label: 'Fold', name: 'Fold the draft', color: '#a3e635',
