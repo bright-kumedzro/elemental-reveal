@@ -1,7 +1,7 @@
 /* @brightkumedzro/reveal: every effect from both packs, by name.
      import { reveal } from '@brightkumedzro/reveal';
      reveal('#hero', { effect: 'fire', from: '/sketch.png', to: '/final.png' });
-   Effects: fire, water, air, earth, lightning (elemental) · clone, vortex, spiral, blade, storm, twister (shinobi).
+   Effects: fire, water, air, earth, lightning, frost (elemental) · clone, vortex, spiral, blade, storm, twister, magma, shuriken (shinobi).
    For a smaller bundle, import one pack: '@brightkumedzro/reveal/elemental' or '@brightkumedzro/reveal/shinobi'. */
 import { makeReveal, VERSION } from './reveal.js';
 import { effects as elemental } from './elemental/index.js';

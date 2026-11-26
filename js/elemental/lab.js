@@ -1,6 +1,7 @@
 /* Sound lab: tune each element's sound by ear. Every change is saved for this browser, and the effects use it
    when the site runs on localhost. "Copy settings" gives the numbers to bake in as the defaults. */
 import { schemaFor, RECIPES, makeBedFor, playHit, playFlight, tuned, saveTuning, clearTuning } from './sfx.js';
+import { FROST_SCHEMA, FROST_PRESETS, FROST, makeFrost, playCrack, playShards, tunedFrost, saveFrost, clearFrost } from './sfx-frost.js';
 
 let A = null;
 function audio() {
@@ -90,3 +91,54 @@ function panel(name) {
 }
 
 document.querySelector('#elemental-panels').append(...Object.keys(RECIPES).map(panel));
+
+/* Frost: its own sliders and voices */
+function frostPanel() {
+  const root = el('section', { id: 'frost' });
+  const names = Object.keys(FROST_PRESETS);
+  let P = { ...tunedFrost() }, bed = null, timer = 0, freeze = 0.8, act = 0.3;
+  const sel = el('select', { 'aria-label': 'Frost: start from' });
+  [...names, 'Custom'].forEach((n) => sel.append(el('option', { value: n }, n)));
+  const json = el('textarea', { readonly: '', rows: '3', 'aria-label': 'Frost settings' });
+  const sliders = {}, grid = el('div', { class: 'grid' });
+  const sync = () => {
+    sel.value = names.find((n) => same(P, FROST_PRESETS[n])) || 'Custom';
+    for (const [k, , , , step] of FROST_SCHEMA) { sliders[k].input.value = P[k]; sliders[k].out.textContent = fmt(P[k], step); }
+    json.value = JSON.stringify(P);
+  };
+  const changed = () => { saveFrost(P); sync(); };
+  for (const [k, label, min, max, step] of FROST_SCHEMA) {
+    const id = `frost-${k}`, out = el('output', { for: id });
+    const input = el('input', { id, type: 'range', min, max, step, on: { input: (e) => { P[k] = Number(e.target.value); changed(); } } });
+    sliders[k] = { input, out };
+    grid.append(el('div', {}, el('label', { class: 'row', for: id }, el('span', {}, label), out), input));
+  }
+  sel.addEventListener('change', () => { if (sel.value !== 'Custom') { P = { ...FROST_PRESETS[sel.value] }; changed(); } });
+  const range = (id, v, set) => el('input', { id, type: 'range', min: 0, max: 1, step: 0.01, value: v, on: { input: (e) => set(Number(e.target.value)) } });
+  const start = btn('Start the freeze', () => {
+    if (bed) { bed.dispose(); bed = null; clearInterval(timer); start.textContent = 'Start the freeze'; return; }
+    bed = makeFrost(audio());
+    timer = setInterval(() => bed?.set(P, freeze, act, 1), 40);
+    start.textContent = 'Stop';
+  }, true);
+  const copy = btn('Copy settings', async () => {
+    json.select();
+    try { await navigator.clipboard.writeText(json.value); copy.textContent = 'Copied'; } catch { copy.textContent = 'Selected: copy it'; }
+    setTimeout(() => { copy.textContent = 'Copy settings'; }, 1600);
+  });
+  root.append(
+    el('h2', {}, 'Frost'),
+    el('p', { class: 'blurb' }, 'The bed runs while the frost grows: cold wind, the ice creaking and tinkling (more with the Freezing slider). "Crack" is the sheet giving way; "Small crack" is a click\'s patch; "Shards" is a few pieces falling.'),
+    el('div', { class: 'bar' }, el('label', { class: 'preset' }, 'Start from ', sel), start,
+      btn('Crack', () => playCrack(audio(), P, 1)), btn('Small crack', () => playCrack(audio(), P, 0.45)), btn('Shards', () => playShards(audio(), P, 4))),
+    el('div', { class: 'grid live' },
+      el('div', {}, el('label', { class: 'row', for: 'frost-freeze' }, el('span', {}, 'Freezing (still → growing fast)')), range('frost-freeze', freeze, (v) => { freeze = v; })),
+      el('div', {}, el('label', { class: 'row', for: 'frost-act' }, el('span', {}, 'Scrolling (calm → hard)')), range('frost-act', act, (v) => { act = v; }))),
+    grid,
+    el('div', { class: 'bar' }, copy, btn('Reset', () => { clearFrost(); P = { ...FROST }; changed(); })),
+    json,
+  );
+  sync();
+  return root;
+}
+document.querySelector('#elemental-panels').append(frostPanel());

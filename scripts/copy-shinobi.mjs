@@ -60,4 +60,24 @@ export const TECHNIQUES = [
     ],
     play: 'Move over the paper and it swirls under your hand. Click to spin up a dust devil that tears its own patch. With sound on, the twister roars like a freight train, louder the nearer it gets and the harder you scroll, and lands with a thud.',
   },
+  {
+    id: 'magma', num: '07', label: 'Magma Sphere', name: 'Melt the draft', color: '#ff5a1f',
+    aria: 'Magma Sphere. Scroll to heat a ball of molten rock over the wireframe until it sinks in and melts the draft away to reveal the finished design.',
+    summary: 'A churning ball of molten rock gathers over a pencil wireframe, drips and scorches the paper, then sinks in and melts the page away from the middle out to reveal the finished design. Click to drop a molten blob.',
+    body: [
+      'A sphere of molten rock gathers in the middle of the page: a black crust split by glowing cracks that slowly churn. The page warms to orange, the air shimmers around it, and molten drips fall off it and scorch the paper where they land.',
+      'Then it sinks into the page with a hiss and a burst of embers, and the page melts outward in slow lumpy lobes. The front glows white-orange and cools to a black crust split by glowing cracks, and behind it the finished design is left, the last cracks cooling across it.',
+    ],
+    play: 'Move over the paper and the air shimmers under your hand. Click to drop a blob of molten rock that melts its own hole. With sound on, the lava rumbles and bubbles as it charges, sinks in with a heavy hiss and a thud, and sizzles as it melts, harder the faster you scroll.',
+  },
+  {
+    id: 'shuriken', num: '08', label: 'Spiral Shuriken', name: 'Shred the draft', color: '#7fe0d0',
+    aria: 'Spiral Shuriken. Scroll to wind up a spinning shuriken of wind, throw it into the wireframe and let its vortex shred the draft to reveal the finished design. Contains a brief flash.',
+    summary: 'A sphere of wind with four spinning blades winds up over a pencil wireframe, is thrown across it and bursts into a vortex of cutting wind that slices the draft into ribbons to reveal the finished design. Click to throw a small one.',
+    body: [
+      'A ball of compressed wind forms low on the left, four blades of air spinning round it faster and faster. The paper flutters in its wind and gets nicked with thin cuts. Then it is thrown: it flies across the page, leaving a wake of slices.',
+      'Where it lands it bursts into a huge vortex of cutting wind. The paper inside is sliced into ribbons that whirl away, and the vortex keeps growing as you scroll, its edge a ring of spinning blades. Behind it the finished design settles out of the wind.',
+    ],
+    play: 'Move over the paper and thin cuts trail your hand. Click to throw a small shuriken that slices its own patch. With sound on, it screams and whirs louder as it spins up, whooshes as it flies, and tears the page apart when it lands.',
+  },
 ];

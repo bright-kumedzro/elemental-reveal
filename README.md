@@ -2,8 +2,8 @@
 
 Scroll-driven WebGL2 reveals between any two images, in two packs. Each effect takes the first image apart in its own way and leaves the second underneath. Drive it with scroll, let it play on its own, or set the progress yourself. No dependencies.
 
-- **Elemental:** `fire`, `water`, `air`, `earth`, `lightning`
-- **Shinobi:** `clone`, `vortex`, `spiral`, `blade`, `storm`, `twister`
+- **Elemental:** `fire`, `water`, `air`, `earth`, `lightning`, `frost`
+- **Shinobi:** `clone`, `vortex`, `spiral`, `blade`, `storm`, `twister`, `magma`, `shuriken`
 
 **Live demo and docs:** https://reveal.brightkumedzro.com/use · **See them all:** https://reveal.brightkumedzro.com
 
@@ -22,8 +22,8 @@ reveal('#hero', { effect: 'storm', from: '/sketch.png', to: '/final.png' });
 Only using one pack? Import it on its own for a smaller bundle:
 
 ```js
-import { reveal } from '@brightkumedzro/reveal/elemental';   // fire · water · air · earth · lightning
-import { reveal } from '@brightkumedzro/reveal/shinobi';     // clone · vortex · spiral · blade · storm · twister
+import { reveal } from '@brightkumedzro/reveal/elemental';   // fire · water · air · earth · lightning · frost
+import { reveal } from '@brightkumedzro/reveal/shinobi';     // clone · vortex · spiral · blade · storm · twister · magma · shuriken
 ```
 
 Or with no build step, straight from a CDN. Pin the version so updates never change your page unexpectedly:
@@ -47,7 +47,7 @@ It's the same library under a new name, with the shinobi pack added. Swap the im
 
 | Option | Default | What it does |
 |---|---|---|
-| `effect` | the pack's first | Any effect by name: `'fire'`, `'water'`, `'air'`, `'earth'`, `'lightning'`, `'clone'`, `'vortex'`, `'spiral'`, `'blade'`, `'storm'` or `'twister'`. The main import defaults to `'fire'`, the shinobi pack to `'clone'` |
+| `effect` | the pack's first | Any effect by name: `'fire'`, `'water'`, `'air'`, `'earth'`, `'lightning'`, `'frost'`, `'clone'`, `'vortex'`, `'spiral'`, `'blade'`, `'storm'`, `'twister'`, `'magma'` or `'shuriken'`. The main import defaults to `'fire'`, the shinobi pack to `'clone'` |
 | `from` | required | What gets taken away: an image URL, or an `<img>`, `<canvas>` or `<video>` |
 | `to` | required | What's revealed underneath |
 | `progress` | `'scroll'` | `'scroll'` follows the page, `'auto'` plays once when it comes into view, and `'manual'` waits for `fx.progress(p)` |
@@ -64,7 +64,7 @@ It's the same library under a new name, with the shinobi pack added. Swap the im
 
 ## Sound
 
-Every effect has its own sound, synthesised with Web Audio: fire roars and the comet lands with a boom, water rushes, the wind gusts, the ground grinds and quakes, lightning crackles and thunders, clones go with a poof, sand roars and hisses, the sphere whirs, the blade shrieks, the storm howls and the twister roars like a train. It is off unless you ask for it, and it gets louder the harder the visitor scrolls.
+Every effect has its own sound, synthesised with Web Audio: fire roars and the comet lands with a boom, water rushes, the wind gusts, the ground grinds and quakes, lightning crackles and thunders, clones go with a poof, sand roars and hisses, the sphere whirs, the blade shrieks, the storm howls, the twister roars like a train, the ice creaks and shatters, the magma bubbles and sizzles and the shuriken screams. It is off unless you ask for it, and it gets louder the harder the visitor scrolls.
 
 ```html
 <button data-reveal-sound aria-pressed="false">Sound</button>
@@ -99,7 +99,7 @@ MIT licensed, so use it anywhere. Keeping the copyright notice in the code is th
 
 ## The site
 
-`/` introduces both packs. `/elemental` runs the five elements in a row and `/shinobi` the six techniques; every effect also has a page of its own (`/fire` … `/twister`). `/use` is the docs with a live demo, `/stats` the adoption numbers, and `/sound-lab` tunes every effect's sound by ear.
+`/` introduces both packs. `/elemental` runs the six elements in a row and `/shinobi` the eight techniques; every effect also has a page of its own (`/fire` … `/twister`). `/use` is the docs with a live demo, `/stats` the adoption numbers, and `/sound-lab` tunes every effect's sound by ear.
 
 ### How it works
 

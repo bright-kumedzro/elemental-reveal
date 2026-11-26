@@ -3,6 +3,8 @@
 import { POOF_SCHEMA, POOF_PRESETS, playPoof, WHIR_SCHEMA, WHIR_PRESETS, makeWhir, CRACKLE_SCHEMA, CRACKLE_PRESETS, makeCrackle, playStrike, tuned, saveTuning, clearTuning } from './sfx.js';
 import { STORM_SCHEMA, STORM_PRESETS, makeStorm, playGust } from './sfx-storm.js';
 import { TWISTER_SCHEMA, TWISTER_PRESETS, makeTwister, playTouchdown, playDevil } from './sfx-twister.js';
+import { MAGMA_SCHEMA, MAGMA_PRESETS, makeMagma, playSink, playBlob } from './sfx-magma.js';
+import { SHURIKEN_SCHEMA, SHURIKEN_PRESETS, makeShuriken, playThrow, playBurst, playSlice } from './sfx-shuriken.js';
 
 let A = null;
 function audio() {
@@ -241,5 +243,81 @@ panel(document.querySelector('#twister'), {
     extra: el('div', { class: 'grid live' },
       el('div', {}, el('label', { class: 'row', for: 't-near' }, el('span', {}, 'On the ground (lifted → down)')), tNearIn),
       el('div', {}, el('label', { class: 'row', for: 't-act' }, el('span', {}, 'Scrolling (calm → hard)')), tActIn)),
+  },
+});
+
+/* the magma sphere */
+let MG = null, mTimer = 0, mCharge = 0.6, mMelt = 0, mDrive = 0, P_mg = null;
+const mChargeIn = el('input', { type: 'range', min: 0, max: 1, step: 0.01, value: mCharge, id: 'm-charge', on: { input: (e) => { mCharge = Number(e.target.value); } } });
+const mMeltIn = el('input', { type: 'range', min: 0, max: 1, step: 0.01, value: mMelt, id: 'm-melt', on: { input: (e) => { mMelt = Number(e.target.value); } } });
+const mDriveIn = el('input', { type: 'range', min: 0, max: 1, step: 0.01, value: mDrive, id: 'm-drive', on: { input: (e) => { mDrive = Number(e.target.value); } } });
+const mStart = btn('Start', () => {
+  if (MG) { MG.dispose(); MG = null; clearInterval(mTimer); mStart.textContent = 'Start'; return; }
+  MG = makeMagma(audio());
+  mTimer = setInterval(() => MG?.set(P_mg(), mCharge, mMelt, mDrive), 40);
+  mStart.textContent = 'Stop';
+}, true);
+panel(document.querySelector('#magma'), {
+  name: 'magma',
+  title: 'Magma Sphere · rumble and sizzle',
+  blurb: 'The rumble and bubbling follow the Charge slider (the sphere forming); the sizzle and spitting follow Melting, and get harder with Scrolling. "Sink" is the hiss and thud as it drops into the page; "Blob" is a click\'s plop.',
+  schema: MAGMA_SCHEMA,
+  presets: MAGMA_PRESETS,
+  controls: {
+    buttons: (get) => {
+      P_mg = get;
+      return [mStart, btn('Sink', () => playSink(audio(), get())), btn('Blob', () => playBlob(audio(), get()))];
+    },
+    extra: el('div', { class: 'grid live' },
+      el('div', {}, el('label', { class: 'row', for: 'm-charge' }, el('span', {}, 'Charge (forming → full)')), mChargeIn),
+      el('div', {}, el('label', { class: 'row', for: 'm-melt' }, el('span', {}, 'Melting (none → full)')), mMeltIn),
+      el('div', {}, el('label', { class: 'row', for: 'm-drive' }, el('span', {}, 'Scrolling (calm → hard)')), mDriveIn)),
+  },
+});
+
+/* the spiral shuriken */
+let SK = null, kTimer = 0, kSpin = 0.5, kShred = 0, kDrive = 0, P_sk = null;
+const kSpinIn = el('input', { type: 'range', min: 0, max: 1, step: 0.01, value: kSpin, id: 'k-spin', on: { input: (e) => { kSpin = Number(e.target.value); } } });
+const kShredIn = el('input', { type: 'range', min: 0, max: 1, step: 0.01, value: kShred, id: 'k-shred', on: { input: (e) => { kShred = Number(e.target.value); } } });
+const kDriveIn = el('input', { type: 'range', min: 0, max: 1, step: 0.01, value: kDrive, id: 'k-drive', on: { input: (e) => { kDrive = Number(e.target.value); } } });
+const kStart = btn('Start', () => {
+  if (SK) { SK.dispose(); SK = null; clearInterval(kTimer); kStart.textContent = 'Start'; return; }
+  SK = makeShuriken(audio());
+  kTimer = setInterval(() => SK?.set(P_sk(), kSpin, kShred, kDrive), 40);
+  kStart.textContent = 'Stop';
+}, true);
+panel(document.querySelector('#shuriken'), {
+  name: 'shuriken',
+  title: 'Spiral Shuriken · scream, throw and shred',
+  blurb: 'The bed runs while the shuriken is on screen: it screams, whirs and whistles higher as it spins up (the Spin slider), and once it lands the vortex roars and tears the page (the Shredding slider), harder the faster you scroll. "Throw", "Landing" and "Small one" are the one-shots.',
+  schema: SHURIKEN_SCHEMA,
+  presets: SHURIKEN_PRESETS,
+  controls: {
+    buttons: (get) => {
+      P_sk = get;
+      return [
+        kStart,
+        btn('Wind up and throw', () => {
+          if (!SK) kStart.click();
+          kSpin = 0; kShred = 0;
+          const t0 = performance.now();
+          let thrown = false;
+          const iv = setInterval(() => {
+            const k = (performance.now() - t0) / 2500;
+            if (k < 1) kSpin = k;
+            else if (!thrown) { thrown = true; playThrow(audio(), get(), 0.65); setTimeout(() => { playBurst(audio(), get()); kSpin = 0; kShred = 1; kShredIn.value = 1; }, 650); }
+            kSpinIn.value = kSpin;
+            if (k > 3) { clearInterval(iv); kShred = 0; kShredIn.value = 0; }
+          }, 40);
+        }),
+        btn('Throw', () => playThrow(audio(), get(), 0.65)),
+        btn('Landing', () => playBurst(audio(), get())),
+        btn('Small one', () => playSlice(audio(), get())),
+      ];
+    },
+    extra: el('div', { class: 'grid live' },
+      el('div', {}, el('label', { class: 'row', for: 'k-spin' }, el('span', {}, 'Spin (forming → full)')), kSpinIn),
+      el('div', {}, el('label', { class: 'row', for: 'k-shred' }, el('span', {}, 'Shredding (landed vortex)')), kShredIn),
+      el('div', {}, el('label', { class: 'row', for: 'k-drive' }, el('span', {}, 'Scrolling (calm → hard)')), kDriveIn)),
   },
 });

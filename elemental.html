@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Elemental · Reveal · Bright Kumedzro</title>
-  <meta name="description" content="Five elements, one pencil sketch. Fire, water, air, earth and lightning each take the same wireframe apart in their own way and leave the finished design behind.">
+  <meta name="description" content="Six elements, one pencil sketch. Fire, water, air, earth, lightning and frost each take the same wireframe apart in their own way and leave the finished design behind.">
   <meta name="theme-color" content="#0b0b0c">
   <link rel="canonical" href="https://reveal.brightkumedzro.com/elemental">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://reveal.brightkumedzro.com/elemental">
   <meta property="og:title" content="Elemental · Reveal">
-  <meta property="og:description" content="Five elements, one pencil sketch. Fire, water, air, earth and lightning each take the same wireframe apart in their own way and leave the finished design behind.">
+  <meta property="og:description" content="Six elements, one pencil sketch. Fire, water, air, earth, lightning and frost each take the same wireframe apart in their own way and leave the finished design behind.">
   <meta property="og:image" content="https://reveal.brightkumedzro.com/og/elemental.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -29,13 +29,14 @@
       <a class="pill back" href="/">← Reveal</a>
       <p class="eyebrow">Reveal · Elemental pack</p>
       <h1>Elemental</h1>
-      <p class="lede">Five elements, one pencil sketch. Fire, water, air, earth and lightning each take the same wireframe apart in their own way and leave the finished design behind.</p>
+      <p class="lede">Six elements, one pencil sketch. Fire, water, air, earth, lightning and frost each take the same wireframe apart in their own way and leave the finished design behind.</p>
       <nav class="chapters" aria-label="Chapters">
         <a href="#fire" style="--c:#ff7a1a"><span>01</span>Fire</a>
         <a href="#water" style="--c:#2dd4bf"><span>02</span>Water</a>
         <a href="#air" style="--c:#a5b4fc"><span>03</span>Air</a>
         <a href="#earth" style="--c:#e9a85a"><span>04</span>Earth</a>
         <a href="#lightning" style="--c:#a78bfa"><span>05</span>Lightning</a>
+        <a href="#frost" style="--c:#9fd8ff"><span>06</span>Frost</a>
       </nav>
       <button class="pill snd" type="button" data-sound-toggle aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="x" d="m16 9 6 6m0-6-6 6"/></svg><span class="snd-label">Sound off</span></button>
       <p class="cue">Scroll to begin</p>
@@ -46,10 +47,11 @@
     <section id="air" class="track" data-el="air" aria-label="Air. Scroll to blow the wireframe away and reveal the finished design."></section>
     <section id="earth" class="track" data-el="earth" aria-label="Earth. Scroll to break the wireframe apart and reveal the finished design."></section>
     <section id="lightning" class="track" data-el="lightning" aria-label="Lightning. Scroll to strike the wireframe and reveal the finished design. Contains brief flashes."></section>
+    <section id="frost" class="track" data-el="frost" aria-label="Frost. Scroll to freeze the wireframe over, then shatter the ice to reveal the finished design."></section>
 
     <section class="after">
       <p class="eyebrow">Reveal · Elemental pack</p>
-      <h2>Five ways to lose a draft</h2>
+      <h2>Six ways to lose a draft</h2>
       <p>Every chapter holds the same two drawings: a pencil wireframe on paper and the finished design underneath. A WebGL2 shader gives each pixel a fuel value and decides, pixel by pixel, which drawing you see. Scrolling pushes the front through the fuel. Each element shapes that fuel differently and does different damage at the edge.</p>
       <dl class="elements">
         <div style="--c:#ff7a1a">
@@ -71,6 +73,10 @@
         <div style="--c:#a78bfa">
           <dt><a href="/lightning">Lightning · Strike the draft</a></dt>
           <dd>Four bolts grow as branching random walks, and each one gets its own distance field. When your scroll reaches a bolt, it strikes. The bolt flashes, and the reveal spreads out from the channel it burned. Click the paper to call down your own bolt.</dd>
+        </div>
+        <div style="--c:#9fd8ff">
+          <dt><a href="/frost">Frost · Shatter the draft</a></dt>
+          <dd>The light goes cold and breath-fog gathers at the edges. Frost creeps in from the edges in feathery fronds, and a white-blue glaze of rime covers the paper until the sketch is only a blur under the ice. Then it cracks: radial cracks race out from the middle, then the rings between them, glinting as they go. The sheet breaks into shards that drop away one by one, leaving the finished design with rime still on the edges and a few drops of melt running down. Move over the paper and frost forms under your hand. Click to freeze a patch and shatter it. With sound on, the ice creaks and tinkles as it grows, and breaks with a crack and a shower of glass.</dd>
         </div>
       </dl>
       <p>Scroll back up in any chapter and the draft comes back. Each element also has a page of its own.</p>

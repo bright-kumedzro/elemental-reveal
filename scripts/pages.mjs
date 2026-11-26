@@ -12,14 +12,14 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 
 const PACKS = [
   {
-    id: 'elemental', title: 'Elemental', color: '#33adff', effects: ELEMENTS, og: 'elemental', count: 'Five', unit: 'element',
-    lede: 'Five elements, one pencil sketch. Fire, water, air, earth and lightning each take the same wireframe apart in their own way and leave the finished design behind.',
+    id: 'elemental', title: 'Elemental', color: '#33adff', effects: ELEMENTS, og: 'elemental', count: 'Six', unit: 'element',
+    lede: 'Six elements, one pencil sketch. Fire, water, air, earth, lightning and frost each take the same wireframe apart in their own way and leave the finished design behind.',
     how: 'A WebGL2 shader gives each pixel a fuel value and decides, pixel by pixel, which drawing you see. Scrolling pushes the front through the fuel. Each element shapes that fuel differently and does different damage at the edge.',
     eyebrow: 'Elemental pack',
   },
   {
-    id: 'shinobi', title: 'Shinobi', color: '#ff8a3d', effects: TECHNIQUES, count: 'Six', unit: 'technique', ink: true,
-    lede: 'Six techniques, one pencil sketch. A crowd of clones goes up in smoke one by one, a sand vortex grinds the draft away, a spinning sphere drills straight through it, a lightning blade runs it through, a wall of dust scours it off and a growing twister tears it up. Each leaves the finished design behind.',
+    id: 'shinobi', title: 'Shinobi', color: '#ff8a3d', effects: TECHNIQUES, count: 'Eight', unit: 'technique', ink: true,
+    lede: 'Eight techniques, one pencil sketch. A crowd of clones goes up in smoke one by one, a sand vortex grinds the draft away, a spinning sphere drills straight through it, a lightning blade runs it through, a wall of dust scours it off, a growing twister tears it up, a molten sphere melts it and a shuriken of wind shreds it. Each leaves the finished design behind.',
     how: 'A WebGL2 shader decides, pixel by pixel, which drawing you see, and your scroll drives the technique.',
     eyebrow: 'Shinobi pack',
     credit: 'Anime-inspired techniques, every effect written from scratch.',
@@ -73,12 +73,12 @@ const glyph = (p) => (p.ink ? '\n      <p class="glyph" aria-hidden="true">忍</
 const titleRow = (p, text) => (p.ink ? `<div class="title-row"><h1>${text}</h1><span class="seal" aria-hidden="true">忍</span></div>` : `<h1>${text}</h1>`);
 
 /* The landing page: both packs, how to use them, no chapters (so no WebGL until you pick one) */
-const index = `${head({ title: 'Reveal', description: 'Scroll-driven WebGL reveals that take a pencil wireframe apart and leave the finished design, in two packs: elemental and shinobi. One library, eleven effects.', path: '/', image: 'elemental', script: false })}
+const index = `${head({ title: 'Reveal', description: 'Scroll-driven WebGL reveals that take a pencil wireframe apart and leave the finished design, in two packs: elemental and shinobi. One library, fourteen effects.', path: '/', image: 'elemental', script: false })}
     <header class="intro">
       <a class="pill back" href="${PLAYGROUND}">← Playground</a>
       <p class="eyebrow">Playground · Library</p>
       <h1>Reveal</h1>
-      <p class="lede">Eleven ways to take a first draft apart and leave the finished design behind, in two packs. Pick a pack to see every effect in a row, or open one on its own.</p>
+      <p class="lede">Fourteen ways to take a first draft apart and leave the finished design behind, in two packs. Pick a pack to see every effect in a row, or open one on its own.</p>
     </header>
     <section class="after packs">
 ${PACKS.map((p) => `      <div class="pack" style="--c:${p.color}">

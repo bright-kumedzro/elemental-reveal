@@ -50,4 +50,14 @@ export const ELEMENTS = [
     ],
     play: 'Click the paper to call down your own bolt.',
   },
+  {
+    id: 'frost', num: '06', label: 'Frost', name: 'Shatter the draft', color: '#9fd8ff',
+    aria: 'Frost. Scroll to freeze the wireframe over, then shatter the ice to reveal the finished design.',
+    summary: 'Frost creeps over a pencil wireframe until it is frozen solid, then the ice cracks and falls away in shards to reveal the finished design. Click to freeze a patch and shatter it.',
+    body: [
+      'The light goes cold and breath-fog gathers at the edges. Frost creeps in from the edges in feathery fronds, and a white-blue glaze of rime covers the paper until the sketch is only a blur under the ice.',
+      'Then it cracks: radial cracks race out from the middle, then the rings between them, glinting as they go. The sheet breaks into shards that drop away one by one, leaving the finished design with rime still on the edges and a few drops of melt running down.',
+    ],
+    play: 'Move over the paper and frost forms under your hand. Click to freeze a patch and shatter it. With sound on, the ice creaks and tinkles as it grows, and breaks with a crack and a shower of glass.',
+  },
 ];

@@ -1,7 +1,7 @@
 {
   "name": "@brightkumedzro/reveal",
   "version": "1.1.0",
-  "description": "Scroll-driven WebGL2 reveals between any two images, in two packs: elemental (fire, water, air, earth, lightning) and shinobi (clone, vortex, spiral, blade, storm, twister). Optional synthesised sound. No dependencies.",
+  "description": "Scroll-driven WebGL2 reveals between any two images, in two packs: elemental (fire, water, air, earth, lightning, frost) and shinobi (clone, vortex, spiral, blade, storm, twister, magma, shuriken). Optional synthesised sound. No dependencies, no network requests.",
   "type": "module",
   "main": "js/lib.js",
   "module": "js/lib.js",
@@ -37,7 +37,9 @@
     "sand",
     "tornado",
     "sandstorm",
-    "anime"
+    "anime",
+    "ice",
+    "lava"
   ],
   "author": "Bright Kumedzro",
   "license": "MIT",
