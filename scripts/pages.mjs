@@ -5,6 +5,7 @@ import { writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { ELEMENTS } from './copy-elemental.mjs';
 import { TECHNIQUES } from './copy-shinobi.mjs';
+import { PAPER } from './copy-paper.mjs';
 
 const SITE = 'https://reveal.brightkumedzro.com';   // the site's address, in one place, for when it moves
 const HOME = 'https://www.brightkumedzro.com';
@@ -28,6 +29,14 @@ const PACKS = [
     tagline: 'Eight anime-inspired techniques take the same pencil sketch apart and leave the finished design behind.',
     short: 'Clones, sand, spinning spheres, molten rock, a lightning blade and a shuriken of wind: anime-inspired techniques, every effect written from scratch.',
     credit: 'Anime-inspired techniques, every effect written from scratch.',
+  },
+  {
+    id: 'paper', title: 'Paper', color: '#f4c27a', effects: PAPER, og: 'paper', count: 'Three', unit: 'effect',
+    lede: 'Three ways a sheet of paper gives way: it curls back like a page being turned, folds up like origami, or gets inked over by a pen until the finished design washes in.',
+    how: 'A WebGL2 shader works out, pixel by pixel, where each part of the sheet has moved to: rolled round a cylinder, flipped over a crease, or inked and washed.',
+    eyebrow: 'Paper pack',
+    tagline: 'The draft is a real sheet of paper: it curls back like a page, folds up like origami, or gets inked over by a pen.',
+    short: 'Page curl, origami folds and a pen that inks the finished design over the sketch: the draft treated as an actual sheet of paper.',
   },
 ];
 const ALL = PACKS.flatMap((p) => p.effects.map((e) => ({ ...e, pack: p })));
@@ -89,11 +98,11 @@ const glyph = (p) => (p.ink ? '\n      <p class="glyph" aria-hidden="true">忍</
 const titleRow = (p, text) => (p.ink ? `<div class="title-row"><h1>${text}</h1><span class="seal" aria-hidden="true">忍</span></div>` : `<h1>${text}</h1>`);
 
 /* The landing page: both packs, how to use them, no chapters (so no WebGL until you pick one) */
-const index = `${head({ title: 'Reveal', description: 'Scroll-driven WebGL reveals that take a pencil wireframe apart and leave the finished design, in two packs: elemental and shinobi. One library, fourteen effects.', path: '/', image: 'reveal', script: false, cls: 'home' })}
+const index = `${head({ title: 'Reveal', description: 'Scroll-driven WebGL reveals that take a pencil wireframe apart and leave the finished design, in three packs: elemental, shinobi and paper. One library, seventeen effects.', path: '/', image: 'reveal', script: false, cls: 'home' })}
     <header class="intro">
       <a class="pill back" href="${PLAYGROUND}">← Playground</a>
       <p class="eyebrow">Playground · Library</p>
-      <h1>Reveal. <span class="rest">Fourteen ways to take a first draft apart and leave the finished design behind, between any two images.</span></h1>
+      <h1>Reveal. <span class="rest">Seventeen ways to take a first draft apart and leave the finished design behind, between any two images.</span></h1>
       <div class="actions">
         <a class="btn primary" href="/use">Use it in your project</a>
         <a class="btn" href="/stats">Who's using it</a>

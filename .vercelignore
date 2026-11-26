@@ -4,4 +4,3 @@ node_modules
 # temporary test pages, entries and work in progress
 _*.html
 js/**/_*.js
-js/paper/

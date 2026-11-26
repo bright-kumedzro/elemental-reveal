@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Paper · Reveal · Bright Kumedzro</title>
+  <meta name="description" content="Three ways a sheet of paper gives way: it curls back like a page being turned, folds up like origami, or gets inked over by a pen until the finished design washes in.">
+  <meta name="theme-color" content="#0c0c0c">
+  <link rel="canonical" href="https://reveal.brightkumedzro.com/paper">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://reveal.brightkumedzro.com/paper">
+  <meta property="og:title" content="Paper · Reveal">
+  <meta property="og:description" content="Three ways a sheet of paper gives way: it curls back like a page being turned, folds up like origami, or gets inked over by a pen until the finished design washes in.">
+  <meta property="og:image" content="https://reveal.brightkumedzro.com/og/paper.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://reveal.brightkumedzro.com/og/paper.png">
+  <link rel="icon" href="/bk-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/js/main.js"></script>
+</head>
+<body>
+  <main>
+    <header class="intro pack-intro" style="--c:#f4c27a">
+      <a class="pill back" href="/">← Reveal</a>
+      <p class="eyebrow">Reveal · Paper pack · 3 effects</p>
+      <h1>Paper. <span class="rest">The draft is a real sheet of paper: it curls back like a page, folds up like origami, or gets inked over by a pen.</span></h1>
+      <a class="banner" href="#curl" aria-label="Start with Page Curl"><img src="/og/paper.png" alt="" width="1200" height="630"></a>
+      <nav class="chapters" aria-label="Chapters">
+        <a href="#curl" style="--c:#fb7185"><span>01</span>Page Curl</a>
+        <a href="#fold" style="--c:#a3e635"><span>02</span>Fold</a>
+        <a href="#draw" style="--c:#4a6cf7"><span>03</span>Ink Draw</a>
+      </nav>
+      <div class="go"><button class="pill snd" type="button" data-sound-toggle aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="x" d="m16 9 6 6m0-6-6 6"/></svg><span class="snd-label">Sound off</span></button><span class="cue">Scroll to begin <span aria-hidden="true">↓</span></span></div>
+    </header>
+
+    <section id="curl" class="track" data-el="curl" aria-label="Page Curl. Scroll to turn the wireframe over like a page and reveal the finished design underneath."></section>
+    <section id="fold" class="track" data-el="fold" aria-label="Fold. Scroll to fold the wireframe in half again and again like origami until the folded packet flies off and the finished design is left."></section>
+    <section id="draw" class="track" data-el="draw" aria-label="Ink Draw. Scroll to watch a pen ink the finished design over the wireframe, then colour wash in to reveal it."></section>
+
+    <section class="after">
+      <p class="eyebrow">Reveal · Paper pack</p>
+      <h2>Three ways to lose a draft. <span class="rest">Same sketch, same design, a different way through.</span></h2>
+      <p>Every chapter holds the same two drawings: a pencil wireframe on paper and the finished design underneath. A WebGL2 shader works out, pixel by pixel, where each part of the sheet has moved to: rolled round a cylinder, flipped over a crease, or inked and washed.</p>
+      <div class="fx-cards">
+        <a class="fx" href="/curl" style="--c:#fb7185">
+          <span class="fx-top"><span class="num">01</span><b>Page Curl</b><span class="name">Turn the draft</span></span>
+          <span class="fx-body">A pencil wireframe curls back like a page being turned, rolling over itself until the finished design underneath is uncovered. Click to peel a patch back.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+        <a class="fx" href="/fold" style="--c:#a3e635">
+          <span class="fx-top"><span class="num">02</span><b>Fold</b><span class="name">Fold the draft</span></span>
+          <span class="fx-body">A pencil wireframe folds in half, then in half again, four times like origami, each fold uncovering more of the finished design, until the little folded packet tumbles off the page. Click to snap a crease.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+        <a class="fx" href="/draw" style="--c:#4a6cf7">
+          <span class="fx-top"><span class="num">03</span><b>Ink Draw</b><span class="name">Ink the draft</span></span>
+          <span class="fx-body">A pen draws the finished design's outlines over a pencil wireframe in ink, the pencil fades away under it, and watercolour blooms into the inked shapes until the finished design is all that is left. Click to drop some ink.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+      </div>
+      <p>Scroll back up in any chapter and the draft comes back. Each effect also has a page of its own.</p>
+      <div class="actions">
+        <button id="again" class="btn primary" type="button">Run it again</button>
+        <a class="btn" href="/elemental">The elemental pack</a>
+        <a class="btn" href="/use">Use it in your project</a>
+      </div>
+      <p class="small">Raw WebGL2 and canvas, no libraries. Without WebGL2 it falls back to a wipe. With reduced motion on it cross-fades instead, with no flashes. Sound is off until you turn it on, and every sound is synthesised in the browser with Web Audio, so there are no audio files. One WebGL canvas draws every chapter, each with its own fragment shader.</p>
+    </section>
+    <footer class="site-foot">
+      <a class="me" href="https://www.brightkumedzro.com"><img src="/bk-mark.png" alt="" width="34" height="34"><span><b>Bright Kumedzro</b><span>Product designer &amp; manager</span></span></a>
+      <nav aria-label="Bright Kumedzro's site">
+        <a href="https://www.brightkumedzro.com">Work</a>
+        <a href="https://www.brightkumedzro.com/about">About</a>
+        <a href="https://www.brightkumedzro.com/playground">Playground</a>
+        <a class="talk" href="https://www.brightkumedzro.com/contact"><i></i>Let's talk</a>
+      </nav>
+      <p class="where">Accra, Ghana · 2026</p>
+    </footer>
+  </main>
+</body>
+</html>
