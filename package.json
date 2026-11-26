@@ -61,10 +61,10 @@
   "homepage": "https://elemental-reveal.vercel.app/use",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bright-kumedzro/elemental-reveal.git"
+    "url": "git+https://github.com/bright-kumedzro/reveal.git"
   },
   "bugs": {
-    "url": "https://github.com/bright-kumedzro/elemental-reveal/issues"
+    "url": "https://github.com/bright-kumedzro/reveal/issues"
   },
   "scripts": {
     "pages": "node scripts/pages.mjs",

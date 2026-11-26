@@ -2,7 +2,7 @@
 // stats page never runs into anyone's rate limit. Each source is best-effort: one that doesn't answer is null.
 // It counts both packages: @brightkumedzro/reveal and the @brightkumedzro/elemental-reveal it grew from.
 const PKGS = ['@brightkumedzro/reveal', '@brightkumedzro/elemental-reveal'];
-const REPO = 'bright-kumedzro/elemental-reveal';
+const REPO = 'bright-kumedzro/reveal';
 
 async function json(url, headers = {}) {
   try {

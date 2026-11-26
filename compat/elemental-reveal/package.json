@@ -27,7 +27,7 @@
   "homepage": "https://elemental-reveal.vercel.app/use",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bright-kumedzro/elemental-reveal.git",
+    "url": "git+https://github.com/bright-kumedzro/reveal.git",
     "directory": "compat/elemental-reveal"
   },
   "sideEffects": false,
