@@ -1,2 +1,7 @@
 node_modules
 .vercel
+
+# temporary test pages, entries and work in progress
+_*.html
+js/**/_*.js
+js/paper/
