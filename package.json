@@ -1,6 +1,6 @@
 {
   "name": "@brightkumedzro/reveal",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Scroll-driven WebGL2 reveals between any two images, in three packs: elemental (fire, water, air, earth, lightning, frost), shinobi (clone, vortex, spiral, blade, storm, twister, magma, shuriken) and paper (curl, fold, draw). Optional synthesised sound. No dependencies, no network requests.",
   "type": "module",
   "main": "js/lib.js",
