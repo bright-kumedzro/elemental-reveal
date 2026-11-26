@@ -17,6 +17,7 @@ const SCROLL = [
   { id: 'steps', label: 'Steps', color: '#fb7185' },
   { id: 'scrub', label: 'Scrub', color: '#e6b35c' },
   { id: 'zoom', label: 'Zoom', color: '#a78bfa' },
+  { id: 'chrome', label: 'Chrome', color: '#9fb4d8' },
 ].map((e, i) => ({ ...e, num: String(i + 1).padStart(2, '0') }));
 
 const SITE = 'https://reveal.brightkumedzro.com';   // the site's address, in one place, for when it moves
@@ -26,12 +27,12 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 
 const PACKS = [
   {
-    id: 'elemental', title: 'Elemental', color: '#33adff', effects: ELEMENTS, og: 'elemental', count: 'Six', unit: 'element',
-    lede: 'Six elements, one pencil sketch. Fire, water, air, earth, lightning and frost each take the same wireframe apart in their own way and leave the finished design behind.',
+    id: 'elemental', title: 'Elemental', color: '#33adff', effects: ELEMENTS, og: 'elemental', count: 'Seven', unit: 'element',
+    lede: 'Seven elements, one pencil sketch. Fire, water, air, earth, lightning, frost and snow each take the same wireframe apart in their own way and leave the finished design behind.',
     how: 'A WebGL2 shader gives each pixel a fuel value and decides, pixel by pixel, which drawing you see. Scrolling pushes the front through the fuel. Each element shapes that fuel differently and does different damage at the edge.',
     eyebrow: 'Elemental pack',
-    tagline: 'Six elements take the same pencil sketch apart, each in its own way, and leave the finished design behind.',
-    short: 'Fire, water, air, earth, lightning and frost each take the same wireframe apart in their own way.',
+    tagline: 'Seven elements take the same pencil sketch apart, each in its own way, and leave the finished design behind.',
+    short: 'Fire, water, air, earth, lightning, frost and snow each take the same wireframe apart in their own way.',
   },
   {
     id: 'shinobi', title: 'Shinobi', color: '#ff8a3d', effects: TECHNIQUES, count: 'Eight', unit: 'technique', ink: true,
@@ -110,11 +111,11 @@ const glyph = (p) => (p.ink ? '\n      <p class="glyph" aria-hidden="true">忍</
 const titleRow = (p, text) => (p.ink ? `<div class="title-row"><h1>${text}</h1><span class="seal" aria-hidden="true">忍</span></div>` : `<h1>${text}</h1>`);
 
 /* The landing page: both packs, how to use them, no chapters (so no WebGL until you pick one) */
-const index = `${head({ title: 'Reveal', description: 'Scroll-driven WebGL reveals that take a pencil wireframe apart and leave the finished design, in three packs: elemental, shinobi and paper. One library, seventeen effects.', path: '/', image: 'reveal', script: false, cls: 'home' })}
+const index = `${head({ title: 'Reveal', description: 'Scroll-driven WebGL reveals that take a pencil wireframe apart and leave the finished design, in three packs: elemental, shinobi and paper. One library, eighteen effects.', path: '/', image: 'reveal', script: false, cls: 'home' })}
     <header class="intro">
       <a class="pill back" href="${PLAYGROUND}">← Playground</a>
       <p class="eyebrow">Playground · Library</p>
-      <h1>Reveal. <span class="rest">Scroll effects in one library: seventeen ways to take a first draft apart and reveal the finished design, plus seven ways to tell your own story as people scroll.</span></h1>
+      <h1>Reveal. <span class="rest">Scroll effects in one library: eighteen ways to take a first draft apart and reveal the finished design, plus eight ways to tell your own story as people scroll.</span></h1>
       <div class="actions">
         <a class="btn primary" href="/use">Use it in your project</a>
         <a class="btn" href="/stats">Who's using it</a>
@@ -140,11 +141,11 @@ ${PACKS.map((p) => `        <article class="pack" style="--c:${p.color}">
           <div class="txt">
             <p class="eyebrow">Scroll effects · ${SCROLL.length} effects</p>
             <h2><a href="/scroll">Scroll effects</a></h2>
-            <p>For your own content: words that light up, numbers that count up, lines that draw themselves, pinned steps, frame scrubbing and zoom-throughs.</p>
+            <p>For your own content: words that light up, numbers that count up, lines that draw themselves, pinned steps, frame scrubbing, zoom-throughs and chrome type.</p>
             <nav class="chapters" aria-label="Scroll effects">
               ${SCROLL.map((e) => chip(e, `/scroll#${e.id}`)).join('\n              ')}
             </nav>
-            <div class="actions"><a class="btn primary" href="/scroll">See all seven</a></div>
+            <div class="actions"><a class="btn primary" href="/scroll">See all eight</a></div>
           </div>
         </article>
       </div>
@@ -218,11 +219,11 @@ ${e.body.map((t) => `      <p>${t}</p>`).join('\n')}
 /* The scroll effects page */
 {
   const demos = SCROLL.map((e) => readFileSync(`${root}/scripts/scroll-demos/${e.id}.html`, 'utf8').trim()).join('\n\n');
-  const page = `${head({ title: 'Scroll effects · Reveal', description: 'Scrollytelling effects for your own content: words that light up, numbers that count, lines that draw themselves, type that masks a picture, pinned steps, frame scrubbing and zoom-throughs.', path: '/scroll', image: 'scroll', script: false, cls: 'scrollfx' })}
+  const page = `${head({ title: 'Scroll effects · Reveal', description: 'Scrollytelling effects for your own content: words that light up, numbers that count, lines that draw themselves, type that masks a picture, pinned steps, frame scrubbing, zoom-throughs and liquid chrome type.', path: '/scroll', image: 'scroll', script: false, cls: 'scrollfx' })}
     <header class="intro pack-intro" style="--c:#33adff">
       <a class="pill back" href="/">← Reveal</a>
       <p class="eyebrow">Reveal · Scroll effects · ${SCROLL.length} effects</p>
-      <h1>Scroll effects. <span class="rest">Seven ways to tell a story as people scroll, using your own words, numbers, drawings and pictures.</span></h1>
+      <h1>Scroll effects. <span class="rest">Eight ways to tell a story as people scroll, using your own words, numbers, drawings and pictures.</span></h1>
       <nav class="chapters" aria-label="Scroll effects">
         ${SCROLL.map((e) => chip(e, `#${e.id}`)).join('\n        ')}
       </nav>
@@ -235,7 +236,7 @@ ${demos}
     <section class="after">
       <p class="eyebrow">Reveal · Scroll effects</p>
       <h2>Add them to your page. <span class="rest">One import, then point each effect at your own content.</span></h2>
-<pre class="sd-code"><span class="k">import</span> { words, count, lines, mask, steps, scrub, zoom } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;</pre>
+<pre class="sd-code"><span class="k">import</span> { words, count, lines, mask, steps, scrub, zoom, chrome } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;</pre>
       <p>Every effect returns <code>{ stop() }</code> to undo itself, shares one scroll listener with the others, and is safe to import during server rendering. With reduced motion turned on, each one simply shows its finished state, and screen readers always get the real text.</p>
       <div class="actions">
         <a class="btn primary" href="/use">Use it in your project</a>

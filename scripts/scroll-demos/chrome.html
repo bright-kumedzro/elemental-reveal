@@ -1,0 +1,17 @@
+<section class="sd sd-chrome" id="chrome">
+  <p class="eyebrow">Scroll · Chrome</p>
+  <h2>Chrome. <span class="rest">Light flows into your type like reflections sliding over polished metal, and it settles into chrome.</span></h2>
+  <div class="sd-stage">
+    <p class="sd-chromed" id="chromed">Shipped.</p>
+  </div>
+<pre class="sd-code"><span class="k">import</span> { chrome } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+chrome(<span class="s">'#chromed'</span>);   <span class="c">// or your own lights: { warm: '#ff5a1f', cool: '#2f7bff' }</span></pre>
+  <style>
+    .sd-chrome .sd-stage { min-height: 110vh; display: flex; align-items: center; justify-content: center; }
+    .sd-chromed { margin: 0; font-size: clamp(64px, 17vw, 240px); line-height: 1; font-weight: 600; letter-spacing: -.04em; color: var(--ink); text-align: center; }
+  </style>
+  <script type="module">
+    import { chrome } from '/js/scroll/chrome.js';
+    chrome('#chromed');
+  </script>
+</section>

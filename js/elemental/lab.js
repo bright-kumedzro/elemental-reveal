@@ -2,6 +2,7 @@
    when the site runs on localhost. "Copy settings" gives the numbers to bake in as the defaults. */
 import { schemaFor, RECIPES, makeBedFor, playHit, playFlight, tuned, saveTuning, clearTuning } from './sfx.js';
 import { FROST_SCHEMA, FROST_PRESETS, FROST, makeFrost, playCrack, playShards, tunedFrost, saveFrost, clearFrost } from './sfx-frost.js';
+import { SNOW_SCHEMA, SNOW_PRESETS, SNOW, makeSnow, playGust, playWhump, tunedSnow, saveSnow, clearSnow } from './sfx-snow.js';
 
 let A = null;
 function audio() {
@@ -142,3 +143,55 @@ function frostPanel() {
   return root;
 }
 document.querySelector('#elemental-panels').append(frostPanel());
+
+/* Snow: its own sliders and voices */
+function snowPanel() {
+  const root = el('section', { id: 'snow' });
+  const names = Object.keys(SNOW_PRESETS);
+  let P = { ...tunedSnow() }, bed = null, timer = 0, snow = 0.8, melt = 0, act = 0.3;
+  const sel = el('select', { 'aria-label': 'Snow: start from' });
+  [...names, 'Custom'].forEach((n) => sel.append(el('option', { value: n }, n)));
+  const json = el('textarea', { readonly: '', rows: '3', 'aria-label': 'Snow settings' });
+  const sliders = {}, grid = el('div', { class: 'grid' });
+  const sync = () => {
+    sel.value = names.find((n) => same(P, SNOW_PRESETS[n])) || 'Custom';
+    for (const [k, , , , step] of SNOW_SCHEMA) { sliders[k].input.value = P[k]; sliders[k].out.textContent = fmt(P[k], step); }
+    json.value = JSON.stringify(P);
+  };
+  const changed = () => { saveSnow(P); sync(); };
+  for (const [k, label, min, max, step] of SNOW_SCHEMA) {
+    const id = `snow-${k}`, out = el('output', { for: id });
+    const input = el('input', { id, type: 'range', min, max, step, on: { input: (e) => { P[k] = Number(e.target.value); changed(); } } });
+    sliders[k] = { input, out };
+    grid.append(el('div', {}, el('label', { class: 'row', for: id }, el('span', {}, label), out), input));
+  }
+  sel.addEventListener('change', () => { if (sel.value !== 'Custom') { P = { ...SNOW_PRESETS[sel.value] }; changed(); } });
+  const range = (id, v, set) => el('input', { id, type: 'range', min: 0, max: 1, step: 0.01, value: v, on: { input: (e) => set(Number(e.target.value)) } });
+  const start = btn('Start the snowfall', () => {
+    if (bed) { bed.dispose(); bed = null; clearInterval(timer); start.textContent = 'Start the snowfall'; return; }
+    bed = makeSnow(audio());
+    timer = setInterval(() => bed?.set(P, snow, melt, act, 1), 40);
+    start.textContent = 'Stop';
+  }, true);
+  const copy = btn('Copy settings', async () => {
+    json.select();
+    try { await navigator.clipboard.writeText(json.value); copy.textContent = 'Copied'; } catch { copy.textContent = 'Selected: copy it'; }
+    setTimeout(() => { copy.textContent = 'Copy settings'; }, 1600);
+  });
+  root.append(
+    el('h2', {}, 'Snow'),
+    el('p', { class: 'blurb' }, 'The bed runs while it snows: the hush of the snowfall and a low, gusting wind (the Snowing slider), then slush and drips as it thaws (the Melting slider). "Whumpf" is the snowpack settling as the thaw starts; "Gust" is a click.'),
+    el('div', { class: 'bar' }, el('label', { class: 'preset' }, 'Start from ', sel), start,
+      btn('Whumpf', () => playWhump(audio(), P, 1)), btn('Gust', () => playGust(audio(), P, 1))),
+    el('div', { class: 'grid live' },
+      el('div', {}, el('label', { class: 'row', for: 'snow-snow' }, el('span', {}, 'Snowing (none → heavy)')), range('snow-snow', snow, (v) => { snow = v; })),
+      el('div', {}, el('label', { class: 'row', for: 'snow-melt' }, el('span', {}, 'Melting (frozen → thawing)')), range('snow-melt', melt, (v) => { melt = v; })),
+      el('div', {}, el('label', { class: 'row', for: 'snow-act' }, el('span', {}, 'Scrolling (calm → hard)')), range('snow-act', act, (v) => { act = v; }))),
+    grid,
+    el('div', { class: 'bar' }, copy, btn('Reset', () => { clearSnow(); P = { ...SNOW }; changed(); })),
+    json,
+  );
+  sync();
+  return root;
+}
+document.querySelector('#elemental-panels').append(snowPanel());

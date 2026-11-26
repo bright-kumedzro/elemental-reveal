@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Scroll effects · Reveal · Bright Kumedzro</title>
-  <meta name="description" content="Scrollytelling effects for your own content: words that light up, numbers that count, lines that draw themselves, type that masks a picture, pinned steps, frame scrubbing and zoom-throughs.">
+  <meta name="description" content="Scrollytelling effects for your own content: words that light up, numbers that count, lines that draw themselves, type that masks a picture, pinned steps, frame scrubbing, zoom-throughs and liquid chrome type.">
   <meta name="theme-color" content="#0c0c0c">
   <link rel="canonical" href="https://reveal.brightkumedzro.com/scroll">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://reveal.brightkumedzro.com/scroll">
   <meta property="og:title" content="Scroll effects · Reveal">
-  <meta property="og:description" content="Scrollytelling effects for your own content: words that light up, numbers that count, lines that draw themselves, type that masks a picture, pinned steps, frame scrubbing and zoom-throughs.">
+  <meta property="og:description" content="Scrollytelling effects for your own content: words that light up, numbers that count, lines that draw themselves, type that masks a picture, pinned steps, frame scrubbing, zoom-throughs and liquid chrome type.">
   <meta property="og:image" content="https://reveal.brightkumedzro.com/og/scroll.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -26,8 +26,8 @@
   <main>
     <header class="intro pack-intro" style="--c:#33adff">
       <a class="pill back" href="/">← Reveal</a>
-      <p class="eyebrow">Reveal · Scroll effects · 7 effects</p>
-      <h1>Scroll effects. <span class="rest">Seven ways to tell a story as people scroll, using your own words, numbers, drawings and pictures.</span></h1>
+      <p class="eyebrow">Reveal · Scroll effects · 8 effects</p>
+      <h1>Scroll effects. <span class="rest">Eight ways to tell a story as people scroll, using your own words, numbers, drawings and pictures.</span></h1>
       <nav class="chapters" aria-label="Scroll effects">
         <a href="#words" style="--c:#f1f1ef"><span>01</span>Words</a>
         <a href="#count" style="--c:#5cc976"><span>02</span>Count</a>
@@ -36,6 +36,7 @@
         <a href="#steps" style="--c:#fb7185"><span>05</span>Steps</a>
         <a href="#scrub" style="--c:#e6b35c"><span>06</span>Scrub</a>
         <a href="#zoom" style="--c:#a78bfa"><span>07</span>Zoom</a>
+        <a href="#chrome" style="--c:#9fb4d8"><span>08</span>Chrome</a>
       </nav>
       <p class="install"><span>$</span> npm i @brightkumedzro/reveal</p>
       <div class="go"><span class="cue">Scroll to begin <span aria-hidden="true">↓</span></span></div>
@@ -381,10 +382,28 @@ zoom(<span class="s">'.story'</span>);</pre>
   </script>
 </section>
 
+<section class="sd sd-chrome" id="chrome">
+  <p class="eyebrow">Scroll · Chrome</p>
+  <h2>Chrome. <span class="rest">Light flows into your type like reflections sliding over polished metal, and it settles into chrome.</span></h2>
+  <div class="sd-stage">
+    <p class="sd-chromed" id="chromed">Shipped.</p>
+  </div>
+<pre class="sd-code"><span class="k">import</span> { chrome } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+chrome(<span class="s">'#chromed'</span>);   <span class="c">// or your own lights: { warm: '#ff5a1f', cool: '#2f7bff' }</span></pre>
+  <style>
+    .sd-chrome .sd-stage { min-height: 110vh; display: flex; align-items: center; justify-content: center; }
+    .sd-chromed { margin: 0; font-size: clamp(64px, 17vw, 240px); line-height: 1; font-weight: 600; letter-spacing: -.04em; color: var(--ink); text-align: center; }
+  </style>
+  <script type="module">
+    import { chrome } from '/js/scroll/chrome.js';
+    chrome('#chromed');
+  </script>
+</section>
+
     <section class="after">
       <p class="eyebrow">Reveal · Scroll effects</p>
       <h2>Add them to your page. <span class="rest">One import, then point each effect at your own content.</span></h2>
-<pre class="sd-code"><span class="k">import</span> { words, count, lines, mask, steps, scrub, zoom } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;</pre>
+<pre class="sd-code"><span class="k">import</span> { words, count, lines, mask, steps, scrub, zoom, chrome } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;</pre>
       <p>Every effect returns <code>{ stop() }</code> to undo itself, shares one scroll listener with the others, and is safe to import during server rendering. With reduced motion turned on, each one simply shows its finished state, and screen readers always get the real text.</p>
       <div class="actions">
         <a class="btn primary" href="/use">Use it in your project</a>

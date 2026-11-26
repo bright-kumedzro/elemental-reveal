@@ -2,7 +2,7 @@
 
 Scroll-driven WebGL2 reveals between any two images, in two packs. Each effect takes the first image apart in its own way and leaves the second underneath. Drive it with scroll, let it play on its own, or set the progress yourself. No dependencies.
 
-- **Elemental:** `fire`, `water`, `air`, `earth`, `lightning`, `frost`
+- **Elemental:** `fire`, `water`, `air`, `earth`, `lightning`, `frost`, `snow`
 - **Shinobi:** `clone`, `vortex`, `spiral`, `blade`, `storm`, `twister`, `magma`, `shuriken`
 - **Paper:** `curl`, `fold`, `draw`
 
@@ -23,7 +23,7 @@ reveal('#hero', { effect: 'storm', from: '/sketch.png', to: '/final.png' });
 Only using one pack? Import it on its own for a smaller bundle:
 
 ```js
-import { reveal } from '@brightkumedzro/reveal/elemental';   // fire · water · air · earth · lightning · frost
+import { reveal } from '@brightkumedzro/reveal/elemental';   // fire · water · air · earth · lightning · frost · snow
 import { reveal } from '@brightkumedzro/reveal/shinobi';     // clone · vortex · spiral · blade · storm · twister · magma · shuriken
 import { reveal } from '@brightkumedzro/reveal/paper';       // curl · fold · draw
 ```
@@ -50,7 +50,7 @@ It's the same library under a new name, with the shinobi pack added. Swap the im
 For your own page content rather than two images: text, numbers, SVG, pictures and whole sections.
 
 ```js
-import { words, count, lines, mask, steps, scrub, zoom } from '@brightkumedzro/reveal/scroll';
+import { words, count, lines, mask, steps, scrub, zoom, chrome } from '@brightkumedzro/reveal/scroll';
 
 words('#intro');                                   // each word lights up as you scroll
 count('.stat');                                    // numbers count up in view, in the format you wrote them ("1,000+", "98%")
@@ -59,6 +59,7 @@ mask('#title', { src: '/hero.jpg' });              // big type becomes a window 
 steps('[data-steps]', { onStep: (i) => {} });      // a pinned visual with steps scrolling past it
 scrub('#track', { frames: '/f/%03d.jpg', count: 90 });   // scroll plays an image sequence
 zoom('#story');                                    // dive from one scene into the next
+chrome('#title');                                  // light flows into the type and it settles into chrome
 ```
 
 Each returns `{ stop() }`, they share one scroll listener, and with reduced motion each shows its finished state. See them all at [reveal.brightkumedzro.com/scroll](https://reveal.brightkumedzro.com/scroll).
@@ -67,7 +68,7 @@ Each returns `{ stop() }`, they share one scroll listener, and with reduced moti
 
 | Option | Default | What it does |
 |---|---|---|
-| `effect` | the pack's first | Any effect by name: `'fire'`, `'water'`, `'air'`, `'earth'`, `'lightning'`, `'frost'`, `'clone'`, `'vortex'`, `'spiral'`, `'blade'`, `'storm'`, `'twister'`, `'magma'`, `'shuriken'`, `'curl'`, `'fold'` or `'draw'`. The main import defaults to `'fire'`, the shinobi pack to `'clone'` |
+| `effect` | the pack's first | Any effect by name: `'fire'`, `'water'`, `'air'`, `'earth'`, `'lightning'`, `'frost'`, `'snow'`, `'clone'`, `'vortex'`, `'spiral'`, `'blade'`, `'storm'`, `'twister'`, `'magma'`, `'shuriken'`, `'curl'`, `'fold'` or `'draw'`. The main import defaults to `'fire'`, the shinobi pack to `'clone'` |
 | `from` | required | What gets taken away: an image URL, or an `<img>`, `<canvas>` or `<video>` |
 | `to` | required | What's revealed underneath |
 | `progress` | `'scroll'` | `'scroll'` follows the page, `'auto'` plays once when it comes into view, and `'manual'` waits for `fx.progress(p)` |
@@ -119,7 +120,7 @@ MIT licensed, so use it anywhere. Keeping the copyright notice in the code is th
 
 ## The site
 
-`/` introduces both packs. `/elemental` runs the six elements in a row, `/shinobi` the eight techniques and `/paper` the three paper effects; every effect also has a page of its own (`/fire` … `/twister`). `/use` is the docs with a live demo, `/stats` the adoption numbers, and `/sound-lab` tunes every effect's sound by ear.
+`/` introduces both packs. `/elemental` runs the seven elements in a row, `/shinobi` the eight techniques and `/paper` the three paper effects; every effect also has a page of its own (`/fire` … `/twister`). `/use` is the docs with a live demo, `/stats` the adoption numbers, and `/sound-lab` tunes every effect's sound by ear.
 
 ### How it works
 

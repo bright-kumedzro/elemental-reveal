@@ -60,4 +60,14 @@ export const ELEMENTS = [
     ],
     play: 'Move over the paper and frost forms under your hand. Click to freeze a patch and shatter it. With sound on, the ice creaks and tinkles as it grows, and breaks with a crack and a shower of glass.',
   },
+  {
+    id: 'snow', num: '07', label: 'Snow', name: 'Snow the draft', color: '#f6b8cf',
+    aria: 'Snow. Scroll to let it snow until the wireframe is buried, then let the snow melt away to reveal the finished design.',
+    summary: 'It snows on a pencil wireframe until the page is buried, then the snowpack slumps and melts away to reveal the finished design. Click to blow a hole in the snow.',
+    body: [
+      'A few flakes drift down, then it snows properly: big soft flakes close up, small sharp ones far off, all swaying as they fall. Snow settles as a speckle, piles into soft caps on the top edge of every line and box in the sketch, and rises from the bottom in drifts until the page is a near-whiteout.',
+      'Then the snowpack settles with a whumpf and starts to slide. From the top it slumps and melts along a lumpy wet edge, grey slush on one side and a film of melt on the other, drips running down the finished design as it comes clear.',
+    ],
+    play: 'Move over the paper and the flakes swirl round your hand. Click to send a gust that blows a hole in the snow. With sound on, the snowfall hushes and the wind gusts, then the thaw drips and slushes away.',
+  },
 ];

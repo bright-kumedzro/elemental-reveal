@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Use it in your project · Reveal</title>
-  <meta name="description" content="Drop any of the seventeen Reveal effects into your own page, between any two images: the elemental pack (fire, water, air, earth, lightning) and the shinobi pack (clone, vortex, spiral, blade, storm, twister). One import, no dependencies.">
+  <meta name="description" content="Drop any of the eighteen Reveal effects into your own page, between any two images: the elemental pack (fire, water, air, earth, lightning, frost, snow), the shinobi pack (clone, vortex, spiral, blade, storm, twister, magma, shuriken) and the paper pack (curl, fold, draw). One import, no dependencies.">
   <meta name="theme-color" content="#0c0c0c">
   <link rel="canonical" href="https://reveal.brightkumedzro.com/use">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Reveal: use it in your project">
-  <meta property="og:description" content="Seventeen scroll-driven reveals between any two images, in two packs. One import, no dependencies.">
+  <meta property="og:description" content="Eighteen scroll-driven reveals between any two images, in three packs. One import, no dependencies.">
   <meta property="og:image" content="https://reveal.brightkumedzro.com/og/elemental.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/bk-mark.png" type="image/png">
@@ -59,7 +59,7 @@
     <a class="pill back" href="/">← Reveal</a>
     <p class="eyebrow">Reveal · Library</p>
     <h1>Use it in your project</h1>
-    <p class="lede">Any of the seventeen effects, from any pack, between any two images: a sketch and the final design, a before and an after, a photo and its edit. One import, no dependencies.</p>
+    <p class="lede">Any of the eighteen effects, from any pack, between any two images: a sketch and the final design, a before and an after, a photo and its edit. One import, no dependencies.</p>
 
     <dl class="figures" id="figures" aria-live="polite">
       <div><dt class="sr">npm downloads this week</dt><dd class="n">…</dd><dd class="l">npm downloads this week</dd></div>
@@ -76,6 +76,7 @@
         <button type="button" data-effect="earth" aria-pressed="false">Earth</button>
         <button type="button" data-effect="lightning" aria-pressed="false">Lightning</button>
         <button type="button" data-effect="frost" aria-pressed="false">Frost</button>
+        <button type="button" data-effect="snow" aria-pressed="false">Snow</button>
       </div>
       <div class="seg" role="group" aria-label="Shinobi effect">
         <button type="button" data-effect="clone" aria-pressed="false">Clone</button>
@@ -108,7 +109,7 @@
   <span class="c">// or, after npm install: import { reveal } from '@brightkumedzro/reveal';</span>
 
   reveal(<span class="s">'#hero'</span>, {
-    effect: <span class="s">'water'</span>,          <span class="c">// any of the seventeen, by name</span>
+    effect: <span class="s">'water'</span>,          <span class="c">// any of the eighteen, by name</span>
     from: <span class="s">'/sketch.png'</span>,      <span class="c">// what gets taken away</span>
     to: <span class="s">'/final.png'</span>,        <span class="c">// what's revealed</span>
   });
@@ -117,7 +118,7 @@
 
     <h2>Just one pack</h2>
     <p>The main import has every effect. If you only use one pack, import that pack instead for a smaller bundle:</p>
-<pre><span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/elemental'</span>;   <span class="c">// fire · water · air · earth · lightning · frost</span>
+<pre><span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/elemental'</span>;   <span class="c">// fire · water · air · earth · lightning · frost · snow</span>
 <span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/shinobi'</span>;     <span class="c">// clone · vortex · spiral · blade · storm · twister · magma · shuriken</span>
 <span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/paper'</span>;       <span class="c">// curl · fold · draw</span>
 <span class="c">// from the CDN: …/@brightkumedzro/reveal@1/js/elemental/index.js or …/js/shinobi/index.js</span></pre>
@@ -140,7 +141,7 @@ fx.progress(<span class="s">0.5</span>);</pre>
       <table>
         <thead><tr><th>Option</th><th>Default</th><th>What it does</th></tr></thead>
         <tbody>
-          <tr><td><code>effect</code></td><td><code>'fire'</code></td><td><code>'fire'</code>, <code>'water'</code>, <code>'air'</code>, <code>'earth'</code>, <code>'lightning'</code>, <code>'frost'</code> (elemental), <code>'clone'</code>, <code>'vortex'</code>, <code>'spiral'</code>, <code>'blade'</code>, <code>'storm'</code>, <code>'twister'</code>, <code>'magma'</code>, <code>'shuriken'</code> (shinobi) or <code>'curl'</code>, <code>'fold'</code>, <code>'draw'</code> (paper). A pack's import defaults to its first effect.</td></tr>
+          <tr><td><code>effect</code></td><td><code>'fire'</code></td><td><code>'fire'</code>, <code>'water'</code>, <code>'air'</code>, <code>'earth'</code>, <code>'lightning'</code>, <code>'frost'</code>, <code>'snow'</code> (elemental), <code>'clone'</code>, <code>'vortex'</code>, <code>'spiral'</code>, <code>'blade'</code>, <code>'storm'</code>, <code>'twister'</code>, <code>'magma'</code>, <code>'shuriken'</code> (shinobi) or <code>'curl'</code>, <code>'fold'</code>, <code>'draw'</code> (paper). A pack's import defaults to its first effect.</td></tr>
           <tr><td><code>from</code></td><td>required</td><td>What gets taken away: an image URL, or an <code>&lt;img&gt;</code>, <code>&lt;canvas&gt;</code> or <code>&lt;video&gt;</code>.</td></tr>
           <tr><td><code>to</code></td><td>required</td><td>What's revealed underneath. Same types as <code>from</code>.</td></tr>
           <tr><td><code>progress</code></td><td><code>'scroll'</code></td><td><code>'scroll'</code> follows the page, <code>'auto'</code> plays once when it comes into view, and <code>'manual'</code> waits for <code>fx.progress(p)</code>.</td></tr>
