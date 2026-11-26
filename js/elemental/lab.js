@@ -1,6 +1,6 @@
 /* Sound lab: tune each element's sound by ear. Every change is saved for this browser, and the effects use it
    when the site runs on localhost. "Copy settings" gives the numbers to bake in as the defaults. */
-import { SCHEMA, RECIPES, makeBed, playHit, playWhoosh, tuned, saveTuning, clearTuning } from './sfx.js';
+import { schemaFor, RECIPES, makeBedFor, playHit, playFlight, tuned, saveTuning, clearTuning } from './sfx.js';
 
 let A = null;
 function audio() {
@@ -27,7 +27,7 @@ const fmt = (v, step) => (step >= 1 ? String(Math.round(v)) : v.toFixed(step < 0
 const same = (a, b) => Object.keys(b).every((k) => Math.abs(a[k] - b[k]) < 1e-9);
 const NAMES = { fire: 'Fire', water: 'Water', air: 'Air', earth: 'Earth', lightning: 'Lightning' };
 const BLURB = {
-  fire: 'The bed roars while it burns. The hit is the comet landing (big) and a thrown fireball landing (small); the whoosh is either one in flight.',
+  fire: 'Fire has its own sounds. "Comet" is the comet screaming in from space for the second before it lands; "Impact" is it landing ("Small impact" is a thrown fireball). Start the burn to hear the fire itself: the flame roar breathing, the crackle and pops, the hiss. The Scrolling slider makes it burn harder.',
   water: 'The bed rushes while it pours. The hit is a spill landing where you click.',
   air: 'The bed is the wind while it strips the page. The whoosh is the gust a click sends.',
   earth: 'The bed grinds while the stone breaks up. The hit is a quake you start with a click.',
@@ -38,13 +38,15 @@ function panel(name) {
   const root = el('section', { id: name });
   let P = { ...tuned(name) };
   let bed = null, timer = 0, act = 0.3;
+  const SCHEMA = schemaFor(name), isFire = name === 'fire';
+  const starts = Object.keys(RECIPES).filter((n) => schemaFor(n) === SCHEMA);   // only recipes with the same sliders
   const sel = el('select', { 'aria-label': `${NAMES[name]}: start from` });
-  [...Object.keys(RECIPES).map((n) => [n, `${NAMES[n]} (default)`]), ['custom', 'Custom']].forEach(([v, t]) => sel.append(el('option', { value: v }, t)));
+  [...starts.map((n) => [n, `${NAMES[n]} (default)`]), ['custom', 'Custom']].forEach(([v, t]) => sel.append(el('option', { value: v }, t)));
   const json = el('textarea', { readonly: '', rows: '3', 'aria-label': `${NAMES[name]} settings` });
   const sliders = {};
   const grid = el('div', { class: 'grid' });
   const sync = () => {
-    sel.value = Object.keys(RECIPES).find((n) => same(P, RECIPES[n])) || 'custom';
+    sel.value = starts.find((n) => same(P, RECIPES[n])) || 'custom';
     for (const [k, , , , step] of SCHEMA) { sliders[k].input.value = P[k]; sliders[k].out.textContent = fmt(P[k], step); }
     json.value = JSON.stringify(P);
   };
@@ -58,9 +60,10 @@ function panel(name) {
   sel.addEventListener('change', () => { if (sel.value !== 'custom') { P = { ...RECIPES[sel.value] }; changed(); } });
 
   const actIn = el('input', { id: `${name}-act`, type: 'range', min: 0, max: 1, step: 0.01, value: act, on: { input: (e) => { act = Number(e.target.value); } } });
-  const start = btn('Start the bed', () => {
-    if (bed) { bed.dispose(); bed = null; clearInterval(timer); start.textContent = 'Start the bed'; return; }
-    bed = makeBed(audio());
+  const startLabel = isFire ? 'Start the burn' : 'Start the bed';
+  const start = btn(startLabel, () => {
+    if (bed) { bed.dispose(); bed = null; clearInterval(timer); start.textContent = startLabel; return; }
+    bed = makeBedFor(audio(), name);
     timer = setInterval(() => bed?.set(P, 1, act), 40);
     start.textContent = 'Stop';
   }, true);
@@ -74,7 +77,9 @@ function panel(name) {
   root.append(
     el('h2', {}, NAMES[name]), el('p', { class: 'blurb' }, BLURB[name]),
     el('div', { class: 'bar' }, el('label', { class: 'preset' }, 'Start from ', sel), start,
-      btn('Hit', () => playHit(audio(), P, 1)), btn('Small hit', () => playHit(audio(), P, 0.4)), btn('Whoosh', () => playWhoosh(audio(), P, 0.8, 1))),
+      ...(isFire
+        ? [btn('Comet and impact', () => { playFlight(audio(), name, P, 1.15, 1); setTimeout(() => playHit(audio(), P, 1), 1150); }), btn('Comet', () => playFlight(audio(), name, P, 1.15, 1)), btn('Impact', () => playHit(audio(), P, 1)), btn('Small impact', () => playHit(audio(), P, 0.4))]
+        : [btn('Hit', () => playHit(audio(), P, 1)), btn('Small hit', () => playHit(audio(), P, 0.4)), btn('Whoosh', () => playFlight(audio(), name, P, 0.8, 1))])),
     el('div', { class: 'grid live' }, el('div', {}, el('label', { class: 'row', for: `${name}-act` }, el('span', {}, 'Scrolling (calm → hard)')), actIn)),
     grid,
     el('div', { class: 'bar' }, copy, reset),
