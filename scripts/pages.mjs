@@ -6,6 +6,18 @@ import { fileURLToPath } from 'node:url';
 import { ELEMENTS } from './copy-elemental.mjs';
 import { TECHNIQUES } from './copy-shinobi.mjs';
 import { PAPER } from './copy-paper.mjs';
+import { readFileSync } from 'node:fs';
+
+/* The scroll effects: each has a demo fragment in scripts/scroll-demos/<id>.html */
+const SCROLL = [
+  { id: 'words', label: 'Words', color: '#f1f1ef' },
+  { id: 'count', label: 'Count', color: '#5cc976' },
+  { id: 'lines', label: 'Lines', color: '#33adff' },
+  { id: 'mask', label: 'Mask', color: '#ff8a3d' },
+  { id: 'steps', label: 'Steps', color: '#fb7185' },
+  { id: 'scrub', label: 'Scrub', color: '#e6b35c' },
+  { id: 'zoom', label: 'Zoom', color: '#a78bfa' },
+].map((e, i) => ({ ...e, num: String(i + 1).padStart(2, '0') }));
 
 const SITE = 'https://reveal.brightkumedzro.com';   // the site's address, in one place, for when it moves
 const HOME = 'https://www.brightkumedzro.com';
@@ -102,7 +114,7 @@ const index = `${head({ title: 'Reveal', description: 'Scroll-driven WebGL revea
     <header class="intro">
       <a class="pill back" href="${PLAYGROUND}">← Playground</a>
       <p class="eyebrow">Playground · Library</p>
-      <h1>Reveal. <span class="rest">Seventeen ways to take a first draft apart and leave the finished design behind, between any two images.</span></h1>
+      <h1>Reveal. <span class="rest">Scroll effects in one library: seventeen ways to take a first draft apart and reveal the finished design, plus seven ways to tell your own story as people scroll.</span></h1>
       <div class="actions">
         <a class="btn primary" href="/use">Use it in your project</a>
         <a class="btn" href="/stats">Who's using it</a>
@@ -123,6 +135,18 @@ ${PACKS.map((p) => `        <article class="pack" style="--c:${p.color}">
             <div class="actions"><a class="btn primary" href="/${p.id}">See all ${p.count.toLowerCase()} in a row</a></div>
           </div>
         </article>`).join('\n')}
+        <article class="pack" style="--c:#33adff">
+          <a class="shot" href="/scroll" tabindex="-1" aria-hidden="true"><img src="/og/scroll.png" alt="" width="1200" height="630" loading="lazy"></a>
+          <div class="txt">
+            <p class="eyebrow">Scroll effects · ${SCROLL.length} effects</p>
+            <h2><a href="/scroll">Scroll effects</a></h2>
+            <p>For your own content: words that light up, numbers that count up, lines that draw themselves, pinned steps, frame scrubbing and zoom-throughs.</p>
+            <nav class="chapters" aria-label="Scroll effects">
+              ${SCROLL.map((e) => chip(e, `/scroll#${e.id}`)).join('\n              ')}
+            </nav>
+            <div class="actions"><a class="btn primary" href="/scroll">See all seven</a></div>
+          </div>
+        </article>
       </div>
       <div class="more">
         <p class="small">${SMALL}</p>
@@ -191,4 +215,33 @@ ${e.body.map((t) => `      <p>${t}</p>`).join('\n')}
   writeFileSync(`${root}/${e.id}.html`, page + foot);
 }
 
-console.log('wrote index.html,', PACKS.map((p) => `${p.id}.html`).join(', '), 'and', ALL.map((e) => `${e.id}.html`).join(', '));
+/* The scroll effects page */
+{
+  const demos = SCROLL.map((e) => readFileSync(`${root}/scripts/scroll-demos/${e.id}.html`, 'utf8').trim()).join('\n\n');
+  const page = `${head({ title: 'Scroll effects · Reveal', description: 'Scrollytelling effects for your own content: words that light up, numbers that count, lines that draw themselves, type that masks a picture, pinned steps, frame scrubbing and zoom-throughs.', path: '/scroll', image: 'scroll', script: false, cls: 'scrollfx' })}
+    <header class="intro pack-intro" style="--c:#33adff">
+      <a class="pill back" href="/">← Reveal</a>
+      <p class="eyebrow">Reveal · Scroll effects · ${SCROLL.length} effects</p>
+      <h1>Scroll effects. <span class="rest">Seven ways to tell a story as people scroll, using your own words, numbers, drawings and pictures.</span></h1>
+      <nav class="chapters" aria-label="Scroll effects">
+        ${SCROLL.map((e) => chip(e, `#${e.id}`)).join('\n        ')}
+      </nav>
+      <p class="install"><span>$</span> npm i @brightkumedzro/reveal</p>
+      <div class="go"><span class="cue">Scroll to begin <span aria-hidden="true">↓</span></span></div>
+    </header>
+
+${demos}
+
+    <section class="after">
+      <p class="eyebrow">Reveal · Scroll effects</p>
+      <h2>Add them to your page. <span class="rest">One import, then point each effect at your own content.</span></h2>
+<pre class="sd-code"><span class="k">import</span> { words, count, lines, mask, steps, scrub, zoom } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;</pre>
+      <p>Every effect returns <code>{ stop() }</code> to undo itself, shares one scroll listener with the others, and is safe to import during server rendering. With reduced motion turned on, each one simply shows its finished state, and screen readers always get the real text.</p>
+      <div class="actions">
+        <a class="btn primary" href="/use">Use it in your project</a>
+        <a class="btn" href="/">The image reveals</a>
+      </div>`;
+  writeFileSync(`${root}/scroll.html`, page + foot);
+}
+
+console.log('wrote scroll.html, index.html,', PACKS.map((p) => `${p.id}.html`).join(', '), 'and', ALL.map((e) => `${e.id}.html`).join(', '));

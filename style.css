@@ -391,3 +391,20 @@ h1, h2 {
 .fx .name { color: var(--soft); font-size: 13px; }
 .fx-body { color: var(--body); font-size: 14px; line-height: 1.55; }
 .fx-go { margin-top: auto; color: var(--c); font-size: 13px; font-weight: 600; }
+
+/* ---------- scroll effects ---------- */
+/* the demo sections on /scroll: each brings its own content styles; these are the shared frame and code blocks */
+.sd { position: relative; background: var(--bg); padding: 120px max(16px, calc((100% - 1040px) / 2)) 40px; }
+.sd > .eyebrow, .sd > h2 { max-width: 860px; }
+#scrub.sd, #zoom.sd { padding: 0 0 24px; }
+.sd-code {
+  margin: 28px 0 0; padding: 16px 18px; overflow-x: auto;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  font: 13px/1.7 ui-monospace, Consolas, monospace; color: #d4d4d8;
+}
+.sd-code .k { color: #c4a7ff; } .sd-code .s { color: #9be29b; } .sd-code .c { color: var(--soft); }
+.after .sd-code { margin: 0 0 24px; }
+.after code, .sd code { font: 13px ui-monospace, Consolas, monospace; background: var(--surface); padding: 1px 6px; border-radius: 6px; }
+.scrollfx .pack-intro .install { margin: 22px auto 0; display: inline-flex; gap: 10px; align-items: center; padding: 8px 16px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font: 13px/1 ui-monospace, Consolas, monospace; }
+.scrollfx .pack-intro .install span { color: var(--faint); }
+.packs .grid > .pack:last-child:nth-child(odd) { grid-column: 1 / -1; }

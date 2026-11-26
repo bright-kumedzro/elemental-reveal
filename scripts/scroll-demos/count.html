@@ -1,0 +1,25 @@
+<section class="sd sd-count" id="count">
+  <p class="eyebrow">Scroll · Count</p>
+  <h2>Count. <span class="rest">Numbers count up as they come into view, in the format you wrote them.</span></h2>
+  <div class="sd-stage">
+    <dl class="sd-stats">
+      <div><dt class="sd-n">1,000+</dt><dd>scholars supported a year</dd></div>
+      <div><dt class="sd-n">17</dt><dd>reveal effects, three packs</dd></div>
+      <div><dt class="sd-n">60</dt><dd>holes in Holeshot</dd></div>
+      <div><dt class="sd-n">98%</dt><dd>of drafts improved by burning</dd></div>
+    </dl>
+  </div>
+<pre class="sd-code"><span class="k">import</span> { count } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+count(<span class="s">'.sd-n'</span>);   <span class="c">// "1,000+", "£2.3m", "4.8" and "98%" keep their format</span></pre>
+  <style>
+    .sd-count .sd-stage { min-height: 70vh; display: flex; align-items: center; }
+    .sd-stats { margin: 0; width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px 24px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 36px 0; }
+    @media (min-width: 760px) { .sd-stats { grid-template-columns: repeat(4, 1fr); } }
+    .sd-stats dt { font-size: clamp(36px, 6vw, 60px); line-height: 1; font-weight: 500; letter-spacing: -.03em; color: var(--ink); }
+    .sd-stats dd { margin: 10px 0 0; color: var(--soft); font-size: 14px; }
+  </style>
+  <script type="module">
+    import { count } from '/js/scroll/count.js';
+    count('.sd-n');
+  </script>
+</section>

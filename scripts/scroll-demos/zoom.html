@@ -1,0 +1,59 @@
+<section class="sd" id="zoom">
+  <style>
+    #zoom .sd-head { max-width: 760px; margin: 0 auto; padding: 96px 16px 32px; text-align: center; }
+    #zoom .sd-head h2 { margin-bottom: 16px; }
+    #zoom .sd-head p { color: var(--body); margin: 0; }
+    #zoom .sd-track { position: relative; height: 420vh; }
+    #zoom [data-zoom-scene] { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; background: var(--bg, #0c0c0c); padding: 0 16px; }
+    #zoom .board { position: relative; width: min(100%, 1100px, 150vh); aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .45); background: var(--surface); }
+    #zoom .board img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* where the camera dives in: the hero visual box on the sketch, the chart panel on the design */
+    #zoom .spot { position: absolute; left: 57%; top: 18.6%; width: 39.1%; height: 52.1%; border-radius: 6px; outline: 2px dashed rgba(51, 173, 255, .7); outline-offset: 4px; }
+    #zoom .spot span { position: absolute; left: 50%; top: -34px; transform: translateX(-50%); white-space: nowrap; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent, #33adff); }
+    #zoom .cap { margin: 0; color: var(--soft); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+    #zoom .cap b { color: var(--ink); font-weight: 600; }
+    #zoom .sd-code { max-width: 760px; margin: 32px auto 96px; padding: 0 16px; }
+    #zoom pre { margin: 0; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; font: 13px/1.6 ui-monospace, Consolas, monospace; color: var(--body); }
+    #zoom pre .k { color: #c084fc; } #zoom pre .s { color: #86efac; } #zoom pre .c { color: var(--soft); }
+  </style>
+  <div class="sd-head">
+    <p class="eyebrow">Scroll · Zoom</p>
+    <h2>Zoom-through. <span class="rest">The camera dives into a detail and comes out in the next scene.</span></h2>
+    <p>From the pencil sketch, into its "hero visual??" box, out into the finished design, and through its chart into every effect.</p>
+  </div>
+  <div class="sd-track">
+    <div data-zoom-scene>
+      <p class="cap"><b>01</b> · The sketch</p>
+      <div class="board">
+        <img src="/demo/sketch.jpg" alt="A pencil wireframe of a landing page, with an empty box labelled hero visual" width="1600" height="900">
+        <div class="spot" data-zoom-to><span>Dive in</span></div>
+      </div>
+    </div>
+    <div data-zoom-scene>
+      <p class="cap"><b>02</b> · The finished design</p>
+      <div class="board">
+        <img src="/demo/final.jpg" alt="The finished landing page: a bold headline and a chart that only goes up" width="1600" height="900">
+        <div class="spot" data-zoom-to><span>And again</span></div>
+      </div>
+    </div>
+    <div data-zoom-scene>
+      <p class="cap"><b>03</b> · Every way to get there</p>
+      <div class="board">
+        <img src="/og/reveal.png" alt="Six strips of the same page mid-reveal: fire, a lightning blade, a sandstorm, a spinning sphere, breaking stone and a sand tornado" width="1200" height="630">
+      </div>
+    </div>
+  </div>
+  <div class="sd-code">
+<pre><span class="k">import</span> { zoom } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+
+<span class="c">// &lt;section class="story" style="height: 400vh"&gt;
+//   &lt;div data-zoom-scene&gt;… &lt;div data-zoom-to&gt;&lt;/div&gt; …&lt;/div&gt;   ← dive into this
+//   &lt;div data-zoom-scene&gt;…&lt;/div&gt;
+// &lt;/section&gt;</span>
+zoom(<span class="s">'.story'</span>);</pre>
+  </div>
+  <script type="module">
+    import { zoom } from '/js/scroll/zoom.js';
+    zoom('#zoom .sd-track', { label: 'Zooming from the sketch into the finished design' });
+  </script>
+</section>

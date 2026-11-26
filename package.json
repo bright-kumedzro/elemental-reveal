@@ -1,7 +1,7 @@
 {
   "name": "@brightkumedzro/reveal",
   "version": "1.2.1",
-  "description": "Scroll-driven WebGL2 reveals between any two images, in three packs: elemental (fire, water, air, earth, lightning, frost), shinobi (clone, vortex, spiral, blade, storm, twister, magma, shuriken) and paper (curl, fold, draw). Optional synthesised sound. No dependencies, no network requests.",
+  "description": "Scroll effects in one library: WebGL2 reveals between any two images, in three packs (elemental, shinobi, paper), and scrollytelling effects for your own content (words, count, lines, mask, steps, scrub, zoom). Optional synthesised sound. No dependencies, no network requests.",
   "type": "module",
   "main": "js/lib.js",
   "module": "js/lib.js",
@@ -10,6 +10,7 @@
     "./elemental": "./js/elemental/index.js",
     "./shinobi": "./js/shinobi/index.js",
     "./paper": "./js/paper/index.js",
+    "./scroll": "./js/scroll/index.js",
     "./package.json": "./package.json"
   },
   "files": [
@@ -43,7 +44,10 @@
     "lava",
     "page-curl",
     "origami",
-    "ink"
+    "ink",
+    "scrollytelling",
+    "scroll-animation",
+    "svg"
   ],
   "author": "Bright Kumedzro",
   "license": "MIT",

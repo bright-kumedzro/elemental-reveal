@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Scroll effects · Reveal · Bright Kumedzro</title>
+  <meta name="description" content="Scrollytelling effects for your own content: words that light up, numbers that count, lines that draw themselves, type that masks a picture, pinned steps, frame scrubbing and zoom-throughs.">
+  <meta name="theme-color" content="#0c0c0c">
+  <link rel="canonical" href="https://reveal.brightkumedzro.com/scroll">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://reveal.brightkumedzro.com/scroll">
+  <meta property="og:title" content="Scroll effects · Reveal">
+  <meta property="og:description" content="Scrollytelling effects for your own content: words that light up, numbers that count, lines that draw themselves, type that masks a picture, pinned steps, frame scrubbing and zoom-throughs.">
+  <meta property="og:image" content="https://reveal.brightkumedzro.com/og/scroll.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://reveal.brightkumedzro.com/og/scroll.png">
+  <link rel="icon" href="/bk-mark.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="scrollfx">
+  <main>
+    <header class="intro pack-intro" style="--c:#33adff">
+      <a class="pill back" href="/">← Reveal</a>
+      <p class="eyebrow">Reveal · Scroll effects · 7 effects</p>
+      <h1>Scroll effects. <span class="rest">Seven ways to tell a story as people scroll, using your own words, numbers, drawings and pictures.</span></h1>
+      <nav class="chapters" aria-label="Scroll effects">
+        <a href="#words" style="--c:#f1f1ef"><span>01</span>Words</a>
+        <a href="#count" style="--c:#5cc976"><span>02</span>Count</a>
+        <a href="#lines" style="--c:#33adff"><span>03</span>Lines</a>
+        <a href="#mask" style="--c:#ff8a3d"><span>04</span>Mask</a>
+        <a href="#steps" style="--c:#fb7185"><span>05</span>Steps</a>
+        <a href="#scrub" style="--c:#e6b35c"><span>06</span>Scrub</a>
+        <a href="#zoom" style="--c:#a78bfa"><span>07</span>Zoom</a>
+      </nav>
+      <p class="install"><span>$</span> npm i @brightkumedzro/reveal</p>
+      <div class="go"><span class="cue">Scroll to begin <span aria-hidden="true">↓</span></span></div>
+    </header>
+
+<section class="sd sd-words" id="words">
+  <p class="eyebrow">Scroll · Words</p>
+  <h2>Words. <span class="rest">Each word lights up as you read your way down.</span></h2>
+  <div class="sd-stage">
+    <p class="sd-manifesto" id="manifesto">A first draft is meant to be wrong. You sketch it in pencil so it costs nothing to throw away, and you keep throwing it away until what's left is worth keeping. Then you <em>commit</em>: the lines get inked, the colour goes in, and the thing ships. Every effect here is that moment, drawn out over a scroll.</p>
+  </div>
+<pre class="sd-code"><span class="k">import</span> { words } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+words(<span class="s">'#manifesto'</span>);</pre>
+  <style>
+    .sd-words .sd-stage { min-height: 130vh; display: flex; align-items: center; }
+    .sd-manifesto { margin: 0; max-width: 900px; font-size: clamp(26px, 3.8vw, 44px); line-height: 1.28; letter-spacing: -.02em; font-weight: 500; color: var(--ink); }
+    .sd-manifesto em { font-style: normal; color: var(--accent); }
+  </style>
+  <script type="module">
+    import { words } from '/js/scroll/words.js';
+    words('#manifesto');
+  </script>
+</section>
+
+<section class="sd sd-count" id="count">
+  <p class="eyebrow">Scroll · Count</p>
+  <h2>Count. <span class="rest">Numbers count up as they come into view, in the format you wrote them.</span></h2>
+  <div class="sd-stage">
+    <dl class="sd-stats">
+      <div><dt class="sd-n">1,000+</dt><dd>scholars supported a year</dd></div>
+      <div><dt class="sd-n">17</dt><dd>reveal effects, three packs</dd></div>
+      <div><dt class="sd-n">60</dt><dd>holes in Holeshot</dd></div>
+      <div><dt class="sd-n">98%</dt><dd>of drafts improved by burning</dd></div>
+    </dl>
+  </div>
+<pre class="sd-code"><span class="k">import</span> { count } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+count(<span class="s">'.sd-n'</span>);   <span class="c">// "1,000+", "£2.3m", "4.8" and "98%" keep their format</span></pre>
+  <style>
+    .sd-count .sd-stage { min-height: 70vh; display: flex; align-items: center; }
+    .sd-stats { margin: 0; width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px 24px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 36px 0; }
+    @media (min-width: 760px) { .sd-stats { grid-template-columns: repeat(4, 1fr); } }
+    .sd-stats dt { font-size: clamp(36px, 6vw, 60px); line-height: 1; font-weight: 500; letter-spacing: -.03em; color: var(--ink); }
+    .sd-stats dd { margin: 10px 0 0; color: var(--soft); font-size: 14px; }
+  </style>
+  <script type="module">
+    import { count } from '/js/scroll/count.js';
+    count('.sd-n');
+  </script>
+</section>
+
+<section class="sd" id="lines">
+  <style>
+    #lines .lines-demo { margin: 36px 0 28px; padding: clamp(12px, 3vw, 28px); border-radius: 22px; background: var(--surface, #161616); border: 1px solid var(--line, #232323); overflow: hidden; }
+    #lines svg { display: block; width: 100%; height: auto; overflow: visible; }
+    #lines .ink { fill: none; stroke: var(--ink, #f1f1ef); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    #lines .leaf { fill: rgba(241, 241, 239, .08); }
+    #lines .start { fill: var(--accent, #33adff); stroke: var(--accent, #33adff); stroke-width: 2; }
+    #lines .label { font: 500 21px Caveat, "Segoe Print", cursive; fill: var(--ink, #f1f1ef); opacity: 0; transition: opacity .35s ease; }
+    #lines .label.on { opacity: 1; }
+    #lines .all { font: 600 20px Caveat, "Segoe Print", cursive; fill: var(--soft, #8d8d8d); }
+    @media (prefers-reduced-motion: reduce) { #lines .label { transition: none; } }
+  </style>
+  <p class="eyebrow">Scroll · Lines</p>
+  <h2>Lines that draw themselves. <span class="rest">Any SVG, drawn along its own paths as it scrolls into view: diagrams, maps, signatures, journeys.</span></h2>
+
+  <div class="lines-demo">
+    <svg id="lines-branch" viewBox="0 0 1000 230" role="img" aria-label="A hand-drawn branch: one line growing from left to right, with a leaf for each discipline: product ownership, program management, product design, development, brand design and graphic design.">
+      <!-- the main line, drawn first, then each branch and leaf in turn -->
+      <circle class="start" cx="40" cy="116" r="7" />
+      <path class="ink" d="M40 116 C 160 109, 260 122, 380 114 S 600 104, 720 115 S 900 118, 975 112" />
+      <!-- up: product ownership -->
+      <path class="ink" d="M190 113 C 196 96, 204 84, 214 74" />
+      <path class="ink leaf" d="M214 74 C 222 58, 242 50, 258 52 C 252 68, 234 78, 214 74 Z" />
+      <path class="ink" d="M216 73 C 228 66, 240 60, 252 55" />
+      <!-- down: program management -->
+      <path class="ink" d="M300 118 C 306 134, 316 146, 328 154" />
+      <path class="ink leaf" d="M328 154 C 340 166, 360 170, 374 164 C 364 152, 346 148, 328 154 Z" />
+      <path class="ink" d="M330 155 C 344 158, 356 160, 368 162" />
+      <!-- up: product design -->
+      <path class="ink" d="M430 112 C 436 95, 444 82, 454 72" />
+      <path class="ink leaf" d="M454 72 C 462 56, 482 48, 498 50 C 492 66, 474 76, 454 72 Z" />
+      <path class="ink" d="M456 71 C 468 64, 480 58, 492 53" />
+      <!-- down: development -->
+      <path class="ink" d="M560 108 C 566 124, 576 138, 588 146" />
+      <path class="ink leaf" d="M588 146 C 600 158, 620 162, 634 156 C 624 144, 606 140, 588 146 Z" />
+      <path class="ink" d="M590 147 C 604 150, 616 152, 628 154" />
+      <!-- up: brand design -->
+      <path class="ink" d="M690 112 C 696 95, 704 82, 714 72" />
+      <path class="ink leaf" d="M714 72 C 722 56, 742 48, 758 50 C 752 66, 734 76, 714 72 Z" />
+      <path class="ink" d="M716 71 C 728 64, 740 58, 752 53" />
+      <!-- down: graphic design -->
+      <path class="ink" d="M830 116 C 836 132, 846 146, 858 154" />
+      <path class="ink leaf" d="M858 154 C 870 166, 890 170, 904 164 C 894 152, 876 148, 858 154 Z" />
+      <path class="ink" d="M860 155 C 874 158, 886 160, 898 162" />
+
+      <text class="all" x="28" y="150">All</text>
+      <text class="label" x="266" y="58">Product ownership</text>
+      <text class="label" x="382" y="182">Program management</text>
+      <text class="label" x="506" y="56">Product design</text>
+      <text class="label" x="642" y="174">Development</text>
+      <text class="label" x="766" y="56">Brand design</text>
+      <text class="label" x="992" y="190" text-anchor="end">Graphic design</text>
+    </svg>
+  </div>
+
+<pre><code><span class="k">import</span> { lines } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+
+lines(<span class="s">'#journey'</span>);                                   <span class="c">// every path draws in order, as it scrolls in</span>
+lines(<span class="s">'#map'</span>, { order: <span class="s">'together'</span>, fill: <span class="k">true</span> });   <span class="c">// all at once, fills fading in after</span>
+lines(<span class="s">'#signature'</span>, { pen: <span class="s">'#33adff'</span> });               <span class="c">// a dot rides the tip</span></code></pre>
+
+  <script type="module">
+    import { lines } from '/js/scroll/lines.js';
+    // the main line draws first, then each branch and leaf in turn; a label appears as its leaf is finished
+    const labels = [...document.querySelectorAll('#lines .label')];
+    lines('#lines-branch', {
+      pen: '#33adff',
+      fill: true,   // the leaves' tint fades in once each outline is drawn
+      onProgress: (p) => {
+        const q = p * p * (3 - 2 * p);   // the same easing the drawing uses
+        labels.forEach((el, i) => el.classList.toggle('on', q >= 0.53 + i * 0.09));
+      },
+    });
+  </script>
+</section>
+
+<section class="sd sd-mask" id="mask">
+  <p class="eyebrow">Scroll · Mask</p>
+  <h2>Mask. <span class="rest">Big type becomes a window, and the picture moves inside it as you scroll.</span></h2>
+  <div class="sd-stage">
+    <p class="sd-masked" id="masked">REVEAL</p>
+  </div>
+<pre class="sd-code"><span class="k">import</span> { mask } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+mask(<span class="s">'#masked'</span>, { src: <span class="s">'/og/shinobi.png'</span>, grow: <span class="s">1.2</span> });</pre>
+  <style>
+    .sd-mask .sd-stage { min-height: 120vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .sd-masked { margin: 0; font-size: clamp(72px, 19vw, 260px); line-height: .9; font-weight: 800; letter-spacing: -.05em; color: var(--ink); text-align: center; }
+  </style>
+  <script type="module">
+    import { mask } from '/js/scroll/mask.js';
+    mask('#masked', { src: '/og/shinobi.png', grow: 1.2 });
+  </script>
+</section>
+
+<section class="sd" id="steps">
+  <style>
+    #steps .steps-demo { --steps-visual-h: 380px; --steps-bg: var(--bg, #0c0c0c); margin: 36px 0 28px; }
+    #steps .card { height: var(--steps-visual-h); border-radius: 22px; background: var(--surface, #161616); border: 1px solid var(--line, #232323); display: grid; place-items: center; overflow: hidden; position: relative; }
+    #steps .card svg { width: 78%; height: auto; overflow: visible; }
+    #steps .card .tag { position: absolute; top: 16px; left: 18px; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
+    #steps .card .ln { fill: none; stroke: var(--ink, #f1f1ef); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    #steps .card .soft { stroke: var(--soft, #8d8d8d); }
+    #steps .card .acc { stroke: var(--c); }
+    #steps .card .fillc { fill: var(--c); }
+    #steps ol { list-style: none; margin: 0; padding: 0; }
+    #steps li h3 { margin: 0 0 8px; font-size: clamp(22px, 3vw, 28px); font-weight: 500; letter-spacing: -.02em; }
+    #steps li h3 span { color: var(--soft, #8d8d8d); font-size: .6em; font-variant-numeric: tabular-nums; margin-right: 10px; letter-spacing: 0; }
+    #steps li p { margin: 0; color: var(--body, #c9c9c6); max-width: 420px; }
+    #steps li.is-active h3 span { color: var(--c); }
+    @media (max-width: 760px) { #steps .steps-demo { --steps-visual-h: 230px; } #steps .card svg { width: 60%; } }
+  </style>
+  <p class="eyebrow">Scroll · Steps</p>
+  <h2>A story told in steps. <span class="rest">One visual stays put while the steps scroll past, and it changes with each one.</span></h2>
+
+  <div class="steps-demo" data-steps>
+    <div data-steps-visual aria-hidden="true">
+      <!-- 0 · Discover: notes on a board and a lens -->
+      <div class="card" data-step="0" style="--c:#ffb547">
+        <span class="tag">01 · Discover</span>
+        <svg viewBox="0 0 320 200">
+          <rect class="ln soft" x="20" y="20" width="200" height="150" rx="10" />
+          <rect class="ln acc" x="44" y="44" width="58" height="46" rx="4" transform="rotate(-4 73 67)" />
+          <rect class="ln" x="118" y="40" width="58" height="46" rx="4" transform="rotate(3 147 63)" />
+          <rect class="ln" x="60" y="104" width="58" height="46" rx="4" transform="rotate(2 89 127)" />
+          <rect class="ln acc" x="136" y="100" width="58" height="46" rx="4" transform="rotate(-3 165 123)" />
+          <circle class="ln acc" cx="248" cy="130" r="34" />
+          <path class="ln acc" d="M272 154 L300 182" />
+        </svg>
+      </div>
+      <!-- 1 · Define: one target -->
+      <div class="card" data-step="1" style="--c:#ff6b8a">
+        <span class="tag">02 · Define</span>
+        <svg viewBox="0 0 320 200">
+          <circle class="ln soft" cx="160" cy="100" r="82" />
+          <circle class="ln" cx="160" cy="100" r="54" />
+          <circle class="ln acc" cx="160" cy="100" r="26" />
+          <circle class="fillc" cx="160" cy="100" r="6" />
+          <path class="ln acc" d="M262 30 L170 92" />
+          <path class="ln acc" d="M262 30 l-2 18 M262 30 l-18 2" />
+        </svg>
+      </div>
+      <!-- 2 · Design: a wireframe -->
+      <div class="card" data-step="2" style="--c:#33adff">
+        <span class="tag">03 · Design</span>
+        <svg viewBox="0 0 320 200">
+          <rect class="ln soft" x="20" y="16" width="280" height="168" rx="12" />
+          <path class="ln soft" d="M20 44 H300" />
+          <rect class="ln acc" x="40" y="62" width="110" height="20" rx="4" />
+          <path class="ln" d="M40 96 H150 M40 108 H130" />
+          <rect class="ln acc" x="40" y="128" width="60" height="22" rx="11" />
+          <rect class="ln" x="172" y="62" width="108" height="88" rx="8" />
+          <path class="ln soft" d="M172 62 L280 150 M280 62 L172 150" />
+        </svg>
+      </div>
+      <!-- 3 · Deliver: it ships, and the line goes up -->
+      <div class="card" data-step="3" style="--c:#5cc976">
+        <span class="tag">04 · Deliver</span>
+        <svg viewBox="0 0 320 200">
+          <path class="ln soft" d="M30 170 H290 M30 170 V30" />
+          <path class="ln acc" d="M30 150 L80 138 L120 142 L160 112 L200 104 L240 70 L285 44" />
+          <circle class="fillc" cx="285" cy="44" r="6" />
+          <rect class="ln acc" x="196" y="140" width="84" height="22" rx="11" />
+          <path class="ln acc" d="M208 151 l6 6 l12 -12" />
+        </svg>
+      </div>
+    </div>
+
+    <ol>
+      <li data-step><h3><span>01</span>Discover</h3><p>Talk to the people who'll use it, and to the people who'll pay for it. Collect what hurts, what's been tried and what success would look like.</p></li>
+      <li data-step><h3><span>02</span>Define</h3><p>Turn it into one problem worth solving, a way to measure it, and what's out of scope. Everyone signs up to the same target.</p></li>
+      <li data-step><h3><span>03</span>Design</h3><p>Sketch, prototype and test the riskiest part first. Wireframes become a clickable flow, then a design system the team can build from.</p></li>
+      <li data-step><h3><span>04</span>Deliver</h3><p>Ship the first complete cycle, measure it against the target, and keep improving what's live instead of polishing what isn't.</p></li>
+    </ol>
+  </div>
+
+<pre><code><span class="k">import</span> { steps } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+
+<span class="c">// &lt;section data-steps&gt;
+//   &lt;div data-steps-visual&gt; &lt;div data-step="0"&gt;…&lt;/div&gt; &lt;div data-step="1"&gt;…&lt;/div&gt; &lt;/div&gt;
+//   &lt;ol&gt; &lt;li data-step&gt;First…&lt;/li&gt; &lt;li data-step&gt;Second…&lt;/li&gt; &lt;/ol&gt;
+// &lt;/section&gt;</span>
+steps(<span class="s">'[data-steps]'</span>, { onStep: (i) =&gt; chart.show(i) });</code></pre>
+
+  <script type="module">
+    import { steps } from '/js/scroll/steps.js';
+    steps('#steps [data-steps]');
+  </script>
+</section>
+
+<section class="sd" id="scrub">
+  <style>
+    #scrub .sd-head { max-width: 760px; margin: 0 auto; padding: 96px 16px 32px; text-align: center; }
+    #scrub .sd-head h2 { margin-bottom: 16px; }
+    #scrub .sd-head p { color: var(--body); margin: 0; }
+    #scrub .sd-track { position: relative; height: 320vh; }
+    #scrub .sd-stage { height: 100vh; height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 0 16px; }
+    #scrub .sd-frame { position: relative; width: min(100%, 1100px, 150vh); aspect-ratio: 960 / 504; border-radius: 22px; overflow: hidden; background: var(--surface); box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
+    #scrub .sd-cap { margin: 0; color: var(--soft); font-size: 13px; font-variant-numeric: tabular-nums; }
+    #scrub .sd-cap b { color: var(--ink); font-weight: 600; }
+    #scrub .sd-code { max-width: 760px; margin: 32px auto 96px; padding: 0 16px; }
+    #scrub pre { margin: 0; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; font: 13px/1.6 ui-monospace, Consolas, monospace; color: var(--body); }
+    #scrub pre .k { color: #c084fc; } #scrub pre .s { color: #86efac; } #scrub pre .c { color: var(--soft); }
+  </style>
+  <div class="sd-head">
+    <p class="eyebrow">Scroll · Scrub</p>
+    <h2>Frame scrub. <span class="rest">Scroll plays an image sequence forwards and backwards, like a product page.</span></h2>
+    <p>Here it plays 90 frames of the fire reveal. Scroll down and the comet comes in; scroll up and it un-burns.</p>
+  </div>
+  <div class="sd-track">
+    <div class="sd-stage" data-scrub-stage>
+      <div class="sd-frame"><canvas></canvas></div>
+      <p class="sd-cap" aria-live="off">Frame <b data-scrub-frame>1</b> / 90</p>
+    </div>
+  </div>
+  <div class="sd-code">
+<pre><span class="k">import</span> { scrub } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+
+<span class="c">// a tall section; its stage stays pinned while it scrolls past</span>
+scrub(<span class="s">'.product'</span>, {
+  frames: <span class="s">'/frames/%03d.jpg'</span>, count: <span class="s">90</span>,   <span class="c">// or an array of URLs, or video: '/clip.mp4'</span>
+  fit: <span class="s">'cover'</span>,
+  alt: <span class="s">'The phone turning round'</span>,
+});</pre>
+  </div>
+  <script type="module">
+    import { scrub } from '/js/scroll/scrub.js';
+    const label = document.querySelector('#scrub [data-scrub-frame]');
+    scrub('#scrub .sd-track', {
+      frames: '/demo/scrub/%03d.jpg', count: 90, fit: 'contain', background: '#161616',
+      alt: 'A comet hits a pencil wireframe and fire burns it away to show the finished design',
+      onProgress: (p, frame) => { label.textContent = String(frame + 1); },
+    });
+  </script>
+</section>
+
+<section class="sd" id="zoom">
+  <style>
+    #zoom .sd-head { max-width: 760px; margin: 0 auto; padding: 96px 16px 32px; text-align: center; }
+    #zoom .sd-head h2 { margin-bottom: 16px; }
+    #zoom .sd-head p { color: var(--body); margin: 0; }
+    #zoom .sd-track { position: relative; height: 420vh; }
+    #zoom [data-zoom-scene] { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; background: var(--bg, #0c0c0c); padding: 0 16px; }
+    #zoom .board { position: relative; width: min(100%, 1100px, 150vh); aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .45); background: var(--surface); }
+    #zoom .board img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* where the camera dives in: the hero visual box on the sketch, the chart panel on the design */
+    #zoom .spot { position: absolute; left: 57%; top: 18.6%; width: 39.1%; height: 52.1%; border-radius: 6px; outline: 2px dashed rgba(51, 173, 255, .7); outline-offset: 4px; }
+    #zoom .spot span { position: absolute; left: 50%; top: -34px; transform: translateX(-50%); white-space: nowrap; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent, #33adff); }
+    #zoom .cap { margin: 0; color: var(--soft); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+    #zoom .cap b { color: var(--ink); font-weight: 600; }
+    #zoom .sd-code { max-width: 760px; margin: 32px auto 96px; padding: 0 16px; }
+    #zoom pre { margin: 0; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; font: 13px/1.6 ui-monospace, Consolas, monospace; color: var(--body); }
+    #zoom pre .k { color: #c084fc; } #zoom pre .s { color: #86efac; } #zoom pre .c { color: var(--soft); }
+  </style>
+  <div class="sd-head">
+    <p class="eyebrow">Scroll · Zoom</p>
+    <h2>Zoom-through. <span class="rest">The camera dives into a detail and comes out in the next scene.</span></h2>
+    <p>From the pencil sketch, into its "hero visual??" box, out into the finished design, and through its chart into every effect.</p>
+  </div>
+  <div class="sd-track">
+    <div data-zoom-scene>
+      <p class="cap"><b>01</b> · The sketch</p>
+      <div class="board">
+        <img src="/demo/sketch.jpg" alt="A pencil wireframe of a landing page, with an empty box labelled hero visual" width="1600" height="900">
+        <div class="spot" data-zoom-to><span>Dive in</span></div>
+      </div>
+    </div>
+    <div data-zoom-scene>
+      <p class="cap"><b>02</b> · The finished design</p>
+      <div class="board">
+        <img src="/demo/final.jpg" alt="The finished landing page: a bold headline and a chart that only goes up" width="1600" height="900">
+        <div class="spot" data-zoom-to><span>And again</span></div>
+      </div>
+    </div>
+    <div data-zoom-scene>
+      <p class="cap"><b>03</b> · Every way to get there</p>
+      <div class="board">
+        <img src="/og/reveal.png" alt="Six strips of the same page mid-reveal: fire, a lightning blade, a sandstorm, a spinning sphere, breaking stone and a sand tornado" width="1200" height="630">
+      </div>
+    </div>
+  </div>
+  <div class="sd-code">
+<pre><span class="k">import</span> { zoom } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+
+<span class="c">// &lt;section class="story" style="height: 400vh"&gt;
+//   &lt;div data-zoom-scene&gt;… &lt;div data-zoom-to&gt;&lt;/div&gt; …&lt;/div&gt;   ← dive into this
+//   &lt;div data-zoom-scene&gt;…&lt;/div&gt;
+// &lt;/section&gt;</span>
+zoom(<span class="s">'.story'</span>);</pre>
+  </div>
+  <script type="module">
+    import { zoom } from '/js/scroll/zoom.js';
+    zoom('#zoom .sd-track', { label: 'Zooming from the sketch into the finished design' });
+  </script>
+</section>
+
+    <section class="after">
+      <p class="eyebrow">Reveal · Scroll effects</p>
+      <h2>Add them to your page. <span class="rest">One import, then point each effect at your own content.</span></h2>
+<pre class="sd-code"><span class="k">import</span> { words, count, lines, mask, steps, scrub, zoom } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;</pre>
+      <p>Every effect returns <code>{ stop() }</code> to undo itself, shares one scroll listener with the others, and is safe to import during server rendering. With reduced motion turned on, each one simply shows its finished state, and screen readers always get the real text.</p>
+      <div class="actions">
+        <a class="btn primary" href="/use">Use it in your project</a>
+        <a class="btn" href="/">The image reveals</a>
+      </div>
+    </section>
+    <footer class="site-foot">
+      <a class="me" href="https://www.brightkumedzro.com"><img src="/bk-mark.png" alt="" width="34" height="34"><span><b>Bright Kumedzro</b><span>Product designer &amp; manager</span></span></a>
+      <nav aria-label="Bright Kumedzro's site">
+        <a href="https://www.brightkumedzro.com">Work</a>
+        <a href="https://www.brightkumedzro.com/about">About</a>
+        <a href="https://www.brightkumedzro.com/playground">Playground</a>
+        <a class="talk" href="https://www.brightkumedzro.com/contact"><i></i>Let's talk</a>
+      </nav>
+      <p class="where">Accra, Ghana · 2026</p>
+    </footer>
+  </main>
+</body>
+</html>

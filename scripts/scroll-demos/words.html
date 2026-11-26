@@ -1,0 +1,18 @@
+<section class="sd sd-words" id="words">
+  <p class="eyebrow">Scroll · Words</p>
+  <h2>Words. <span class="rest">Each word lights up as you read your way down.</span></h2>
+  <div class="sd-stage">
+    <p class="sd-manifesto" id="manifesto">A first draft is meant to be wrong. You sketch it in pencil so it costs nothing to throw away, and you keep throwing it away until what's left is worth keeping. Then you <em>commit</em>: the lines get inked, the colour goes in, and the thing ships. Every effect here is that moment, drawn out over a scroll.</p>
+  </div>
+<pre class="sd-code"><span class="k">import</span> { words } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+words(<span class="s">'#manifesto'</span>);</pre>
+  <style>
+    .sd-words .sd-stage { min-height: 130vh; display: flex; align-items: center; }
+    .sd-manifesto { margin: 0; max-width: 900px; font-size: clamp(26px, 3.8vw, 44px); line-height: 1.28; letter-spacing: -.02em; font-weight: 500; color: var(--ink); }
+    .sd-manifesto em { font-style: normal; color: var(--accent); }
+  </style>
+  <script type="module">
+    import { words } from '/js/scroll/words.js';
+    words('#manifesto');
+  </script>
+</section>

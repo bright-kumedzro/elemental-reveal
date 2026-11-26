@@ -1,0 +1,17 @@
+<section class="sd sd-mask" id="mask">
+  <p class="eyebrow">Scroll · Mask</p>
+  <h2>Mask. <span class="rest">Big type becomes a window, and the picture moves inside it as you scroll.</span></h2>
+  <div class="sd-stage">
+    <p class="sd-masked" id="masked">REVEAL</p>
+  </div>
+<pre class="sd-code"><span class="k">import</span> { mask } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+mask(<span class="s">'#masked'</span>, { src: <span class="s">'/og/shinobi.png'</span>, grow: <span class="s">1.2</span> });</pre>
+  <style>
+    .sd-mask .sd-stage { min-height: 120vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .sd-masked { margin: 0; font-size: clamp(72px, 19vw, 260px); line-height: .9; font-weight: 800; letter-spacing: -.05em; color: var(--ink); text-align: center; }
+  </style>
+  <script type="module">
+    import { mask } from '/js/scroll/mask.js';
+    mask('#masked', { src: '/og/shinobi.png', grow: 1.2 });
+  </script>
+</section>

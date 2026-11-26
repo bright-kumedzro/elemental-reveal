@@ -45,6 +45,24 @@ The element needs a size. Anything you put inside it stays on top of the effect,
 
 It's the same library under a new name, with the shinobi pack added. Swap the import for `@brightkumedzro/reveal/elemental` (or `@brightkumedzro/reveal` for every effect) and everything works as before: same options, same methods, same effect names.
 
+## Scroll effects
+
+For your own page content rather than two images: text, numbers, SVG, pictures and whole sections.
+
+```js
+import { words, count, lines, mask, steps, scrub, zoom } from '@brightkumedzro/reveal/scroll';
+
+words('#intro');                                   // each word lights up as you scroll
+count('.stat');                                    // numbers count up in view, in the format you wrote them ("1,000+", "98%")
+lines('#journey', { pen: true });                  // SVG paths draw themselves
+mask('#title', { src: '/hero.jpg' });              // big type becomes a window onto a picture
+steps('[data-steps]', { onStep: (i) => {} });      // a pinned visual with steps scrolling past it
+scrub('#track', { frames: '/f/%03d.jpg', count: 90 });   // scroll plays an image sequence
+zoom('#story');                                    // dive from one scene into the next
+```
+
+Each returns `{ stop() }`, they share one scroll listener, and with reduced motion each shows its finished state. See them all at [reveal.brightkumedzro.com/scroll](https://reveal.brightkumedzro.com/scroll).
+
 ## Options
 
 | Option | Default | What it does |

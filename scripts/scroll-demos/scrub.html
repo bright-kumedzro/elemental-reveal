@@ -1,0 +1,45 @@
+<section class="sd" id="scrub">
+  <style>
+    #scrub .sd-head { max-width: 760px; margin: 0 auto; padding: 96px 16px 32px; text-align: center; }
+    #scrub .sd-head h2 { margin-bottom: 16px; }
+    #scrub .sd-head p { color: var(--body); margin: 0; }
+    #scrub .sd-track { position: relative; height: 320vh; }
+    #scrub .sd-stage { height: 100vh; height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 0 16px; }
+    #scrub .sd-frame { position: relative; width: min(100%, 1100px, 150vh); aspect-ratio: 960 / 504; border-radius: 22px; overflow: hidden; background: var(--surface); box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
+    #scrub .sd-cap { margin: 0; color: var(--soft); font-size: 13px; font-variant-numeric: tabular-nums; }
+    #scrub .sd-cap b { color: var(--ink); font-weight: 600; }
+    #scrub .sd-code { max-width: 760px; margin: 32px auto 96px; padding: 0 16px; }
+    #scrub pre { margin: 0; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; font: 13px/1.6 ui-monospace, Consolas, monospace; color: var(--body); }
+    #scrub pre .k { color: #c084fc; } #scrub pre .s { color: #86efac; } #scrub pre .c { color: var(--soft); }
+  </style>
+  <div class="sd-head">
+    <p class="eyebrow">Scroll · Scrub</p>
+    <h2>Frame scrub. <span class="rest">Scroll plays an image sequence forwards and backwards, like a product page.</span></h2>
+    <p>Here it plays 90 frames of the fire reveal. Scroll down and the comet comes in; scroll up and it un-burns.</p>
+  </div>
+  <div class="sd-track">
+    <div class="sd-stage" data-scrub-stage>
+      <div class="sd-frame"><canvas></canvas></div>
+      <p class="sd-cap" aria-live="off">Frame <b data-scrub-frame>1</b> / 90</p>
+    </div>
+  </div>
+  <div class="sd-code">
+<pre><span class="k">import</span> { scrub } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+
+<span class="c">// a tall section; its stage stays pinned while it scrolls past</span>
+scrub(<span class="s">'.product'</span>, {
+  frames: <span class="s">'/frames/%03d.jpg'</span>, count: <span class="s">90</span>,   <span class="c">// or an array of URLs, or video: '/clip.mp4'</span>
+  fit: <span class="s">'cover'</span>,
+  alt: <span class="s">'The phone turning round'</span>,
+});</pre>
+  </div>
+  <script type="module">
+    import { scrub } from '/js/scroll/scrub.js';
+    const label = document.querySelector('#scrub [data-scrub-frame]');
+    scrub('#scrub .sd-track', {
+      frames: '/demo/scrub/%03d.jpg', count: 90, fit: 'contain', background: '#161616',
+      alt: 'A comet hits a pencil wireframe and fire burns it away to show the finished design',
+      onProgress: (p, frame) => { label.textContent = String(frame + 1); },
+    });
+  </script>
+</section>

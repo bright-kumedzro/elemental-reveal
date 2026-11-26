@@ -1,0 +1,75 @@
+<section class="sd" id="lines">
+  <style>
+    #lines .lines-demo { margin: 36px 0 28px; padding: clamp(12px, 3vw, 28px); border-radius: 22px; background: var(--surface, #161616); border: 1px solid var(--line, #232323); overflow: hidden; }
+    #lines svg { display: block; width: 100%; height: auto; overflow: visible; }
+    #lines .ink { fill: none; stroke: var(--ink, #f1f1ef); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    #lines .leaf { fill: rgba(241, 241, 239, .08); }
+    #lines .start { fill: var(--accent, #33adff); stroke: var(--accent, #33adff); stroke-width: 2; }
+    #lines .label { font: 500 21px Caveat, "Segoe Print", cursive; fill: var(--ink, #f1f1ef); opacity: 0; transition: opacity .35s ease; }
+    #lines .label.on { opacity: 1; }
+    #lines .all { font: 600 20px Caveat, "Segoe Print", cursive; fill: var(--soft, #8d8d8d); }
+    @media (prefers-reduced-motion: reduce) { #lines .label { transition: none; } }
+  </style>
+  <p class="eyebrow">Scroll · Lines</p>
+  <h2>Lines that draw themselves. <span class="rest">Any SVG, drawn along its own paths as it scrolls into view: diagrams, maps, signatures, journeys.</span></h2>
+
+  <div class="lines-demo">
+    <svg id="lines-branch" viewBox="0 0 1000 230" role="img" aria-label="A hand-drawn branch: one line growing from left to right, with a leaf for each discipline: product ownership, program management, product design, development, brand design and graphic design.">
+      <!-- the main line, drawn first, then each branch and leaf in turn -->
+      <circle class="start" cx="40" cy="116" r="7" />
+      <path class="ink" d="M40 116 C 160 109, 260 122, 380 114 S 600 104, 720 115 S 900 118, 975 112" />
+      <!-- up: product ownership -->
+      <path class="ink" d="M190 113 C 196 96, 204 84, 214 74" />
+      <path class="ink leaf" d="M214 74 C 222 58, 242 50, 258 52 C 252 68, 234 78, 214 74 Z" />
+      <path class="ink" d="M216 73 C 228 66, 240 60, 252 55" />
+      <!-- down: program management -->
+      <path class="ink" d="M300 118 C 306 134, 316 146, 328 154" />
+      <path class="ink leaf" d="M328 154 C 340 166, 360 170, 374 164 C 364 152, 346 148, 328 154 Z" />
+      <path class="ink" d="M330 155 C 344 158, 356 160, 368 162" />
+      <!-- up: product design -->
+      <path class="ink" d="M430 112 C 436 95, 444 82, 454 72" />
+      <path class="ink leaf" d="M454 72 C 462 56, 482 48, 498 50 C 492 66, 474 76, 454 72 Z" />
+      <path class="ink" d="M456 71 C 468 64, 480 58, 492 53" />
+      <!-- down: development -->
+      <path class="ink" d="M560 108 C 566 124, 576 138, 588 146" />
+      <path class="ink leaf" d="M588 146 C 600 158, 620 162, 634 156 C 624 144, 606 140, 588 146 Z" />
+      <path class="ink" d="M590 147 C 604 150, 616 152, 628 154" />
+      <!-- up: brand design -->
+      <path class="ink" d="M690 112 C 696 95, 704 82, 714 72" />
+      <path class="ink leaf" d="M714 72 C 722 56, 742 48, 758 50 C 752 66, 734 76, 714 72 Z" />
+      <path class="ink" d="M716 71 C 728 64, 740 58, 752 53" />
+      <!-- down: graphic design -->
+      <path class="ink" d="M830 116 C 836 132, 846 146, 858 154" />
+      <path class="ink leaf" d="M858 154 C 870 166, 890 170, 904 164 C 894 152, 876 148, 858 154 Z" />
+      <path class="ink" d="M860 155 C 874 158, 886 160, 898 162" />
+
+      <text class="all" x="28" y="150">All</text>
+      <text class="label" x="266" y="58">Product ownership</text>
+      <text class="label" x="382" y="182">Program management</text>
+      <text class="label" x="506" y="56">Product design</text>
+      <text class="label" x="642" y="174">Development</text>
+      <text class="label" x="766" y="56">Brand design</text>
+      <text class="label" x="992" y="190" text-anchor="end">Graphic design</text>
+    </svg>
+  </div>
+
+<pre><code><span class="k">import</span> { lines } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+
+lines(<span class="s">'#journey'</span>);                                   <span class="c">// every path draws in order, as it scrolls in</span>
+lines(<span class="s">'#map'</span>, { order: <span class="s">'together'</span>, fill: <span class="k">true</span> });   <span class="c">// all at once, fills fading in after</span>
+lines(<span class="s">'#signature'</span>, { pen: <span class="s">'#33adff'</span> });               <span class="c">// a dot rides the tip</span></code></pre>
+
+  <script type="module">
+    import { lines } from '/js/scroll/lines.js';
+    // the main line draws first, then each branch and leaf in turn; a label appears as its leaf is finished
+    const labels = [...document.querySelectorAll('#lines .label')];
+    lines('#lines-branch', {
+      pen: '#33adff',
+      fill: true,   // the leaves' tint fades in once each outline is drawn
+      onProgress: (p) => {
+        const q = p * p * (3 - 2 * p);   // the same easing the drawing uses
+        labels.forEach((el, i) => el.classList.toggle('on', q >= 0.53 + i * 0.09));
+      },
+    });
+  </script>
+</section>
