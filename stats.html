@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Who's using it · Reveal</title>
-  <meta name="description" content="Live adoption numbers for the Reveal library (and the Elemental Reveal package it grew from): sites using it, page loads and which effects people pick.">
+  <meta name="description" content="How far the Reveal library has spread: npm downloads, CDN requests, dependents and GitHub stars, and the sites built with it.">
   <link rel="canonical" href="https://reveal.brightkumedzro.com/stats">
   <link rel="icon" href="/bk-mark.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,6 +51,9 @@
     .join pre { margin: 0; overflow-x: auto; background: #0b0b0c; border: 1px solid var(--grid); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #d4d4d8; }
     .join pre b { color: var(--mark); font-weight: 600; }
     .owner { margin-top: 40px; }
+    .submit { display: flex; gap: 8px; flex-wrap: wrap; margin: 0; }
+    .submit input { flex: 1; min-width: 200px; background: #0b0b0c; color: var(--ink); border: 1px solid #2e2e33; border-radius: 10px; padding: 11px 14px; font: inherit; }
+    .submit input:focus-visible { outline: 2px solid var(--mark); outline-offset: 1px; }
     .owner .bar { display: flex; gap: 8px; flex-wrap: wrap; }
     .owner input { flex: 1; min-width: 180px; background: #0b0b0c; color: var(--ink); border: 1px solid #2e2e33; border-radius: 10px; padding: 9px 12px; font: inherit; }
     .owner table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13px; }
@@ -64,46 +67,9 @@
     <a class="pill" href="/use" style="display:inline-block;margin-bottom:32px">← Use it in your project</a>
     <p class="eyebrow">Reveal · Library</p>
     <h1>Who's using it</h1>
-    <p class="sub">Live numbers from sites running the library. They update every few minutes.</p>
+    <p class="sub">How far <code>@brightkumedzro/reveal</code> has spread, from npm, the jsDelivr CDN and GitHub. The library itself sends nothing anywhere, so these come from outside it. They update hourly.</p>
 
-    <dl class="figures" id="figures" aria-live="polite">
-      <div><dt class="sr">Sites using it</dt><dd class="n">…</dd><dd class="l">sites using it</dd></div>
-      <div><dt class="sr">Active this week</dt><dd class="n">…</dd><dd class="l">active this week</dd></div>
-      <div><dt class="sr">Page loads</dt><dd class="n">…</dd><dd class="l">page loads</dd></div>
-      <div><dt class="sr">Still using it</dt><dd class="n">…</dd><dd class="l">still using it after four weeks</dd></div>
-    </dl>
-
-    <div class="card">
-      <h2>Active sites per day</h2>
-      <p class="cap">Sites that loaded it each day, last 30 days</p>
-      <div class="chart" id="daily"></div>
-    </div>
-    <div class="grid2">
-      <div class="card">
-        <h2>Effects</h2>
-        <p class="cap">Page loads by effect, all time</p>
-        <div class="meters" id="effects"></div>
-      </div>
-      <div class="card">
-        <h2>Versions</h2>
-        <p class="cap">Page loads by library version, all time</p>
-        <div class="meters" id="versions"></div>
-      </div>
-    </div>
-    <p class="fine">Counted from the library's anonymous ping, which sites opt in to with <code>telemetry: true</code> (it was on by default before 0.2.0): one request per page per effect, with the effect and version. Sites are counted by domain, and no domain is shown unless the site asked to be in the showcase. Localhost and this site aren't counted.</p>
-
-    <h2 class="sec" id="showcase-title">Made with Reveal</h2>
-    <p class="sub">Sites that asked to be listed, and still use it.</p>
-    <div class="show" id="showcase" aria-labelledby="showcase-title"></div>
-    <div class="card join">
-      <h2>Using it? Get your site listed</h2>
-      <p class="cap" style="margin-bottom:10px">Add <code>showcase: true</code>. It sends the anonymous ping and asks to be listed; your site shows up here once it's approved.</p>
-<pre>reveal('#hero', { effect: 'fire', from: '/sketch.png', to: '/final.png', <b>showcase: true</b> });</pre>
-    </div>
-
-    <h2 class="sec">Other signals</h2>
-    <p class="sub">From outside the ping, so they count people who never turn it on. They update hourly.</p>
-    <dl class="figures" id="signals">
+    <dl class="figures" id="signals" aria-live="polite">
       <div><dt class="sr">npm downloads this week</dt><dd class="n">…</dd><dd class="l">npm downloads this week</dd></div>
       <div><dt class="sr">CDN requests</dt><dd class="n">…</dd><dd class="l">CDN requests, last 30 days</dd></div>
       <div><dt class="sr">Packages depending on it</dt><dd class="n">…</dd><dd class="l">packages on npm depending on it</dd></div>
@@ -122,6 +88,20 @@
       </div>
     </div>
 
+    <h2 class="sec" id="showcase-title">Made with Reveal</h2>
+    <p class="sub">Sites using it whose makers asked to be listed.</p>
+    <div class="show" id="showcase" aria-labelledby="showcase-title"></div>
+    <div class="card join">
+      <h2>Using it? Get your site listed</h2>
+      <p class="cap" style="margin-bottom:12px">Send the address of a page that uses it. It shows up here once it's been checked.</p>
+      <form id="submit-form" class="bar submit">
+        <input id="submit-url" type="text" inputmode="url" placeholder="yoursite.com/page" aria-label="Your site's address" autocomplete="url" required>
+        <button class="btn primary" type="submit">Submit your site</button>
+      </form>
+      <p class="cap" id="submit-note" role="status" style="margin:10px 0 0"></p>
+    </div>
+    <p class="fine">Versions before 1.1 could send an opt-in adoption ping; the library no longer sends anything.</p>
+
     <section class="card owner" id="owner" hidden>
       <h2>Owner: showcase requests</h2>
       <p class="cap">Your STATS_TOKEN stays in this browser only.</p>
@@ -134,11 +114,6 @@
     const $ = (s) => document.querySelector(s);
     const fmt = (n) => Number(n).toLocaleString('en');
     const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-
-    function figures(t) {
-      const vals = [fmt(t.sites), fmt(t.active7), fmt(t.loads), t.retention28 == null ? '—' : `${Math.round(t.retention28 * 100)}%`];
-      $('#figures').querySelectorAll('.n').forEach((el, i) => { el.textContent = vals[i]; });
-    }
 
     const day = (s, o = { day: 'numeric', month: 'short' }) => new Date(s + 'T00:00:00Z').toLocaleDateString('en-GB', { ...o, timeZone: 'UTC' });
 
@@ -168,29 +143,8 @@
         r.addEventListener('pointerleave', () => { tip.style.opacity = 0; });
       });
     }
-    const drawDaily = (daily) => columns($('#daily'), daily, {
-      value: (d) => d.sites, label: (d) => day(d.day), aria: 'Active sites per day for the last 30 days',
-      tip: (d) => `${day(d.day, { day: 'numeric', month: 'short', year: 'numeric' })}<br><b>${fmt(d.sites)}</b> sites · ${fmt(d.loads)} loads`,
-    });
-
-    function meters(el, obj) {
-      const rows = Object.entries(obj).sort((a, b) => b[1] - a[1]);
-      const max = Math.max(1, ...rows.map((r) => r[1]));
-      el.innerHTML = rows.length
-        ? rows.map(([k, v]) => `<div class="meter"><span>${esc(k)}</span><span class="track"><span class="fill" style="width:${(v / max) * 100}%"></span></span><span class="fig">${fmt(v)}</span></div>`).join('')
-        : '<p class="empty">Nothing yet.</p>';
-    }
-
     const redraw = [];
     addEventListener('resize', () => redraw.forEach((f) => f()));
-
-    fetch('/api/stats').then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then((d) => {
-      figures(d.totals); drawDaily(d.daily); meters($('#effects'), d.effects); meters($('#versions'), d.versions);
-      redraw.push(() => drawDaily(d.daily));
-    }).catch(() => {
-      $('#figures').querySelectorAll('.n').forEach((el) => { el.textContent = '—'; });
-      $('#daily').innerHTML = '<p class="empty">The numbers couldn’t load right now.</p>';
-    });
 
     /* other signals: npm, jsDelivr and GitHub, gathered by /api/signals */
     fetch('/api/signals').then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then((s) => {
@@ -214,6 +168,20 @@
         ? sites.map((s) => `<a href="https://${esc(s.site)}" target="_blank" rel="noopener"><b>${esc(s.site)}</b><span>${s.effects.map(esc).join(' · ') || 'Reveal'} · since ${new Date(s.since).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</span></a>`).join('')
         : '<p class="empty">No sites listed yet. Yours could be the first.</p>';
     }).catch(() => { $('#showcase').innerHTML = '<p class="empty">The showcase couldn’t load right now.</p>'; });
+
+    /* "Submit your site": it waits for the owner's approval before it shows */
+    $('#submit-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const note = $('#submit-note'), button = e.submitter || e.target.querySelector('button');
+      button.disabled = true; note.textContent = 'Sending…';
+      try {
+        const r = await fetch('/api/showcase', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: $('#submit-url').value }) });
+        const j = await r.json().catch(() => ({}));
+        note.textContent = r.ok ? `Thanks! ${j.site} will show up here once it's been checked.` : (j.error || 'That didn’t go through. Please try again.');
+        if (r.ok) $('#submit-url').value = '';
+      } catch { note.textContent = 'That didn’t go through. Please try again.'; }
+      button.disabled = false;
+    });
 
     /* owner mode (/stats#owner): approve or hide showcase requests. The token stays in this browser. */
     if (location.hash === '#owner') {

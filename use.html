@@ -142,8 +142,6 @@ fx.progress(<span class="s">0.5</span>);</pre>
           <tr><td><code>background</code></td><td><code>'#0b0b0c'</code></td><td>Shown behind images that don't fill the element.</td></tr>
           <tr><td><code>sound</code></td><td><code>'off'</code></td><td>Synthesised sound, no audio files. <code>'on'</code> starts at the visitor's first click, tap or key press. <code>'toggle'</code> waits for <code>fx.sound(true)</code> or any button with a <code>data-reveal-sound</code> attribute.</td></tr>
           <tr><td><code>onProgress</code></td><td>none</td><td>Called every frame with progress from 0 to 1. The draft is gone by about 0.9.</td></tr>
-          <tr><td><code>telemetry</code></td><td><code>false</code></td><td>Opt in to the anonymous adoption ping (see below) with <code>true</code>.</td></tr>
-          <tr><td><code>showcase</code></td><td><code>false</code></td><td>Ask to be listed under “Made with Reveal” on <a href="/stats" style="color:var(--accent)">/stats</a>. Sends the ping too; your site appears once it’s approved.</td></tr>
           <tr><td><code>credit</code></td><td><code>true</code></td><td>One line crediting the library in the browser console. <code>false</code> turns it off.</td></tr>
         </tbody>
       </table>
@@ -167,8 +165,8 @@ fx.destroy();        <span class="c">// remove the canvases and listeners</span>
       <li>On slow devices it drops its render resolution automatically until it's smooth.</li>
     </ul>
 
-    <h2>Telemetry</h2>
-    <p>Off by default. If you turn it on with <code>telemetry: true</code> (thank you), the library sends one tiny request per page per effect. It contains the effect name and the library version. The server records your site's domain from the request itself. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. The totals are public at <a href="/stats" style="color:var(--accent)">/stats</a>; no domain is shown unless you ask to be in the showcase with <code>showcase: true</code>. Versions before 0.2.0 sent it by default.</p>
+    <h2>Privacy</h2>
+    <p>The library makes no network requests of its own: it only loads the images you give it, and it sends nothing about you or your visitors anywhere. Using it on a site? <a href="/stats" style="color:var(--accent)">Submit it</a> to be listed under “Made with Reveal”.</p>
 
     <h2>License and credit</h2>
     <p>MIT licensed: use it in anything, commercial or not. Keeping the copyright notice in the code is the only requirement. If it helps your project, a link back to <a href="/" style="color:var(--accent)">reveal.brightkumedzro.com</a> is appreciated, never required.</p>

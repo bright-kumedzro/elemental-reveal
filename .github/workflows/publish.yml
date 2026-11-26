@@ -1,0 +1,45 @@
+# Publishes to npm when a version tag is pushed, using npm Trusted Publishing: GitHub proves to npm which repo and
+# workflow is publishing, so there's no npm token or one-time code, and npm attaches a provenance statement that
+# links each release to this repo and commit.
+#
+#   v1.1.0                    → @brightkumedzro/reveal from the repo root
+#   elemental-reveal-v0.3.0   → @brightkumedzro/elemental-reveal from compat/elemental-reveal
+#
+# One-time setup on npmjs.com, for each package: Settings → Trusted Publisher → GitHub Actions →
+# owner "bright-kumedzro", repository "reveal", workflow "publish.yml".
+name: Publish to npm
+
+on:
+  push:
+    tags: ['v*', 'elemental-reveal-v*']
+
+permissions:
+  contents: read
+  id-token: write   # lets npm verify this workflow (Trusted Publishing)
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      # Trusted Publishing needs npm 11.5.1 or later
+      - run: npm install -g npm@latest
+
+      - name: Pick the package and check the tag matches its version
+        id: pkg
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          if [[ "$TAG" == elemental-reveal-v* ]]; then DIR=compat/elemental-reveal; WANT="${TAG#elemental-reveal-v}"; else DIR=.; WANT="${TAG#v}"; fi
+          HAVE=$(node -p "require('./$DIR/package.json').version")
+          if [ "$HAVE" != "$WANT" ]; then echo "Tag $TAG says $WANT but $DIR/package.json says $HAVE"; exit 1; fi
+          echo "dir=$DIR" >> "$GITHUB_OUTPUT"
+
+      - name: Publish
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: npm publish --access public

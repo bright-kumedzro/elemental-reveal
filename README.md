@@ -58,8 +58,6 @@ It's the same library under a new name, with the shinobi pack added. Swap the im
 | `background` | `'#0b0b0c'` | Shown behind images that don't fill the element |
 | `sound` | `'off'` | Synthesised sound, no audio files. `'on'` starts at the visitor's first click, tap or key press (browsers block sound before one); `'toggle'` waits for `fx.sound(true)` or a `[data-reveal-sound]` button |
 | `onProgress` | none | Called every frame with progress from 0 to 1 (the draft is gone by about 0.9) |
-| `telemetry` | `false` | Opt in to the anonymous adoption ping, described below |
-| `showcase` | `false` | Ask to be listed under "Made with Reveal" at [/stats](https://reveal.brightkumedzro.com/stats). Sends the ping too; your site appears once it is approved |
 | `credit` | `true` | One line crediting the library in the browser console |
 
 `reveal()` returns `{ ready, progress(p?), play(), reset(), sound(on?), destroy() }`. The package also exports `effects` (every effect by name), `packs` (`{ elemental, shinobi }`), `makeReveal(effects)` for your own set, and `VERSION`.
@@ -87,9 +85,11 @@ Every reveal on a page shares one sound switch, and the visitor's choice is reme
 - Without WebGL2 it falls back to a wipe. With reduced motion on it cross-fades, so nothing flashes.
 - It's safe to import during server rendering; it only runs in the browser.
 
-## Telemetry
+## Privacy
 
-Off by default. If you turn it on with `telemetry: true` (thank you), the library sends one tiny request per page per effect to `reveal.brightkumedzro.com/api/ping`. It contains the effect name, the package and the library version. The server records your site's domain from the request's `Origin` header. Nothing about your visitors is sent or stored: no cookies, no IPs, no paths. It never runs on localhost. The totals are public at [reveal.brightkumedzro.com/stats](https://reveal.brightkumedzro.com/stats); no domain is shown unless you ask to be in the showcase with `showcase: true`. Versions of elemental-reveal before 0.2.0 sent it by default.
+The library makes no network requests of its own: it only loads the images you give it, and it sends nothing about you or your visitors anywhere. (Versions before 1.1 could send an opt-in adoption ping; the `telemetry` and `showcase` options are now ignored.)
+
+Using it on a site? [Submit it](https://reveal.brightkumedzro.com/stats) to be listed under "Made with Reveal".
 
 ## Credit
 
@@ -130,7 +130,7 @@ vercel deploy --prod
 
 `?capture=<effect>&p=<progress>&t=<ms>` shows one chapter full screen on a virtual clock. For fire, `&comet=<ms>` places the comet partway through its flight; for the blade, `&run=<ms>` places its charge partway through its run. `window.__capture.prime(p, t)` and `window.__capture.frame(p, t, 0)` render frame by frame, which is how the covers and card loops are made.
 
-`/api/ping` records adoption in Neon Postgres (connected through the Vercel Marketplace, free plan). `/stats` shows the public totals. The list of individual sites is only returned by `/api/stats` with the `STATS_TOKEN` environment variable as a bearer token. `/api/signals` gathers npm downloads, jsDelivr CDN requests and npm dependents for both packages, and GitHub stars, cached for an hour. `/api/showcase` lists the sites that asked to be shown (`showcase: true`) and that you approved: open `/stats#owner`, paste the `STATS_TOKEN`, and approve or hide each request.
+`/api/showcase` keeps the "Made with Reveal" list in Neon Postgres (connected through the Vercel Marketplace, free plan): anyone can submit a site from `/stats`, and it only shows once you approve it at `/stats#owner` with the `STATS_TOKEN`. `/api/signals` gathers npm downloads, jsDelivr CDN requests and npm dependents for both package names, and GitHub stars, cached for an hour. `/api/ping` still accepts pings from versions before 1.1, which could opt in to one.
 
 burn-the-draft.vercel.app redirects to `/fire`.
 

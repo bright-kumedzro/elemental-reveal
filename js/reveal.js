@@ -12,8 +12,7 @@
 import { GLSL_HEAD, MAX_SEEDS, OCT, DONE, ign, clamp, reduce, fine, lite } from './core.js';
 import { createSound } from './sound.js';
 
-export const VERSION = '1.0.0';
-const PKG = 'reveal';
+export const VERSION = '1.1.0';
 
 /* Sound is off unless you ask for it, and every reveal on the page shares one audio output. Any button on the
    page with a data-reveal-sound attribute turns it on and off (and gets aria-pressed to match). */
@@ -32,29 +31,13 @@ function soundFor(mode) {
   return pageSound;
 }
 
-/* Adoption ping, off unless you opt in with { telemetry: true }: one tiny request per page per effect, so the
-   author can see which sites use it and which effects. It sends only the effect name, the package and the
-   library version; the server reads the site's domain from the
-   request's Origin header. No cookies, nothing about visitors. Skipped on localhost. */
-// one constant, so the stats server can move domains without touching anything else
-const PING = 'https://reveal.brightkumedzro.com/api/ping';
-const pinged = new Set();
-function ping(effect, showcase) {
-  if (pinged.has(effect)) return;
-  pinged.add(effect);
-  try {
-    const h = location.hostname;
-    if (!h || h === 'localhost' || h.endsWith('.local') || /^[\d.]+$|^\[/.test(h) || h === 'reveal.brightkumedzro.com' || h === 'elemental-reveal.vercel.app' || h === 'weather-the-draft.vercel.app') return;
-    const body = { e: effect, v: VERSION, p: PKG };
-    if (showcase) body.s = 1;
-    navigator.sendBeacon?.(PING, JSON.stringify(body));
-  } catch { /* never let the ping affect the page */ }
-}
+/* The library makes no network requests of its own: it only loads the images you give it. (Before 1.1 it could
+   send an opt-in adoption ping; that's gone, and the `telemetry` and `showcase` options are now ignored.) */
 let credited = false;
 function credit() {
   if (credited || typeof console === 'undefined') return;
   credited = true;
-  console.info(`%c@brightkumedzro/reveal ${VERSION}%c by Bright Kumedzro · https://reveal.brightkumedzro.com`, 'font-weight:600', 'color:#888');
+  console.info(`%c@brightkumedzro/reveal ${VERSION}%c by Bright Kumedzro`, 'font-weight:600', 'color:#888');
 }
 
 const VS = `#version 300 es
@@ -98,7 +81,7 @@ function fitInto(c, src, w, h, fit, bg) {
  *        manual: you drive it with fx.progress(p)
  * @param {HTMLElement|string} [o.track]  scroll mode only: a tall wrapper the target is pinned inside
  *        (position: sticky). Progress then runs from the wrapper's top reaching the top of the viewport to
- *        its bottom reaching the bottom, like the chapters on reveal.brightkumedzro.com.
+ *        its bottom reaching the bottom, like the chapters on the demo site.
  * @param {number} [o.duration=3500]  auto mode: how long it takes, ms
  * @param {boolean} [o.interactive=true]  hover and click effects (throw fire, spill water, gusts, quakes, bolts)
  * @param {'cover'|'contain'|'fill'} [o.fit='cover']  how the images fill the target
@@ -108,8 +91,6 @@ function fitInto(c, src, w, h, fit, bg) {
  *        off:    silent
  *        on:     starts at the visitor's first click, tap or key press (browsers block sound before one)
  *        toggle: ready, but silent until fx.sound(true) or a [data-reveal-sound] button turns it on
- * @param {boolean} [o.telemetry=false]  opt in to the anonymous adoption ping described above
- * @param {boolean} [o.showcase=false]  ask to be listed in the showcase at reveal.brightkumedzro.com/stats
  *        (sends the ping too; the listing appears once the author approves it)
  * @param {boolean} [o.credit=true]  print one line crediting the library in the browser console
  *
@@ -326,7 +307,6 @@ export function makeReveal(effects) {
   const ready = Promise.all([load(o.from), load(o.to)]).then((s) => {
     if (dead) return;
     srcs = s;
-    if (o.telemetry === true || o.showcase === true) ping(name, o.showcase === true);
     if (o.credit !== false) credit();
     resize();
     readScroll(); ch.p = ch.pTarget;
