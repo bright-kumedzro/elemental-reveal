@@ -1,6 +1,7 @@
-# Publishes to npm when a version tag is pushed, using npm Trusted Publishing: GitHub proves to npm which repo and
-# workflow is publishing, so there's no npm token or one-time code, and npm attaches a provenance statement that
-# links each release to this repo and commit.
+# Stages a release on npm when a version tag is pushed, using npm Trusted Publishing: GitHub proves to npm which repo
+# and workflow is publishing, so there's no npm token or one-time code, and npm attaches a provenance statement that
+# links each release to this repo and commit. The release waits in npm's stage queue until the owner approves it on
+# npmjs.com (or with npm stage approve), which needs their 2FA, so a compromised workflow can't ship anything alone.
 #
 #   v1.1.0                    → @brightkumedzro/reveal from the repo root
 #   elemental-reveal-v0.3.0   → @brightkumedzro/elemental-reveal from compat/elemental-reveal
@@ -28,7 +29,7 @@ jobs:
           node-version: 24
           registry-url: https://registry.npmjs.org
 
-      # Trusted Publishing needs npm 11.5.1 or later
+      # staged publishing needs npm 11.15 or later
       - run: npm install -g npm@latest
 
       - name: Pick the package and check the tag matches its version
@@ -40,6 +41,6 @@ jobs:
           if [ "$HAVE" != "$WANT" ]; then echo "Tag $TAG says $WANT but $DIR/package.json says $HAVE"; exit 1; fi
           echo "dir=$DIR" >> "$GITHUB_OUTPUT"
 
-      - name: Publish
+      - name: Stage the release for approval
         working-directory: ${{ steps.pkg.outputs.dir }}
-        run: npm publish --access public
+        run: npm stage publish --access public
