@@ -17,6 +17,7 @@ const PACKS = [
     lede: 'Six elements, one pencil sketch. Fire, water, air, earth, lightning and frost each take the same wireframe apart in their own way and leave the finished design behind.',
     how: 'A WebGL2 shader gives each pixel a fuel value and decides, pixel by pixel, which drawing you see. Scrolling pushes the front through the fuel. Each element shapes that fuel differently and does different damage at the edge.',
     eyebrow: 'Elemental pack',
+    tagline: 'Six elements take the same pencil sketch apart, each in its own way, and leave the finished design behind.',
     short: 'Fire, water, air, earth, lightning and frost each take the same wireframe apart in their own way.',
   },
   {
@@ -24,6 +25,7 @@ const PACKS = [
     lede: 'Eight techniques, one pencil sketch. A crowd of clones goes up in smoke one by one, a sand vortex grinds the draft away, a spinning sphere drills straight through it, a lightning blade runs it through, a wall of dust scours it off, a growing twister tears it up, a molten sphere melts it and a shuriken of wind shreds it. Each leaves the finished design behind.',
     how: 'A WebGL2 shader decides, pixel by pixel, which drawing you see, and your scroll drives the technique.',
     eyebrow: 'Shinobi pack', og: 'shinobi',
+    tagline: 'Eight anime-inspired techniques take the same pencil sketch apart and leave the finished design behind.',
     short: 'Clones, sand, spinning spheres, molten rock, a lightning blade and a shuriken of wind: anime-inspired techniques, every effect written from scratch.',
     credit: 'Anime-inspired techniques, every effect written from scratch.',
   },
@@ -122,30 +124,30 @@ writeFileSync(`${root}/index.html`, index + foot);
 for (const p of PACKS) {
   const other = PACKS.find((o) => o !== p);
   const page = `${head({ title: `${p.title} · Reveal`, description: p.lede, path: `/${p.id}`, image: p.og, cls: p.ink ? 'shinobi' : '' })}
-    <header class="intro">${glyph(p)}
+    <header class="intro pack-intro" style="--c:${p.color}">${glyph(p)}
       <a class="pill back" href="/">← Reveal</a>
-      <p class="eyebrow">Reveal · ${p.eyebrow}</p>
-      ${titleRow(p, p.title)}
-      <p class="lede">${p.lede}</p>
+      <p class="eyebrow">Reveal · ${p.eyebrow} · ${p.effects.length} effects</p>
+      <h1>${p.title}.${p.ink ? ' <span class="seal" aria-hidden="true">忍</span>' : ''} <span class="rest">${p.tagline}</span></h1>
+      <a class="banner" href="#${p.effects[0].id}" aria-label="Start with ${p.effects[0].label}"><img src="/og/${p.og}.png" alt="" width="1200" height="630"></a>
       <nav class="chapters" aria-label="Chapters">
         ${p.effects.map((e) => chip(e, `#${e.id}`)).join('\n        ')}
       </nav>
-      ${SOUND_BTN}
-      <p class="cue">Scroll to begin</p>
+      <div class="go">${SOUND_BTN}<span class="cue">Scroll to begin <span aria-hidden="true">↓</span></span></div>
     </header>
 
 ${p.effects.map(track).join('\n')}
 
     <section class="after">
       <p class="eyebrow">Reveal · ${p.eyebrow}</p>
-      <h2>${p.count} ways to lose a draft</h2>
+      <h2>${p.count} ways to lose a draft. <span class="rest">Same sketch, same design, a different way through.</span></h2>
       <p>Every chapter holds the same two drawings: a pencil wireframe on paper and the finished design underneath. ${p.how}</p>
-      <dl class="elements">
-${p.effects.map((e) => `        <div style="--c:${e.color}">
-          <dt><a href="/${e.id}">${e.label} · ${e.name}</a></dt>
-          <dd>${e.body.join(' ')} ${e.play}</dd>
-        </div>`).join('\n')}
-      </dl>
+      <div class="fx-cards">
+${p.effects.map((e) => `        <a class="fx" href="/${e.id}" style="--c:${e.color}">
+          <span class="fx-top"><span class="num">${e.num}</span><b>${e.label}</b><span class="name">${e.name}</span></span>
+          <span class="fx-body">${e.summary}</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>`).join('\n')}
+      </div>
       <p>Scroll back up in any chapter and the draft comes back. Each ${p.unit} also has a page of its own.</p>
       <div class="actions">
         <button id="again" class="btn primary" type="button">Run it again</button>

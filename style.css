@@ -363,3 +363,31 @@ h1, h2 {
 .packs .pack .chapters a { font-size: 13px; padding: 7px 12px 7px 8px; }
 .packs .pack .actions { margin: auto 0 0; }
 .packs .more { max-width: 680px; margin: 48px auto 0; text-align: center; }
+
+/* ---------- pack pages ---------- */
+/* centred like the landing page: two-tone headline, the pack's banner, its chapters, then sound and the cue */
+.pack-intro { align-items: center; text-align: center; padding-top: 112px; padding-bottom: 56px; }
+.pack-intro h1 { max-width: 900px; margin: 0 auto 32px; font-size: clamp(30px, 4.6vw, 46px); }
+.pack-intro h1 .seal { display: inline-grid; vertical-align: .08em; margin: 0 .12em; width: .95em; font-size: .9em; }
+.pack-intro .banner { display: block; width: min(100%, 900px); aspect-ratio: 40 / 21; margin: 0 auto 28px; border-radius: 22px; overflow: hidden; background: var(--surface); box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
+.pack-intro .banner img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .8s ease; }
+.pack-intro .banner:hover img, .pack-intro .banner:focus-visible img { transform: scale(1.025); }
+.pack-intro .chapters { justify-content: center; max-width: 900px; }
+.pack-intro .go { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 26px; flex-wrap: wrap; }
+.pack-intro .go .snd { margin: 0; }
+.pack-intro .cue { position: static; color: var(--soft); font-size: 13px; }
+.pack-intro .cue span { display: inline-block; animation: nudge 1.8s ease-in-out infinite; }
+@keyframes nudge { 50% { transform: translateY(4px); } }
+@media (prefers-reduced-motion: reduce) { .pack-intro .cue span { animation: none; } }
+.shinobi .pack-intro .chapters a { background: rgba(12, 12, 12, .6); }
+
+.fx-cards { display: grid; gap: 12px; grid-template-columns: 1fr; margin: 32px 0; }
+@media (min-width: 640px) { .fx-cards { grid-template-columns: 1fr 1fr; } }
+.fx { display: flex; flex-direction: column; gap: 10px; padding: 18px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); color: var(--ink) !important; text-decoration: none; transition: border-color .2s, transform .2s; }
+.fx:hover, .fx:focus-visible { border-color: var(--c); transform: translateY(-2px); outline: none; }
+.fx-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.fx .num { font-size: 12px; font-variant-numeric: tabular-nums; color: #0c0c0c; background: var(--c); border-radius: 999px; padding: 2px 7px; }
+.fx b { font-weight: 600; }
+.fx .name { color: var(--soft); font-size: 13px; }
+.fx-body { color: var(--body); font-size: 14px; line-height: 1.55; }
+.fx-go { margin-top: auto; color: var(--c); font-size: 13px; font-weight: 600; }

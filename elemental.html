@@ -25,11 +25,11 @@
 </head>
 <body>
   <main>
-    <header class="intro">
+    <header class="intro pack-intro" style="--c:#33adff">
       <a class="pill back" href="/">← Reveal</a>
-      <p class="eyebrow">Reveal · Elemental pack</p>
-      <h1>Elemental</h1>
-      <p class="lede">Six elements, one pencil sketch. Fire, water, air, earth, lightning and frost each take the same wireframe apart in their own way and leave the finished design behind.</p>
+      <p class="eyebrow">Reveal · Elemental pack · 6 effects</p>
+      <h1>Elemental. <span class="rest">Six elements take the same pencil sketch apart, each in its own way, and leave the finished design behind.</span></h1>
+      <a class="banner" href="#fire" aria-label="Start with Fire"><img src="/og/elemental.png" alt="" width="1200" height="630"></a>
       <nav class="chapters" aria-label="Chapters">
         <a href="#fire" style="--c:#ff7a1a"><span>01</span>Fire</a>
         <a href="#water" style="--c:#2dd4bf"><span>02</span>Water</a>
@@ -38,8 +38,7 @@
         <a href="#lightning" style="--c:#a78bfa"><span>05</span>Lightning</a>
         <a href="#frost" style="--c:#9fd8ff"><span>06</span>Frost</a>
       </nav>
-      <button class="pill snd" type="button" data-sound-toggle aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="x" d="m16 9 6 6m0-6-6 6"/></svg><span class="snd-label">Sound off</span></button>
-      <p class="cue">Scroll to begin</p>
+      <div class="go"><button class="pill snd" type="button" data-sound-toggle aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="x" d="m16 9 6 6m0-6-6 6"/></svg><span class="snd-label">Sound off</span></button><span class="cue">Scroll to begin <span aria-hidden="true">↓</span></span></div>
     </header>
 
     <section id="fire" class="track" data-el="fire" aria-label="Fire. Scroll to call down a comet and burn the wireframe away to reveal the finished design. Contains a brief flash."></section>
@@ -51,34 +50,40 @@
 
     <section class="after">
       <p class="eyebrow">Reveal · Elemental pack</p>
-      <h2>Six ways to lose a draft</h2>
+      <h2>Six ways to lose a draft. <span class="rest">Same sketch, same design, a different way through.</span></h2>
       <p>Every chapter holds the same two drawings: a pencil wireframe on paper and the finished design underneath. A WebGL2 shader gives each pixel a fuel value and decides, pixel by pixel, which drawing you see. Scrolling pushes the front through the fuel. Each element shapes that fuel differently and does different damage at the edge.</p>
-      <dl class="elements">
-        <div style="--c:#ff7a1a">
-          <dt><a href="/fire">Fire · Burn the draft</a></dt>
-          <dd>The first scroll calls down a comet. It streaks in trailing fire, lights up the page as it comes, and hits: a flash, a shockwave that bends everything it crosses, and a blast crater that catches. From there the fire spreads as you scroll. Ahead of the fire the paper browns and chars. Flames rise off the burning edge, torn into tongues by heat rising through them. Embers lift away, and the finished design wavers in the heat behind it. Move over the paper and fire follows your hand. Click and a fireball arcs up from below and starts a new fire where it lands.</dd>
-        </div>
-        <div style="--c:#2dd4bf">
-          <dt><a href="/water">Water · Wash the draft</a></dt>
-          <dd>Water pours in from the top and runs down the page. Each rivulet swells to a rounded head and widens until it merges with its neighbours. The paper ahead wicks the water up and greys, and the pencil runs. In the water, ripples flow downhill and bend the finished design underneath. The sketch’s pigment washes out just behind the front. Click the paper to spill some: it pools where it lands, then runs down.</dd>
-        </div>
-        <div style="--c:#a5b4fc">
-          <dt><a href="/air">Air · Scatter the draft</a></dt>
-          <dd>Wind comes in from the left. The paper flutters before the gust arrives. Then the wind strips it off in streaks and carries it away. Each paper fleck keeps the colour of the bit of sketch it tore from. Click the paper to send a gust: it blows a hole outward from where you clicked.</dd>
-        </div>
-        <div style="--c:#e9a85a">
-          <dt><a href="/earth">Earth · Break the draft</a></dt>
-          <dd>Cracks race out from the epicentre along jagged fault lines, with hairlines branching off them. Each chunk works loose and rattles, then breaks away and falls down the page, turning as it drops. Behind each one is a shadowed hole with the finished design at the bottom. Scroll fast and the ground shakes. Click the paper to start a new quake.</dd>
-        </div>
-        <div style="--c:#a78bfa">
-          <dt><a href="/lightning">Lightning · Strike the draft</a></dt>
-          <dd>Four bolts grow as branching random walks, and each one gets its own distance field. When your scroll reaches a bolt, it strikes. The bolt flashes, and the reveal spreads out from the channel it burned. Click the paper to call down your own bolt.</dd>
-        </div>
-        <div style="--c:#9fd8ff">
-          <dt><a href="/frost">Frost · Shatter the draft</a></dt>
-          <dd>The light goes cold and breath-fog gathers at the edges. Frost creeps in from the edges in feathery fronds, and a white-blue glaze of rime covers the paper until the sketch is only a blur under the ice. Then it cracks: radial cracks race out from the middle, then the rings between them, glinting as they go. The sheet breaks into shards that drop away one by one, leaving the finished design with rime still on the edges and a few drops of melt running down. Move over the paper and frost forms under your hand. Click to freeze a patch and shatter it. With sound on, the ice creaks and tinkles as it grows, and breaks with a crack and a shower of glass.</dd>
-        </div>
-      </dl>
+      <div class="fx-cards">
+        <a class="fx" href="/fire" style="--c:#ff7a1a">
+          <span class="fx-top"><span class="num">01</span><b>Fire</b><span class="name">Burn the draft</span></span>
+          <span class="fx-body">Call down a comet and burn a pencil wireframe away to reveal the finished design. Throw fire at the paper, or scroll back up and call the comet again.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+        <a class="fx" href="/water" style="--c:#2dd4bf">
+          <span class="fx-top"><span class="num">02</span><b>Water</b><span class="name">Wash the draft</span></span>
+          <span class="fx-body">Water pours down a pencil wireframe in rivulets that merge into a sheet, washing the sketch away to reveal the finished design. Click to spill some more.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+        <a class="fx" href="/air" style="--c:#a5b4fc">
+          <span class="fx-top"><span class="num">03</span><b>Air</b><span class="name">Scatter the draft</span></span>
+          <span class="fx-body">Wind strips a pencil wireframe off the page in streaks and carries it away, leaving the finished design. Click to send a gust.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+        <a class="fx" href="/earth" style="--c:#e9a85a">
+          <span class="fx-top"><span class="num">04</span><b>Earth</b><span class="name">Break the draft</span></span>
+          <span class="fx-body">A pencil wireframe cracks along jagged fault lines and falls apart chunk by chunk, revealing the finished design underneath. Click to start a quake.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+        <a class="fx" href="/lightning" style="--c:#a78bfa">
+          <span class="fx-top"><span class="num">05</span><b>Lightning</b><span class="name">Strike the draft</span></span>
+          <span class="fx-body">Lightning strikes a pencil wireframe and the finished design spreads out from every bolt. Click to call down your own.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+        <a class="fx" href="/frost" style="--c:#9fd8ff">
+          <span class="fx-top"><span class="num">06</span><b>Frost</b><span class="name">Shatter the draft</span></span>
+          <span class="fx-body">Frost creeps over a pencil wireframe until it is frozen solid, then the ice cracks and falls away in shards to reveal the finished design. Click to freeze a patch and shatter it.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+      </div>
       <p>Scroll back up in any chapter and the draft comes back. Each element also has a page of its own.</p>
       <div class="actions">
         <button id="again" class="btn primary" type="button">Run it again</button>

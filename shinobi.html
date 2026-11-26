@@ -25,12 +25,12 @@
 </head>
 <body class="shinobi">
   <main>
-    <header class="intro">
+    <header class="intro pack-intro" style="--c:#ff8a3d">
       <p class="glyph" aria-hidden="true">忍</p>
       <a class="pill back" href="/">← Reveal</a>
-      <p class="eyebrow">Reveal · Shinobi pack</p>
-      <div class="title-row"><h1>Shinobi</h1><span class="seal" aria-hidden="true">忍</span></div>
-      <p class="lede">Eight techniques, one pencil sketch. A crowd of clones goes up in smoke one by one, a sand vortex grinds the draft away, a spinning sphere drills straight through it, a lightning blade runs it through, a wall of dust scours it off, a growing twister tears it up, a molten sphere melts it and a shuriken of wind shreds it. Each leaves the finished design behind.</p>
+      <p class="eyebrow">Reveal · Shinobi pack · 8 effects</p>
+      <h1>Shinobi. <span class="seal" aria-hidden="true">忍</span> <span class="rest">Eight anime-inspired techniques take the same pencil sketch apart and leave the finished design behind.</span></h1>
+      <a class="banner" href="#clone" aria-label="Start with Shadow Clone"><img src="/og/shinobi.png" alt="" width="1200" height="630"></a>
       <nav class="chapters" aria-label="Chapters">
         <a href="#clone" style="--c:#ff8a3d"><span>01</span>Shadow Clone</a>
         <a href="#vortex" style="--c:#e6b35c"><span>02</span>Sand Vortex</a>
@@ -41,8 +41,7 @@
         <a href="#magma" style="--c:#ff5a1f"><span>07</span>Magma Sphere</a>
         <a href="#shuriken" style="--c:#7fe0d0"><span>08</span>Spiral Shuriken</a>
       </nav>
-      <button class="pill snd" type="button" data-sound-toggle aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="x" d="m16 9 6 6m0-6-6 6"/></svg><span class="snd-label">Sound off</span></button>
-      <p class="cue">Scroll to begin</p>
+      <div class="go"><button class="pill snd" type="button" data-sound-toggle aria-pressed="false"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="x" d="m16 9 6 6m0-6-6 6"/></svg><span class="snd-label">Sound off</span></button><span class="cue">Scroll to begin <span aria-hidden="true">↓</span></span></div>
     </header>
 
     <section id="clone" class="track" data-el="clone" aria-label="Shadow Clone. Scroll to split the wireframe into clones and dispel them one by one to reveal the finished design."></section>
@@ -56,42 +55,50 @@
 
     <section class="after">
       <p class="eyebrow">Reveal · Shinobi pack</p>
-      <h2>Eight ways to lose a draft</h2>
+      <h2>Eight ways to lose a draft. <span class="rest">Same sketch, same design, a different way through.</span></h2>
       <p>Every chapter holds the same two drawings: a pencil wireframe on paper and the finished design underneath. A WebGL2 shader decides, pixel by pixel, which drawing you see, and your scroll drives the technique.</p>
-      <dl class="elements">
-        <div style="--c:#ff8a3d">
-          <dt><a href="/clone">Shadow Clone · Multiply the draft</a></dt>
-          <dd>The sketch starts to tremble and its lines double, a shadow of itself pulling away. Then it splits: a puff of smoke covers the page and nine clones fly out of it, each a whole copy of the draft, stacked and overlapping. Keep scrolling and the clone on top goes up in smoke, showing whatever is under it, one after another, until only the finished design is left. Click a clone to dispel it early. Scroll back up and they come back. With sound on, every clone goes with a poof.</dd>
-        </div>
-        <div style="--c:#e6b35c">
-          <dt><a href="/vortex">Sand Vortex · Weather the draft</a></dt>
-          <dd>Sand drifts in from the corners and grains lift off the darkest pencil strokes. Then a storm swirls round the page and wears the sketch away from the outside in, grain by grain along spiral arms, the paper going gritty ahead of it. Behind it the finished design shows through the swirling haze. At the end the storm closes into a ball of sand in the middle, and the ball bursts: the sand rains off the page and the air clears. Move over the paper and the sand eddies round your hand. Click to stir up a whirl that wears its own hole. With sound on, the storm roars and hisses, and the burst lands with a whump.</dd>
-        </div>
-        <div style="--c:#5ad1ff">
-          <dt><a href="/spiral">Spiral Sphere · Drill the draft</a></dt>
-          <dd>A sphere of light gathers in the middle of the page. Streams of light spiral into it, and the paper around it is dragged round into the spin. When it hits there is a flash and a shockwave, and it grinds into the page. The hole spreads as you scroll. Its edge saws round on spinning spiral arms, scoring and twisting the paper ahead of it. Behind it the finished design settles out of the twist, with rings of light running out from the sphere. Move over the paper and it twists under your hand. Click to drop a small sphere that drills its own hole. With sound on, the sphere whirs louder and higher as it charges, and grinds as it drills.</dd>
-        </div>
-        <div style="--c:#3d8bff">
-          <dt><a href="/blade">Lightning Blade · Cut the draft</a></dt>
-          <dd>The light drains from the page and a dense ball of blue-white lightning gathers low on the left, held down by the paper like a hand. It shrieks like a flock of birds while arcs spray off it and crawl over the paper, which scorches underneath. Then it charges across the page, dragged along the paper, gouging a burning trench with sparks spraying off the back, and thrusts straight through at the end with a flash. The trench widens as you scroll, its edge white-hot and flickering, with cracks of light running ahead of it. Move over the paper and static gathers under your hand. Click to call down a bolt that blows its own hole. With sound on, the shriek climbs as it charges and holds through the run, and the pierce lands with a thunderclap.</dd>
-        </div>
-        <div style="--c:#d2593c">
-          <dt><a href="/storm">Sandstorm · Scour the draft</a></dt>
-          <dd>From the first scroll the wind is up: sand races across the page in gusts, bands of haze drift past, the paper shivers and the light goes orange-brown and dim. On the left a towering wall of dust looms, rust-dark at its base and wispy up high, its billows rolling forward. It bears down and sweeps across. Inside it you can barely see the page: streaks of sand race past and tear the sketch off grain by grain. Behind it the haze slowly thins, and the finished design is left standing. Move over the paper and the sand eddies round your hand. Click to kick up a dust devil that scours its own hole. With sound on, the wind howls and gusts from the first scroll, and the sand hisses harder the faster you scroll.</dd>
-        </div>
-        <div style="--c:#c4ad84">
-          <dt><a href="/twister">Sand Tornado · Uproot the draft</a></dt>
-          <dd>The light goes grey and a thin rope of sand reaches down from a dust cloud at the top of the page. It touches down in the middle with a thud and a burst of dust, then grows as you scroll, wider, taller and nearer, its bands of sand getting bigger as it comes. Its foot tears the paper away from the middle outward, along an edge that turns with it, and the scraps spiral up into the column. By the end it fills the screen and blows through in a blast of dust, and when the air clears only the finished design is left. Move over the paper and it swirls under your hand. Click to spin up a dust devil that tears its own patch. With sound on, the twister roars like a freight train, louder the nearer it gets and the harder you scroll, and lands with a thud.</dd>
-        </div>
-        <div style="--c:#ff5a1f">
-          <dt><a href="/magma">Magma Sphere · Melt the draft</a></dt>
-          <dd>A sphere of molten rock gathers in the middle of the page: a black crust split by glowing cracks that slowly churn. The page warms to orange, the air shimmers around it, and molten drips fall off it and scorch the paper where they land. Then it sinks into the page with a hiss and a burst of embers, and the page melts outward in slow lumpy lobes. The front glows white-orange and cools to a black crust split by glowing cracks, and behind it the finished design is left, the last cracks cooling across it. Move over the paper and the air shimmers under your hand. Click to drop a blob of molten rock that melts its own hole. With sound on, the lava rumbles and bubbles as it charges, sinks in with a heavy hiss and a thud, and sizzles as it melts, harder the faster you scroll.</dd>
-        </div>
-        <div style="--c:#7fe0d0">
-          <dt><a href="/shuriken">Spiral Shuriken · Shred the draft</a></dt>
-          <dd>A ball of compressed wind forms low on the left, four blades of air spinning round it faster and faster. The paper flutters in its wind and gets nicked with thin cuts. Then it is thrown: it flies across the page, leaving a wake of slices. Where it lands it bursts into a huge vortex of cutting wind. The paper inside is sliced into ribbons that whirl away, and the vortex keeps growing as you scroll, its edge a ring of spinning blades. Behind it the finished design settles out of the wind. Move over the paper and thin cuts trail your hand. Click to throw a small shuriken that slices its own patch. With sound on, it screams and whirs louder as it spins up, whooshes as it flies, and tears the page apart when it lands.</dd>
-        </div>
-      </dl>
+      <div class="fx-cards">
+        <a class="fx" href="/clone" style="--c:#ff8a3d">
+          <span class="fx-top"><span class="num">01</span><b>Shadow Clone</b><span class="name">Multiply the draft</span></span>
+          <span class="fx-body">A pencil wireframe splits into nine clones of itself, and each one goes up in a puff of smoke until only the finished design is left. Click a clone to dispel it.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+        <a class="fx" href="/vortex" style="--c:#e6b35c">
+          <span class="fx-top"><span class="num">02</span><b>Sand Vortex</b><span class="name">Weather the draft</span></span>
+          <span class="fx-body">A sandstorm grinds a pencil wireframe away grain by grain, packs itself into a ball of sand and bursts, raining off the page to reveal the finished design.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+        <a class="fx" href="/spiral" style="--c:#5ad1ff">
+          <span class="fx-top"><span class="num">03</span><b>Spiral Sphere</b><span class="name">Drill the draft</span></span>
+          <span class="fx-body">A ball of spinning light gathers over a pencil wireframe and drills straight through it, twisting the paper into a spiral to reveal the finished design. Click to drop a small one.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+        <a class="fx" href="/blade" style="--c:#3d8bff">
+          <span class="fx-top"><span class="num">04</span><b>Lightning Blade</b><span class="name">Cut the draft</span></span>
+          <span class="fx-body">Lightning gathers in one hand, shrieking like a flock of birds, then charges across a pencil wireframe, gouging a burning trench, and pierces it. The trench widens, crackling, to reveal the finished design.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+        <a class="fx" href="/storm" style="--c:#d2593c">
+          <span class="fx-top"><span class="num">05</span><b>Sandstorm</b><span class="name">Scour the draft</span></span>
+          <span class="fx-body">A gale gets up and a towering wall of dust rolls across a pencil wireframe, swallows the page in blowing sand and scours the sketch away, then the air clears onto the finished design. Click to kick up a dust devil.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+        <a class="fx" href="/twister" style="--c:#c4ad84">
+          <span class="fx-top"><span class="num">06</span><b>Sand Tornado</b><span class="name">Uproot the draft</span></span>
+          <span class="fx-body">A twister of sand touches down in the middle of a pencil wireframe and grows as you scroll, tearing the paper up into its funnel from the centre out until it blows through and leaves the finished design. Click to spin up a dust devil.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+        <a class="fx" href="/magma" style="--c:#ff5a1f">
+          <span class="fx-top"><span class="num">07</span><b>Magma Sphere</b><span class="name">Melt the draft</span></span>
+          <span class="fx-body">A churning ball of molten rock gathers over a pencil wireframe, drips and scorches the paper, then sinks in and melts the page away from the middle out to reveal the finished design. Click to drop a molten blob.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+        <a class="fx" href="/shuriken" style="--c:#7fe0d0">
+          <span class="fx-top"><span class="num">08</span><b>Spiral Shuriken</b><span class="name">Shred the draft</span></span>
+          <span class="fx-body">A sphere of wind with four spinning blades winds up over a pencil wireframe, is thrown across it and bursts into a vortex of cutting wind that slices the draft into ribbons to reveal the finished design. Click to throw a small one.</span>
+          <span class="fx-go">Open on its own →</span>
+        </a>
+      </div>
       <p>Scroll back up in any chapter and the draft comes back. Each technique also has a page of its own.</p>
       <div class="actions">
         <button id="again" class="btn primary" type="button">Run it again</button>
