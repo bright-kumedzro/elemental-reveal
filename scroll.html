@@ -142,11 +142,11 @@ count(<span class="s">'.sd-n'</span>);   <span class="c">// "1,000+", "£2.3m", 
     </svg>
   </div>
 
-<pre><code><span class="k">import</span> { lines } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+<pre class="sd-code"><span class="k">import</span> { lines } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
 
 lines(<span class="s">'#journey'</span>);                                   <span class="c">// every path draws in order, as it scrolls in</span>
 lines(<span class="s">'#map'</span>, { order: <span class="s">'together'</span>, fill: <span class="k">true</span> });   <span class="c">// all at once, fills fading in after</span>
-lines(<span class="s">'#signature'</span>, { pen: <span class="s">'#33adff'</span> });               <span class="c">// a dot rides the tip</span></code></pre>
+lines(<span class="s">'#signature'</span>, { pen: <span class="s">'#33adff'</span> });               <span class="c">// a dot rides the tip</span></pre>
 
   <script type="module">
     import { lines } from '/js/scroll/lines.js';
@@ -262,13 +262,13 @@ mask(<span class="s">'#masked'</span>, { src: <span class="s">'/og/shinobi.png'<
     </ol>
   </div>
 
-<pre><code><span class="k">import</span> { steps } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+<pre class="sd-code"><span class="k">import</span> { steps } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
 
 <span class="c">// &lt;section data-steps&gt;
 //   &lt;div data-steps-visual&gt; &lt;div data-step="0"&gt;…&lt;/div&gt; &lt;div data-step="1"&gt;…&lt;/div&gt; &lt;/div&gt;
 //   &lt;ol&gt; &lt;li data-step&gt;First…&lt;/li&gt; &lt;li data-step&gt;Second…&lt;/li&gt; &lt;/ol&gt;
 // &lt;/section&gt;</span>
-steps(<span class="s">'[data-steps]'</span>, { onStep: (i) =&gt; chart.show(i) });</code></pre>
+steps(<span class="s">'[data-steps]'</span>, { onStep: (i) =&gt; chart.show(i) });</pre>
 
   <script type="module">
     import { steps } from '/js/scroll/steps.js';

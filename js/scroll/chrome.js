@@ -10,8 +10,11 @@
    Options
      warm     '#ff8a3d'   the light flowing in from the left (any CSS colour)
      cool     '#3d7bff'   the light from the right, and the tint the type settles into
-     start    0.85        the element's top, as a share of the viewport height, when the light starts flowing
-     end      0.3         where its top is when the type has settled
+     start    1           where the tracked point of the element is, as a share of the viewport height, when the light starts flowing
+     end      0.45        where it is when the type has settled
+     at       0.5         which point is tracked, as a share of the element's height (0 top, 0.5 centre, 1 bottom). The
+                          centre means the type has settled once it is a little above the middle of the screen, however
+                          tall it is. Passing start or end without at tracks the top, as in v1.4 (0.85 and 0.3).
      shimmer  1           strength of the idle sheen once settled (0 turns it off)
      glow     1           strength of the bloom around the glints
    Returns { stop() }, which removes the canvas and gives the text back its own colour. The text stays real text, so
@@ -236,18 +239,20 @@ function hex(c) {
   return [r / 255, g / 255, b / 255];
 }
 
-function fallback(el, warm, cool, start, end) {
+function fallback(el, warm, cool, start, end, at) {
   const s = el.style, keep = { bg: s.backgroundImage, clip: s.webkitBackgroundClip, bclip: s.backgroundClip, color: s.color, size: s.backgroundSize, pos: s.backgroundPosition };
   s.backgroundImage = `linear-gradient(100deg, ${warm} 0%, #f4f6fa 22%, #6b7385 38%, #f4f6fa 50%, ${cool} 62%, #e8ecf5 78%, #5a6273 90%, ${cool} 100%)`;
   s.backgroundSize = '300% 100%';
   s.webkitBackgroundClip = 'text'; s.backgroundClip = 'text'; s.color = 'transparent';
-  const stop = enter(el, (p) => { s.backgroundPosition = `${(1 - p) * 100}% 50%`; }, { from: start, to: end });
+  const stop = enter(el, (p) => { s.backgroundPosition = `${(1 - p) * 100}% 50%`; }, { from: start, to: end, at });
   return () => { stop(); Object.assign(s, { backgroundImage: keep.bg, webkitBackgroundClip: keep.clip, backgroundClip: keep.bclip, color: keep.color, backgroundSize: keep.size, backgroundPosition: keep.pos }); };
 }
 
 const SETTLED_T = 7.3;     // the moment of the drift shown for reduced motion
 
-function one(el, { warm = '#ff8a3d', cool = '#3d7bff', start = 0.85, end = 0.3, shimmer = 1, glow = 1 } = {}) {
+function one(el, { warm = '#ff8a3d', cool = '#3d7bff', start, end, at, shimmer = 1, glow = 1 } = {}) {
+  at ??= start === undefined && end === undefined ? 0.5 : 0;
+  start ??= at ? 1 : 0.85; end ??= at ? 0.45 : 0.3;
   const s = el.style, keep = { pos: s.position, color: s.color, fill: s.webkitTextFillColor };
   let canvas = null, gl = null, U = null, texM = null, texN = null, noGL = false, fb = null, losses = [];
   let raster = null;       // the rasterised text, kept while the context comes and goes
@@ -256,7 +261,7 @@ function one(el, { warm = '#ff8a3d', cool = '#3d7bff', start = 0.85, end = 0.3, 
   const t0 = performance.now();
 
   // the plain chrome gradient, only while a context is wanted but can't be had (no WebGL2, the budget is full, lost)
-  const fallbackOn = () => { if (!fb && !dead) fb = fallback(el, warm, cool, start, end); };
+  const fallbackOn = () => { if (!fb && !dead) fb = fallback(el, warm, cool, start, end, at); };
   const fallbackOff = () => { if (fb) { fb(); fb = null; } };
 
   /* ---------- the WebGL context: held only while the heading is on or near the screen (see ../gpu.js) ---------- */
@@ -372,7 +377,7 @@ function one(el, { warm = '#ff8a3d', cool = '#3d7bff', start = 0.85, end = 0.3, 
   };
   const kick = () => { if (!reduced && visible && ready && !raf) { last = 0; raf = requestAnimationFrame(loop); } };
 
-  const stopScroll = reduced ? () => {} : enter(el, (x) => { target = x; kick(); }, { from: start, to: end });
+  const stopScroll = reduced ? () => {} : enter(el, (x) => { target = x; kick(); }, { from: start, to: end, at });
   const io = new IntersectionObserver((es) => {
     visible = es.some((e) => e.isIntersecting);
     h.see(visible);

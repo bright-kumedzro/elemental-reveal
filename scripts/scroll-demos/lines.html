@@ -53,11 +53,11 @@
     </svg>
   </div>
 
-<pre><code><span class="k">import</span> { lines } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
+<pre class="sd-code"><span class="k">import</span> { lines } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/scroll'</span>;
 
 lines(<span class="s">'#journey'</span>);                                   <span class="c">// every path draws in order, as it scrolls in</span>
 lines(<span class="s">'#map'</span>, { order: <span class="s">'together'</span>, fill: <span class="k">true</span> });   <span class="c">// all at once, fills fading in after</span>
-lines(<span class="s">'#signature'</span>, { pen: <span class="s">'#33adff'</span> });               <span class="c">// a dot rides the tip</span></code></pre>
+lines(<span class="s">'#signature'</span>, { pen: <span class="s">'#33adff'</span> });               <span class="c">// a dot rides the tip</span></pre>
 
   <script type="module">
     import { lines } from '/js/scroll/lines.js';

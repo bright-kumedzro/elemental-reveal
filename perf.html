@@ -17,6 +17,8 @@
     h1 span { color: var(--soft); }
     header p { color: #c9c9c6; margin: 0 0 10px; }
     code { font: 13px ui-monospace, Consolas, monospace; background: var(--surface); padding: 1px 6px; border-radius: 6px; }
+    /* chrome() draws its canvas a little wider than the heading; clip it sideways so a phone does not scroll sideways */
+    #list { overflow-x: clip; }
     .fx { position: relative; height: 72vh; min-height: 320px; margin: 0 0 8vh; overflow: hidden; }
     .fx .tag { position: absolute; left: 16px; bottom: 14px; font: 12px/1 ui-monospace, Consolas, monospace; background: rgba(0,0,0,.6); color: #fff; padding: 6px 9px; border-radius: 999px; }
     .chrome { max-width: 1040px; margin: 0 auto 18vh; padding: 0 16px; font-size: clamp(56px, 15vw, 168px); font-weight: 600; letter-spacing: -0.03em; line-height: 1; text-align: center; color: var(--ink); }

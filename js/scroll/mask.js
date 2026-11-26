@@ -10,14 +10,19 @@
      pan     [-10, 10]   where it's panned, in % of its spare width, at the start and at the end
      panY    [0, 0]      the same, up and down
      grow    1           scale the whole text up by this much over the last 30% of the scroll (1 = off)
-     start   0.95        the element's top, as a share of the viewport height, when the motion starts
-     end     0.1         where its top is when it ends
+     start   1           where the tracked point of the element is, as a share of the viewport height, when the motion starts
+     end     0.45        where it is when the motion ends
+     at      0.5         which point is tracked, as a share of the element's height (0 top, 0.5 centre, 1 bottom). The
+                         centre means the motion has finished once the text is a little above the middle of the screen,
+                         however tall it is. Passing start or end without at tracks the top, as in v1.4.
    The text stays real, selectable text; until the image has loaded it shows in its normal colour, so it is never
    invisible. Returns { stop() }, which puts the element's style back. With reduced motion the image sits still
    at its end position. (For video, pass a poster frame or an animated image: background-clip can't show <video>.) */
 import { resolve, enter, lerp, smooth, clamp, stopAll } from './core.js';
 
-export function mask(target, { src, scale = [1.5, 1], pan = [-10, 10], panY = [0, 0], grow = 1, start = 0.95, end = 0.1 } = {}) {
+export function mask(target, { src, scale = [1.5, 1], pan = [-10, 10], panY = [0, 0], grow = 1, start, end, at } = {}) {
+  at ??= start === undefined && end === undefined ? 0.5 : 0;
+  start ??= at ? 1 : 0.95; end ??= at ? 0.45 : 0.1;
   if (!src) throw new Error('mask(): pass { src } with an image to show through the text');
   const stops = [];
   for (const el of resolve(target)) {
@@ -55,7 +60,7 @@ export function mask(target, { src, scale = [1.5, 1], pan = [-10, 10], panY = [0
     };
     im.src = src;
 
-    const stop = enter(el, (v) => { p = v; paint(); }, { from: start, to: end });
+    const stop = enter(el, (v) => { p = v; paint(); }, { from: start, to: end, at });
     stops.push(() => {
       stop(); ro.disconnect(); im.onload = null;
       if (before === null) el.removeAttribute('style'); else el.setAttribute('style', before);

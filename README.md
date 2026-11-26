@@ -71,7 +71,14 @@ zoom('#story');                                    // dive from one scene into t
 chrome('#title');                                  // light flows into the type and it settles into chrome
 ```
 
-Each returns `{ stop() }`, they share one scroll listener, and with reduced motion each shows its finished state. See them all at [reveal.brightkumedzro.com/scroll](https://reveal.brightkumedzro.com/scroll).
+Each returns `{ stop() }`, they share one scroll listener, and with reduced motion each shows its finished state.
+
+**Timing on tall elements (phones).** Effects finish while the element is on screen, whatever its height:
+
+- `words` times each word by its own position on screen: a word lights as it crosses a reading band from `start` (0.85 of the viewport height) to `end` (0.5). Offsets are measured once and on resize/font load, never per frame.
+- `mask`, `chrome`, `lines` (not pinned) and `count` (`scroll: true`) track the element's centre instead of its top, so they finish when it is a little above the middle of the screen (`start` 1, `end` 0.45; lines 1 and 0.5). The new `at` option picks the tracked point (0 top, 0.5 centre, 1 bottom). Passing `start`/`end` (or `from`/`to`) without `at` keeps the old top-based behaviour.
+- `count` playing once fires when 30% of the element shows, or 30% of the viewport for an element taller than the screen.
+- The new `track(el, fn)` helper (also exported) gives your own effects the element's rect once per frame on the shared listener. See them all at [reveal.brightkumedzro.com/scroll](https://reveal.brightkumedzro.com/scroll).
 
 ## Options
 

@@ -41,7 +41,9 @@ const CSS = `
 :where([data-steps]) :where([data-step]):not(:where([data-steps-visual] *)){min-height:70vh;display:flex;flex-direction:column;justify-content:center;opacity:.32;transition:opacity .4s ease}
 :where([data-steps]) :where([data-step].is-active):not(:where([data-steps-visual] *)){opacity:1}
 @media (max-width:760px){
-  :where([data-steps]){grid-template-columns:1fr;gap:0}
+  /* display:block, not a one-column grid: a sticky grid item only sticks within its own row, so in a one-column grid
+     the visual would scroll away with its row instead of staying pinned while the steps pass */
+  :where([data-steps]){display:block}
   :where([data-steps]) > :where([data-steps-visual]){top:0;z-index:1;padding:12px 0;background:var(--steps-bg,inherit)}
   :where([data-steps]) :where([data-step]):not(:where([data-steps-visual] *)){min-height:60vh}
 }

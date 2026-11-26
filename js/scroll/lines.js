@@ -16,7 +16,10 @@
                  true: progress runs through a tall pinned section (through()); see `track`
      track       pinned only: the tall section to measure (default: the nearest [data-lines-track], else the
                  SVG's parent)
-     from, to    enter() only: where the SVG's top is (share of the viewport height) at progress 0 and 1
+     from, to    enter() only: where the tracked point of the SVG is (share of the viewport height) at progress 0 and 1
+                 (defaults 1 and 0.5 with the centre tracked: fully drawn when the SVG's centre reaches mid-screen)
+     at          enter() only: which point of the SVG is tracked, as a share of its height (0 top, 0.5 centre, 1 bottom).
+                 Default 0.5; passing from or to without at tracks the top, as in v1.4 (0.9 and 0.35).
      ease        a function of 0–1 (default smoothstep)
      onProgress  called with progress 0–1 every time it changes (to fade in labels, say)
 
@@ -28,7 +31,7 @@ const SHAPES = 'path, line, polyline, polygon, circle, ellipse, rect';
 const SVGNS = 'http://www.w3.org/2000/svg';
 
 export function lines(target, o = {}) {
-  const { order = 'sequence', fill = false, pen = false, penSize = 4, pinned = false, from, to, ease = smooth, onProgress } = o;
+  const { order = 'sequence', fill = false, pen = false, penSize = 4, pinned = false, from, to, at: anchor, ease = smooth, onProgress } = o;
   const stops = [];
   for (const el of resolve(target)) {
     const svg = el instanceof SVGSVGElement ? el : el.ownerSVGElement;
@@ -92,8 +95,9 @@ export function lines(target, o = {}) {
       onProgress?.(p);
     };
 
+    const centred = anchor !== undefined ? anchor > 0 : from === undefined && to === undefined;
     const trackEl = pinned ? (resolve(o.track)[0] || svg.closest('[data-lines-track]') || svg.parentElement) : svg;
-    stops.push(pinned ? through(trackEl, apply) : enter(trackEl, apply, { from, to }));
+    stops.push(pinned ? through(trackEl, apply) : enter(trackEl, apply, centred ? { from: from ?? 1, to: to ?? 0.5, at: anchor ?? 0.5 } : { from, to, at: anchor ?? 0 }));
     stops.push(() => {
       for (const it of items) {
         it.s.style.strokeDasharray = it.saved.da;

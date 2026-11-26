@@ -37,11 +37,26 @@ function listen() {
 }
 
 /* Progress as an element passes through the viewport.
-     from: where the element's top is (as a share of the viewport height, 0 = top, 1 = bottom) when progress is 0
-     to:   where its top is when progress is 1
+     from: where the tracked point of the element is (as a share of the viewport height, 0 = top, 1 = bottom)
+           when progress is 0
+     to:   where that point is when progress is 1
+     at:   which point of the element is tracked, as a share of its own height: 0 = its top (default), 0.5 = its
+           centre, 1 = its bottom. Tracking the centre keeps tall elements (a paragraph on a phone) from finishing
+           only after they have scrolled mostly off screen.
    The defaults run from "top just entering at the bottom" (0.9) to "top a third of the way down" (0.35). */
-export function enter(el, fn, { from = 0.9, to = 0.35 } = {}) {
-  return add(el, fn, (r, vh) => (from * vh - r.top) / Math.max(1, (from - to) * vh));
+export function enter(el, fn, { from = 0.9, to = 0.35, at = 0 } = {}) {
+  return add(el, fn, (r, vh) => (from * vh - (r.top + at * r.height)) / Math.max(1, (from - to) * vh));
+}
+
+/* Raw per-frame measurement for effects that time their own parts: fn(rect, vh) runs once per frame (and once now)
+   with the element's bounding rect, sharing the page's single scroll listener. Not called under reduced motion. */
+export function track(el, fn) {
+  const t = { update: (vh) => fn(el.getBoundingClientRect(), vh) };
+  if (reduced) return () => {};
+  trackers.add(t);
+  listen();
+  t.update(window.innerHeight);
+  return () => trackers.delete(t);
 }
 
 /* Progress through a tall section whose content is pinned (position: sticky) while you scroll past it:
@@ -64,9 +79,13 @@ function add(el, fn, measure) {
   return () => trackers.delete(t);
 }
 
-/* Call fn once when an element first comes into view (threshold: how much of it must show). */
+/* Call fn once when an element first comes into view. threshold is a share of the element, but never more than the
+   same share of the viewport, so an element taller than the screen still fires (a 3000px block can never show 30% of
+   itself on an 800px phone). */
 export function onceVisible(el, fn, { threshold = 0.3 } = {}) {
   if (reduced || typeof IntersectionObserver === 'undefined') { fn(); return () => {}; }
+  const h = el.getBoundingClientRect().height, vh = window.innerHeight;
+  if (h > vh) threshold = Math.min(threshold, (threshold * vh) / h);
   const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); fn(); } }, { threshold });
   io.observe(el);
   return () => io.disconnect();

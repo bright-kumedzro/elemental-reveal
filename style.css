@@ -404,6 +404,7 @@ h1, h2 {
 }
 .sd-code .k { color: #c4a7ff; } .sd-code .s { color: #9be29b; } .sd-code .c { color: var(--soft); }
 .after .sd-code { margin: 0 0 24px; }
+.sd pre { max-width: 100%; overflow-x: auto; }
 .after code, .sd code { font: 13px ui-monospace, Consolas, monospace; background: var(--surface); padding: 1px 6px; border-radius: 6px; }
 .scrollfx .pack-intro .install { margin: 22px auto 0; display: inline-flex; gap: 10px; align-items: center; padding: 8px 16px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font: 13px/1 ui-monospace, Consolas, monospace; }
 .scrollfx .pack-intro .install span { color: var(--faint); }

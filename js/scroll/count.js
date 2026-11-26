@@ -9,9 +9,12 @@
      duration  1600       ms, when it plays once on coming into view
      ease      easeOut    a function from 0–1 to 0–1
      scroll    false      true: the count follows scroll progress through the element instead of a timer
-     start     0.9        scroll mode: the element's top, as a share of the viewport height, at the first number
-     end       0.4        scroll mode: where its top is at the final number
+     start     0.9        scroll mode: where the tracked point of the element is, as a share of the viewport height, at the first number
+     end       0.45       scroll mode: where it is at the final number
+     at        0.5        scroll mode: which point is tracked, as a share of the element's height (0.5 = centre). Passing
+                          start or end without at tracks the top, as in v1.4 (0.9 and 0.4).
      locale    'en'       how the number is written while counting (grouping and decimal marks)
+   Playing once starts when 30% of the element shows (30% of the viewport for an element taller than the screen).
    The number is read from the element's text: a prefix ("£", "~"), the number with its grouping and decimals,
    then a suffix ("+", "%", "m", " scholars"). Screen readers get the final text throughout; the counting digits
    are visual only. Returns { stop() }, which puts the original text back. With reduced motion it shows the final
@@ -28,7 +31,9 @@ export function parseNumber(text) {
   return { prefix: m[1], value: Number(num.replace(/,/g, '')), decimals: (num.split('.')[1] || '').length, grouped: num.includes(','), suffix: m[3] };
 }
 
-export function count(target, { from = 0, duration = 1600, ease = easeOut, scroll = false, start = 0.9, end = 0.4, locale = 'en' } = {}) {
+export function count(target, { from = 0, duration = 1600, ease = easeOut, scroll = false, start, end, at, locale = 'en' } = {}) {
+  at ??= start === undefined && end === undefined ? 0.5 : 0;
+  start ??= 0.9; end ??= at ? 0.45 : 0.4;
   const stops = [];
   for (const el of resolve(target)) {
     const info = parseNumber(el.textContent);
@@ -47,7 +52,7 @@ export function count(target, { from = 0, duration = 1600, ease = easeOut, scrol
       if (s !== last) { last = s; vis.textContent = s; }
     };
     let stop;
-    if (scroll) stop = enter(el, (p) => show(ease(p)), { from: start, to: end });
+    if (scroll) stop = enter(el, (p) => show(ease(p)), { from: start, to: end, at });
     else if (reduced) { show(1); stop = () => {}; }
     else {
       show(0);

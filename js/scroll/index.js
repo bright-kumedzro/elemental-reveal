@@ -13,6 +13,6 @@ export { steps } from './steps.js';
 export { scrub } from './scrub.js';
 export { zoom } from './zoom.js';
 export { chrome } from './chrome.js';
-export { enter, through, onceVisible, reduced } from './core.js';
+export { enter, through, track, onceVisible, reduced } from './core.js';
 export { VERSION } from '../reveal.js';
 export { gpu } from '../gpu.js';
