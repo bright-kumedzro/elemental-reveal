@@ -5,70 +5,88 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Reveal · Bright Kumedzro</title>
   <meta name="description" content="Scroll-driven WebGL reveals that take a pencil wireframe apart and leave the finished design, in two packs: elemental and shinobi. One library, fourteen effects.">
-  <meta name="theme-color" content="#0b0b0c">
+  <meta name="theme-color" content="#0c0c0c">
   <link rel="canonical" href="https://reveal.brightkumedzro.com/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://reveal.brightkumedzro.com/">
   <meta property="og:title" content="Reveal">
   <meta property="og:description" content="Scroll-driven WebGL reveals that take a pencil wireframe apart and leave the finished design, in two packs: elemental and shinobi. One library, fourteen effects.">
-  <meta property="og:image" content="https://reveal.brightkumedzro.com/og/elemental.png">
+  <meta property="og:image" content="https://reveal.brightkumedzro.com/og/reveal.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://reveal.brightkumedzro.com/og/elemental.png">
+  <meta name="twitter:image" content="https://reveal.brightkumedzro.com/og/reveal.png">
   <link rel="icon" href="/bk-mark.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
 </head>
-<body>
+<body class="home">
   <main>
     <header class="intro">
       <a class="pill back" href="https://www.brightkumedzro.com/playground">← Playground</a>
       <p class="eyebrow">Playground · Library</p>
-      <h1>Reveal</h1>
-      <p class="lede">Fourteen ways to take a first draft apart and leave the finished design behind, in two packs. Pick a pack to see every effect in a row, or open one on its own.</p>
-    </header>
-    <section class="after packs">
-      <div class="pack" style="--c:#33adff">
-        <p class="eyebrow">Elemental pack · 6 effects</p>
-        <h2><a href="/elemental">Elemental</a></h2>
-        <p>Six elements, one pencil sketch. Fire, water, air, earth, lightning and frost each take the same wireframe apart in their own way and leave the finished design behind.</p>
-        <nav class="chapters" aria-label="Elemental effects">
-          <a href="/fire" style="--c:#ff7a1a"><span>01</span>Fire</a>
-          <a href="/water" style="--c:#2dd4bf"><span>02</span>Water</a>
-          <a href="/air" style="--c:#a5b4fc"><span>03</span>Air</a>
-          <a href="/earth" style="--c:#e9a85a"><span>04</span>Earth</a>
-          <a href="/lightning" style="--c:#a78bfa"><span>05</span>Lightning</a>
-          <a href="/frost" style="--c:#9fd8ff"><span>06</span>Frost</a>
-        </nav>
-        <div class="actions"><a class="btn primary" href="/elemental">See all six in a row</a></div>
-      </div>
-      <div class="pack" style="--c:#ff8a3d">
-        <p class="eyebrow">Shinobi pack · 8 effects</p>
-        <h2><a href="/shinobi">Shinobi</a></h2>
-        <p>Eight techniques, one pencil sketch. A crowd of clones goes up in smoke one by one, a sand vortex grinds the draft away, a spinning sphere drills straight through it, a lightning blade runs it through, a wall of dust scours it off, a growing twister tears it up, a molten sphere melts it and a shuriken of wind shreds it. Each leaves the finished design behind.</p>
-        <nav class="chapters" aria-label="Shinobi effects">
-          <a href="/clone" style="--c:#ff8a3d"><span>01</span>Shadow Clone</a>
-          <a href="/vortex" style="--c:#e6b35c"><span>02</span>Sand Vortex</a>
-          <a href="/spiral" style="--c:#5ad1ff"><span>03</span>Spiral Sphere</a>
-          <a href="/blade" style="--c:#3d8bff"><span>04</span>Lightning Blade</a>
-          <a href="/storm" style="--c:#d2593c"><span>05</span>Sandstorm</a>
-          <a href="/twister" style="--c:#c4ad84"><span>06</span>Sand Tornado</a>
-          <a href="/magma" style="--c:#ff5a1f"><span>07</span>Magma Sphere</a>
-          <a href="/shuriken" style="--c:#7fe0d0"><span>08</span>Spiral Shuriken</a>
-        </nav>
-        <div class="actions"><a class="btn primary" href="/shinobi">See all eight in a row</a></div>
-      </div>
+      <h1>Reveal. <span class="rest">Fourteen ways to take a first draft apart and leave the finished design behind, between any two images.</span></h1>
       <div class="actions">
         <a class="btn primary" href="/use">Use it in your project</a>
         <a class="btn" href="/stats">Who's using it</a>
-        <a class="btn" href="https://www.brightkumedzro.com/playground">More on the playground</a>
       </div>
-      <p class="small">Raw WebGL2 and canvas, no libraries. Without WebGL2 it falls back to a wipe. With reduced motion on it cross-fades instead, with no flashes. Sound is off until you turn it on, and every sound is synthesised in the browser with Web Audio, so there are no audio files.</p>
-      <p class="small foot">© 2026 Bright Kumedzro</p>
+      <p class="install"><span>$</span> npm i @brightkumedzro/reveal</p>
+    </header>
+    <section class="after packs">
+      <div class="grid">
+        <article class="pack" style="--c:#33adff">
+          <a class="shot" href="/elemental" tabindex="-1" aria-hidden="true"><img src="/og/elemental.png" alt="" width="1200" height="630" loading="lazy"></a>
+          <div class="txt">
+            <p class="eyebrow">Elemental pack · 6 effects</p>
+            <h2><a href="/elemental">Elemental</a></h2>
+            <p>Fire, water, air, earth, lightning and frost each take the same wireframe apart in their own way.</p>
+            <nav class="chapters" aria-label="Elemental effects">
+              <a href="/fire" style="--c:#ff7a1a"><span>01</span>Fire</a>
+              <a href="/water" style="--c:#2dd4bf"><span>02</span>Water</a>
+              <a href="/air" style="--c:#a5b4fc"><span>03</span>Air</a>
+              <a href="/earth" style="--c:#e9a85a"><span>04</span>Earth</a>
+              <a href="/lightning" style="--c:#a78bfa"><span>05</span>Lightning</a>
+              <a href="/frost" style="--c:#9fd8ff"><span>06</span>Frost</a>
+            </nav>
+            <div class="actions"><a class="btn primary" href="/elemental">See all six in a row</a></div>
+          </div>
+        </article>
+        <article class="pack" style="--c:#ff8a3d">
+          <a class="shot" href="/shinobi" tabindex="-1" aria-hidden="true"><img src="/og/shinobi.png" alt="" width="1200" height="630" loading="lazy"></a>
+          <div class="txt">
+            <p class="eyebrow">Shinobi pack · 8 effects</p>
+            <h2><a href="/shinobi">Shinobi</a></h2>
+            <p>Clones, sand, spinning spheres, molten rock, a lightning blade and a shuriken of wind: anime-inspired techniques, every effect written from scratch.</p>
+            <nav class="chapters" aria-label="Shinobi effects">
+              <a href="/clone" style="--c:#ff8a3d"><span>01</span>Shadow Clone</a>
+              <a href="/vortex" style="--c:#e6b35c"><span>02</span>Sand Vortex</a>
+              <a href="/spiral" style="--c:#5ad1ff"><span>03</span>Spiral Sphere</a>
+              <a href="/blade" style="--c:#3d8bff"><span>04</span>Lightning Blade</a>
+              <a href="/storm" style="--c:#d2593c"><span>05</span>Sandstorm</a>
+              <a href="/twister" style="--c:#c4ad84"><span>06</span>Sand Tornado</a>
+              <a href="/magma" style="--c:#ff5a1f"><span>07</span>Magma Sphere</a>
+              <a href="/shuriken" style="--c:#7fe0d0"><span>08</span>Spiral Shuriken</a>
+            </nav>
+            <div class="actions"><a class="btn primary" href="/shinobi">See all eight in a row</a></div>
+          </div>
+        </article>
+      </div>
+      <div class="more">
+        <p class="small">Raw WebGL2 and canvas, no libraries. Without WebGL2 it falls back to a wipe. With reduced motion on it cross-fades instead, with no flashes. Sound is off until you turn it on, and every sound is synthesised in the browser with Web Audio, so there are no audio files.</p>
+      </div>
     </section>
+    <footer class="site-foot">
+      <a class="me" href="https://www.brightkumedzro.com"><img src="/bk-mark.png" alt="" width="34" height="34"><span><b>Bright Kumedzro</b><span>Product designer &amp; manager</span></span></a>
+      <nav aria-label="Bright Kumedzro's site">
+        <a href="https://www.brightkumedzro.com">Work</a>
+        <a href="https://www.brightkumedzro.com/about">About</a>
+        <a href="https://www.brightkumedzro.com/playground">Playground</a>
+        <a class="talk" href="https://www.brightkumedzro.com/contact"><i></i>Let's talk</a>
+      </nav>
+      <p class="where">Accra, Ghana · 2026</p>
+    </footer>
   </main>
 </body>
 </html>

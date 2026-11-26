@@ -1,13 +1,14 @@
 // Writes the demo site from the copy in scripts/copy-*.mjs: index.html (both packs), one page per pack
 // (elemental.html, shinobi.html: every chapter in a row) and one page per effect (fire.html, … twister.html).
 // Run after editing: node scripts/pages.mjs
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { ELEMENTS } from './copy-elemental.mjs';
 import { TECHNIQUES } from './copy-shinobi.mjs';
 
 const SITE = 'https://reveal.brightkumedzro.com';   // the site's address, in one place, for when it moves
-const PLAYGROUND = 'https://www.brightkumedzro.com/playground';
+const HOME = 'https://www.brightkumedzro.com';
+const PLAYGROUND = `${HOME}/playground`;
 const root = fileURLToPath(new URL('..', import.meta.url));
 
 const PACKS = [
@@ -16,12 +17,14 @@ const PACKS = [
     lede: 'Six elements, one pencil sketch. Fire, water, air, earth, lightning and frost each take the same wireframe apart in their own way and leave the finished design behind.',
     how: 'A WebGL2 shader gives each pixel a fuel value and decides, pixel by pixel, which drawing you see. Scrolling pushes the front through the fuel. Each element shapes that fuel differently and does different damage at the edge.',
     eyebrow: 'Elemental pack',
+    short: 'Fire, water, air, earth, lightning and frost each take the same wireframe apart in their own way.',
   },
   {
     id: 'shinobi', title: 'Shinobi', color: '#ff8a3d', effects: TECHNIQUES, count: 'Eight', unit: 'technique', ink: true,
     lede: 'Eight techniques, one pencil sketch. A crowd of clones goes up in smoke one by one, a sand vortex grinds the draft away, a spinning sphere drills straight through it, a lightning blade runs it through, a wall of dust scours it off, a growing twister tears it up, a molten sphere melts it and a shuriken of wind shreds it. Each leaves the finished design behind.',
     how: 'A WebGL2 shader decides, pixel by pixel, which drawing you see, and your scroll drives the technique.',
-    eyebrow: 'Shinobi pack',
+    eyebrow: 'Shinobi pack', og: 'shinobi',
+    short: 'Clones, sand, spinning spheres, molten rock, a lightning blade and a shuriken of wind: anime-inspired techniques, every effect written from scratch.',
     credit: 'Anime-inspired techniques, every effect written from scratch.',
   },
 ];
@@ -35,7 +38,7 @@ const head = ({ title, description, path, image, script = true, cls = '' }) => `
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>${esc(title)} · Bright Kumedzro</title>
   <meta name="description" content="${esc(description)}">
-  <meta name="theme-color" content="#0b0b0c">
+  <meta name="theme-color" content="#0c0c0c">
   <link rel="canonical" href="${SITE}${path}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="${SITE}${path}">
@@ -55,9 +58,20 @@ const head = ({ title, description, path, image, script = true, cls = '' }) => `
 </head>
 <body${cls ? ` class="${cls}"` : ''}>
   <main>`;
+/* The footer on every page: who made it, and the way back to the portfolio (same order and labels as its nav). */
+export const FOOTER = `
+    <footer class="site-foot">
+      <a class="me" href="${HOME}"><img src="/bk-mark.png" alt="" width="34" height="34"><span><b>Bright Kumedzro</b><span>Product designer &amp; manager</span></span></a>
+      <nav aria-label="Bright Kumedzro's site">
+        <a href="${HOME}">Work</a>
+        <a href="${HOME}/about">About</a>
+        <a href="${PLAYGROUND}">Playground</a>
+        <a class="talk" href="${HOME}/contact"><i></i>Let's talk</a>
+      </nav>
+      <p class="where">Accra, Ghana · 2026</p>
+    </footer>`;
 const foot = `
-      <p class="small foot">© 2026 Bright Kumedzro</p>
-    </section>
+    </section>${FOOTER}
   </main>
 </body>
 </html>
@@ -73,29 +87,35 @@ const glyph = (p) => (p.ink ? '\n      <p class="glyph" aria-hidden="true">忍</
 const titleRow = (p, text) => (p.ink ? `<div class="title-row"><h1>${text}</h1><span class="seal" aria-hidden="true">忍</span></div>` : `<h1>${text}</h1>`);
 
 /* The landing page: both packs, how to use them, no chapters (so no WebGL until you pick one) */
-const index = `${head({ title: 'Reveal', description: 'Scroll-driven WebGL reveals that take a pencil wireframe apart and leave the finished design, in two packs: elemental and shinobi. One library, fourteen effects.', path: '/', image: 'elemental', script: false })}
+const index = `${head({ title: 'Reveal', description: 'Scroll-driven WebGL reveals that take a pencil wireframe apart and leave the finished design, in two packs: elemental and shinobi. One library, fourteen effects.', path: '/', image: 'reveal', script: false, cls: 'home' })}
     <header class="intro">
       <a class="pill back" href="${PLAYGROUND}">← Playground</a>
       <p class="eyebrow">Playground · Library</p>
-      <h1>Reveal</h1>
-      <p class="lede">Fourteen ways to take a first draft apart and leave the finished design behind, in two packs. Pick a pack to see every effect in a row, or open one on its own.</p>
-    </header>
-    <section class="after packs">
-${PACKS.map((p) => `      <div class="pack" style="--c:${p.color}">
-        <p class="eyebrow">${p.eyebrow} · ${p.effects.length} effects</p>
-        <h2><a href="/${p.id}">${p.title}</a></h2>
-        <p>${p.lede}</p>
-        <nav class="chapters" aria-label="${p.title} effects">
-          ${p.effects.map((e) => chip(e, `/${e.id}`)).join('\n          ')}
-        </nav>
-        <div class="actions"><a class="btn primary" href="/${p.id}">See all ${p.count.toLowerCase()} in a row</a></div>
-      </div>`).join('\n')}
+      <h1>Reveal. <span class="rest">Fourteen ways to take a first draft apart and leave the finished design behind, between any two images.</span></h1>
       <div class="actions">
         <a class="btn primary" href="/use">Use it in your project</a>
         <a class="btn" href="/stats">Who's using it</a>
-        <a class="btn" href="${PLAYGROUND}">More on the playground</a>
       </div>
-      <p class="small">${SMALL}</p>`;
+      <p class="install"><span>$</span> npm i @brightkumedzro/reveal</p>
+    </header>
+    <section class="after packs">
+      <div class="grid">
+${PACKS.map((p) => `        <article class="pack" style="--c:${p.color}">
+          <a class="shot" href="/${p.id}" tabindex="-1" aria-hidden="true"><img src="/og/${p.og}.png" alt="" width="1200" height="630" loading="lazy"></a>
+          <div class="txt">
+            <p class="eyebrow">${p.eyebrow} · ${p.effects.length} effects</p>
+            <h2><a href="/${p.id}">${p.title}</a></h2>
+            <p>${p.short}</p>
+            <nav class="chapters" aria-label="${p.title} effects">
+              ${p.effects.map((e) => chip(e, `/${e.id}`)).join('\n              ')}
+            </nav>
+            <div class="actions"><a class="btn primary" href="/${p.id}">See all ${p.count.toLowerCase()} in a row</a></div>
+          </div>
+        </article>`).join('\n')}
+      </div>
+      <div class="more">
+        <p class="small">${SMALL}</p>
+      </div>`;
 writeFileSync(`${root}/index.html`, index + foot);
 
 /* One pack: every chapter in a row */
@@ -136,10 +156,10 @@ ${p.effects.map((e) => `        <div style="--c:${e.color}">
   writeFileSync(`${root}/${p.id}.html`, page + foot);
 }
 
-/* One effect on its own */
+/* One effect on its own (its own share image if it has one, else its pack's) */
 for (const e of ALL) {
-  const p = e.pack, others = p.effects.filter((o) => o !== e);
-  const page = `${head({ title: p.ink ? e.label : e.name, description: e.summary, path: `/${e.id}`, image: p.og ? e.id : null, cls: p.ink ? 'shinobi' : '' })}
+  const p = e.pack, others = p.effects.filter((o) => o.id !== e.id);
+  const page = `${head({ title: p.ink ? e.label : e.name, description: e.summary, path: `/${e.id}`, image: existsSync(`${root}/og/${e.id}.png`) ? e.id : p.og, cls: p.ink ? 'shinobi' : '' })}
 ${track(e)}
 
     <section class="after" style="--c:${e.color}">

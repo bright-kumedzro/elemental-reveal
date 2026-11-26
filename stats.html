@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <style>
-    :root { --surface: #121214; --grid: #232328; --mark: #33adff; --muted: #8b8b93; }
+    :root { --grid: var(--line); --mark: var(--accent); --muted: var(--soft); }
     .wrap { max-width: 980px; margin: 0 auto; padding: 56px 16px 80px; }
     .wrap h1 { font-size: clamp(32px, 6vw, 52px); margin: 0 0 10px; }
     .sub { color: #d4d4d8; margin: 0 0 8px; max-width: 640px; }
@@ -109,6 +109,16 @@
       <div id="owner-list"></div>
     </section>
   </main>
+  <footer class="site-foot">
+    <a class="me" href="https://www.brightkumedzro.com"><img src="/bk-mark.png" alt="" width="34" height="34"><span><b>Bright Kumedzro</b><span>Product designer &amp; manager</span></span></a>
+    <nav aria-label="Bright Kumedzro's site">
+      <a href="https://www.brightkumedzro.com">Work</a>
+      <a href="https://www.brightkumedzro.com/about">About</a>
+      <a href="https://www.brightkumedzro.com/playground">Playground</a>
+      <a class="talk" href="https://www.brightkumedzro.com/contact"><i></i>Let's talk</a>
+    </nav>
+    <p class="where">Accra, Ghana · 2026</p>
+  </footer>
 
   <script>
     const $ = (s) => document.querySelector(s);

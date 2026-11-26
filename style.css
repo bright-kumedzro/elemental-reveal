@@ -1,10 +1,17 @@
+/* The same tokens as brightkumedzro.com (its dark theme), so the two read as one site. */
 :root {
-  --bg: #0b0b0c;
+  --bg: #0c0c0c;
+  --surface: #161616;
   --ink: #f1f1ef;
-  --soft: #a1a1aa;
-  --line: #26262b;
+  --body: #c9c9c6;
+  --soft: #8d8d8d;
+  --faint: #555;
+  --line: #232323;
   --accent: #33adff;
+  --leaf: #5cc976;
   --paper: #f1e9d8;
+  /* film grain, as on the portfolio */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   color-scheme: dark;
 }
 
@@ -46,7 +53,19 @@ main { position: relative; z-index: 1; }
   padding: 96px max(16px, calc((100% - 760px) / 2)) 72px;
 }
 .intro .back { position: absolute; top: 16px; left: 16px; }
-.lede { color: #d4d4d8; font-size: clamp(17px, 2.2vw, 20px); margin: 0 0 32px; max-width: 620px; }
+.lede { color: var(--body); font-size: clamp(17px, 2.2vw, 20px); margin: 0 0 32px; max-width: 620px; }
+/* grain over the solid sections only: never over the effects themselves */
+.intro, .after, .site-foot { isolation: isolate; }
+.intro::after, .after::after, .site-foot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--grain);
+  opacity: .12;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
 .lede a, .after a { color: var(--accent); }
 
 .chapters { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -160,48 +179,87 @@ a.pill:hover, a.pill:focus-visible { border-color: var(--accent); outline: none;
   padding: 120px max(16px, calc((100% - 680px) / 2)) 72px;
 }
 
+/* small spaced caps, as on the portfolio */
 .eyebrow {
-  color: var(--accent);
+  color: var(--soft);
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: .12em;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  margin: 0 0 8px;
+  margin: 0 0 12px;
 }
 
+/* headlines: medium weight, tight, and often two-tone (a white lead, then the rest in grey) */
 h1, h2 {
-  font-size: clamp(36px, 7vw, 56px);
-  line-height: 1.05;
-  letter-spacing: -.03em;
-  font-weight: 800;
+  font-size: clamp(32px, 5.4vw, 52px);
+  line-height: 1.1;
+  letter-spacing: -.025em;
+  font-weight: 500;
   margin: 0 0 28px;
 }
+.rest { color: var(--soft); }
 
-.after p { color: #d4d4d8; margin: 0 0 18px; }
+.after p { color: var(--body); margin: 0 0 18px; }
 
 .elements { margin: 32px 0; display: grid; gap: 22px; }
 .elements div { border-left: 2px solid var(--c); padding-left: 16px; }
-.elements dt { font-weight: 700; color: var(--c); margin-bottom: 4px; }
-.elements dd { margin: 0; color: #d4d4d8; }
+.elements dt { font-weight: 600; color: var(--c); margin-bottom: 4px; }
+.elements dd { margin: 0; color: var(--body); }
 
-.actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 32px 0 40px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 32px 0 40px; }
 
+/* pills, as on the portfolio: a light one for the main action, soft dark ones for the rest */
 .btn {
-  font: 600 15px/1 "Plus Jakarta Sans", system-ui, sans-serif;
-  padding: 14px 20px;
+  font: 600 14px/1 "Plus Jakarta Sans", system-ui, sans-serif;
+  padding: 13px 20px;
   border-radius: 999px;
-  border: 1px solid #2e2e33;
-  background: transparent;
+  border: 1px solid var(--line);
+  background: var(--surface);
   color: var(--ink);
   text-decoration: none;
   cursor: pointer;
+  transition: background .2s, color .2s;
 }
-.btn:hover, .btn:focus-visible { border-color: var(--accent); outline: none; }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #04121c; }
-.btn.primary:hover, .btn.primary:focus-visible { background: #5cc0ff; }
+/* buttons keep their own colours inside sections that tint links */
+.after a.btn, .intro a.btn { color: var(--ink); }
+.after a.btn.primary, .intro a.btn.primary { color: #0c0c0c; }
+.btn:hover, .btn:focus-visible { background: #222; outline: none; }
+.btn:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+.btn.primary { background: var(--ink); color: #0c0c0c; border-color: var(--ink); }
+.btn.primary:hover, .btn.primary:focus-visible { background: #fff; }
 
 .after .small { font-size: 14px; color: var(--soft); }
+.after .chapters + .small { margin-top: 32px; }
 .after .foot { margin-top: 48px; }
+
+/* ---------- the footer: who made it, and the way back to the portfolio ---------- */
+.site-foot {
+  position: relative;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  padding: 28px max(16px, calc((100% - 1100px) / 2)) calc(28px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px 28px;
+  font-size: 13px;
+}
+.site-foot .me { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; }
+.site-foot .me img { width: 34px; height: 34px; border-radius: 9px; }
+.site-foot .me b { display: block; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: 12px; }
+.site-foot .me span { display: block; color: var(--soft); letter-spacing: .12em; text-transform: uppercase; font-size: 11px; margin-top: 2px; }
+.site-foot nav { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; }
+.site-foot nav a { color: var(--soft); text-decoration: none; }
+.site-foot nav a:hover, .site-foot nav a:focus-visible { color: var(--ink); outline: none; }
+.site-foot .talk {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 16px; border-radius: 999px;
+  background: #1c79c7; color: #fff !important; font-weight: 600;
+}
+.site-foot .talk i { width: 7px; height: 7px; border-radius: 50%; background: var(--leaf); }
+.site-foot .talk:hover, .site-foot .talk:focus-visible { background: #2389df; }
+.site-foot .where { color: var(--soft); letter-spacing: .12em; text-transform: uppercase; font-size: 11px; }
 
 /* ?capture=<chapter> renders one chapter full screen, without the page around it. */
 .capture .intro, .capture .after, .capture .track:not(.cap), .capture .hud, .capture .hint { display: none; }
@@ -238,8 +296,6 @@ h1, h2 {
 /* The shinobi pages (body.shinobi) take an orange accent and their own ink: a wash behind the intro, a big brushed
    glyph bleeding off the edge, and a red seal by the title. */
 .shinobi { --accent: #ff8a3d; }
-.shinobi .btn.primary { color: #2a1204; }
-.shinobi .btn.primary:hover, .shinobi .btn.primary:focus-visible { background: #ffa566; }
 /* ---------- ink ---------- */
 /* A wash of sumi ink behind the intro, a big brushed glyph bleeding off the edge, and a red seal by the title. */
 .shinobi .intro { overflow: hidden; isolation: isolate; }
@@ -284,10 +340,26 @@ h1, h2 {
 .shinobi .credit { margin-top: 20px !important; }
 
 /* ---------- landing ---------- */
-.packs .pack { padding: 28px 0 8px; border-top: 1px solid var(--line); }
-.packs .pack:first-child { border-top: 0; padding-top: 0; }
-.packs .pack h2 { margin: 6px 0 10px; }
+/* centred, like the portfolio's home: a two-tone headline, the main actions, then a card per pack */
+.home .intro { min-height: auto; padding-top: 120px; padding-bottom: 40px; align-items: center; text-align: center; }
+.home .intro h1 { max-width: 860px; margin: 0 auto 32px; font-size: clamp(30px, 4.6vw, 46px); }
+.home .intro .actions { justify-content: center; margin: 0; }
+.home .install { margin: 22px auto 0; display: inline-flex; gap: 10px; align-items: center; padding: 8px 8px 8px 16px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font: 13px/1 ui-monospace, Consolas, monospace; color: var(--ink); }
+.home .install span { color: var(--faint); }
+.after.packs { padding: 24px max(16px, calc((100% - 1100px) / 2)) 72px; }
+.packs .grid { max-width: 1100px; margin: 0 auto; display: grid; gap: 18px; grid-template-columns: 1fr; }
+@media (min-width: 860px) { .packs .grid { grid-template-columns: 1fr 1fr; } }
+.packs .pack { background: var(--surface); border-radius: 22px; padding: 12px 12px 24px; display: flex; flex-direction: column; }
+.packs .pack .shot { display: block; aspect-ratio: 40 / 21; border-radius: 14px; overflow: hidden; background: #0e0e0e; }
+.packs .pack .shot img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .7s ease; }
+.packs .pack:hover .shot img { transform: scale(1.03); }
+.packs .pack .txt { padding: 20px 12px 0; display: flex; flex-direction: column; flex: 1; }
+.packs .pack h2 { font-size: clamp(24px, 3vw, 30px); margin: 0 0 10px; }
 .packs .pack h2 a { color: inherit; text-decoration: none; }
-.packs .pack h2 a:hover, .packs .pack h2 a:focus-visible { color: var(--c); }
-.packs .pack .eyebrow { color: var(--c); }
-.packs .pack .chapters { margin: 16px 0 4px; }
+.packs .pack h2 a:hover, .packs .pack h2 a:focus-visible { color: var(--c); outline: none; }
+.packs .pack .eyebrow { color: var(--c); margin-bottom: 8px; }
+.packs .pack p { font-size: 15px; }
+.packs .pack .chapters { margin: 6px 0 18px; gap: 8px; }
+.packs .pack .chapters a { font-size: 13px; padding: 7px 12px 7px 8px; }
+.packs .pack .actions { margin: auto 0 0; }
+.packs .more { max-width: 680px; margin: 48px auto 0; text-align: center; }
