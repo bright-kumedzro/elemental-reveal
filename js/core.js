@@ -542,7 +542,7 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
     };
 
     ch.update = (dt, now) => {
-      ch.pPrev = ch.p;
+      ch.pPrev = ch.__capPrev ?? ch.p; ch.__capPrev = undefined;   // capture: the previous frame's progress, so one-off moments fire
       if (ch.mode === 'gl') {
         ch.p += (ch.pTarget - ch.p) * (1 - Math.exp(-dt * 7));
         if (Math.abs(ch.pTarget - ch.p) < 1e-4) ch.p = ch.pTarget;
@@ -776,7 +776,7 @@ void main() { vUv = aPos * .5 + .5; gl_Position = vec4(aPos, 0., 1.); }`;
           ch.near = true; if (!ch.tex) ch.paint();
           for (let i = steps; i >= 0; i--) {
             const pt = Math.max(0, pv - i * 0.003);
-            ch.pTarget = pt; ch.p = pt;
+            ch.__capPrev = ch.__lastCap ?? pt; ch.__lastCap = pt; ch.pTarget = pt; ch.p = pt;
             drawAll(1 / 30, tMs - i * 33);
           }
         },
