@@ -12,7 +12,7 @@
 import { GLSL_HEAD, MAX_SEEDS, OCT, DONE, ign, clamp, reduce, fine, lite } from './core.js';
 import { createSound } from './sound.js';
 
-export const VERSION = '1.2.1';
+export const VERSION = '1.3.0';
 
 /* Sound is off unless you ask for it, and every reveal on the page shares one audio output. Any button on the
    page with a data-reveal-sound attribute turns it on and off (and gets aria-pressed to match). */
