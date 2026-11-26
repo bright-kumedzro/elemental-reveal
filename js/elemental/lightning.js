@@ -150,6 +150,8 @@ const lightning = {
     };
     ch.s.tex = { A: mk(), B: mk() };
   },
+  // the library gives its context back when the reveal is far off screen: forget the textures (initGL and resize rebuild them)
+  releaseGL(ch) { ch.s.tex = null; },
 
   resize(ch) {
     const S = ch.s, G = lite ? 6 : 4;

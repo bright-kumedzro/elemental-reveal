@@ -122,6 +122,10 @@
 <span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/shinobi'</span>;     <span class="c">// clone · vortex · spiral · blade · storm · twister · magma · shuriken</span>
 <span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/paper'</span>;       <span class="c">// curl · fold · draw</span>
 <span class="c">// from the CDN: …/@brightkumedzro/reveal@1/js/elemental/index.js or …/js/shinobi/index.js</span></pre>
+    <p>Or just one effect, for the smallest bundle: about 12 to 14 kB gzipped. Every effect has its own entry, and you don't need <code>effect</code>:</p>
+<pre><span class="k">import</span> { reveal } <span class="k">from</span> <span class="s">'@brightkumedzro/reveal/elemental/fire'</span>;   <span class="c">// or /shinobi/storm, /paper/curl, …</span>
+reveal(<span class="s">'#hero'</span>, { from: <span class="s">'/sketch.png'</span>, to: <span class="s">'/final.png'</span> });
+<span class="c">// from the CDN: …/@brightkumedzro/reveal@1/js/entry/elemental/fire.js</span></pre>
     <p>Coming from <code>@brightkumedzro/elemental-reveal</code>? It's the same library under a new name. Swap the import for <code>@brightkumedzro/reveal/elemental</code> and everything works as before.</p>
 
     <h2>Three ways to drive it</h2>
@@ -165,14 +169,15 @@ fx.progress(<span class="s">0.3</span>);    <span class="c">// set it (switches 
 fx.play();           <span class="c">// run it from the start over `duration`</span>
 fx.reset();          <span class="c">// put the draft back and clear clicks</span>
 fx.sound(<span class="k">true</span>);      <span class="c">// turn sound on or off for every reveal on the page</span>
+fx.stats();          <span class="c">// for debugging: mode, render resolution, frame time</span>
 fx.destroy();        <span class="c">// remove the canvases and listeners</span></pre>
 
     <h2>Good to know</h2>
     <ul>
-      <li>Each call gets its own WebGL2 canvas. Browsers cap how many can run at once (often around 16), so a few per page is fine. Call <code>destroy()</code> on ones you're done with.</li>
+      <li>Use as many as you like on a page. Each one only holds a WebGL context while it's on or near the screen, and the page holds at most eight at once (<code>gpu.budget</code>), so you never hit the browser's limit. Until one has a context, it shows its plain fallback. <a href="/perf" style="color:var(--accent)">Twenty on one page</a>.</li>
       <li>Without WebGL2 it falls back to a wipe. With reduced motion turned on, it cross-fades, so lightning doesn't flash.</li>
       <li>Anything inside the element stays on top of the effect, so it works as a background behind your own headline or buttons.</li>
-      <li>On slow devices it drops its render resolution automatically until it's smooth.</li>
+      <li>It only draws while it's on screen. On slow devices it lowers its render resolution until it's smooth, and raises it again when there's room.</li>
     </ul>
 
     <h2>Privacy</h2>

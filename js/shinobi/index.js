@@ -2,7 +2,7 @@
    smaller bundle.
      import { reveal } from '@brightkumedzro/reveal/shinobi';
      reveal('#hero', { effect: 'storm', from: '/sketch.png', to: '/final.png' }); */
-import { makeReveal, VERSION } from '../reveal.js';
+import { makeReveal, VERSION, gpu } from '../reveal.js';
 import clone from './clone.js';
 import vortex from './vortex.js';
 import spiral from './spiral.js';
@@ -14,5 +14,5 @@ import shuriken from './shuriken.js';
 
 export const effects = { clone, vortex, spiral, blade, storm, twister, magma, shuriken };
 export const reveal = makeReveal(effects);
-export { VERSION, clone, vortex, spiral, blade, storm, twister, magma, shuriken };
+export { VERSION, gpu, clone, vortex, spiral, blade, storm, twister, magma, shuriken };
 export default reveal;

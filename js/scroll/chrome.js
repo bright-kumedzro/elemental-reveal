@@ -16,8 +16,11 @@
    Returns { stop() }, which removes the canvas and gives the text back its own colour. The text stays real text, so
    screen readers, selection and copy-paste are unaffected. It is drawn in the element's own font, size, weight and
    letter-spacing, and redrawn when the element resizes or web fonts load. With reduced motion the type is shown
-   settled and still; without WebGL2 it falls back to a chrome gradient clipped to the text. */
+   settled and still; without WebGL2 it falls back to a chrome gradient clipped to the text.
+   Like the reveals, a heading only holds a WebGL context while it is on or near the screen, within the page-wide
+   budget in ../gpu.js. */
 import { resolve, enter, reduced, clamp, stopAll } from './core.js';
+import { holder } from '../gpu.js';
 
 const VS = `#version 300 es
 layout(location = 0) in vec2 p; out vec2 uv;
@@ -181,44 +184,84 @@ function fallback(el, warm, cool, start, end) {
 }
 
 function one(el, { warm = '#ff8a3d', cool = '#3d7bff', start = 0.85, end = 0.3, shimmer = 1, glow = 1 } = {}) {
-  const canvas = document.createElement('canvas');
-  const gl = canvas.getContext('webgl2', { premultipliedAlpha: true, alpha: true, antialias: false });
-  if (!gl) return fallback(el, warm, cool, start, end);
-
-  const compile = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
-  const prog = gl.createProgram();
-  try {
-    gl.attachShader(prog, compile(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FS));
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
-  } catch (e) { console.warn('chrome: falling back', e); return fallback(el, warm, cool, start, end); }
-  gl.useProgram(prog);
-  const vao = gl.createVertexArray(); gl.bindVertexArray(vao);
-  const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-  const tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  const U = {}; for (const k of ['M', 'tx', 'P', 'T', 'SH', 'GL', 'BV', 'W', 'C']) U[k] = gl.getUniformLocation(prog, k);
-  gl.uniform1i(U.M, 0); gl.uniform3fv(U.W, hex(warm)); gl.uniform3fv(U.C, hex(cool));
-  gl.uniform1f(U.SH, reduced ? 0 : shimmer); gl.uniform1f(U.GL, glow);
-
-  // the canvas sits over the element, a little larger so the bloom has room
   const s = el.style, keep = { pos: s.position, color: s.color, fill: s.webkitTextFillColor };
-  if (getComputedStyle(el).position === 'static') s.position = 'relative';
-  canvas.setAttribute('aria-hidden', 'true');
-  Object.assign(canvas.style, { position: 'absolute', pointerEvents: 'none', display: 'block' });
-  el.append(canvas);
+  let canvas = null, gl = null, U = null, tex = null, noGL = false, fb = null, losses = [];
+  let raster = null;       // the rasterised text, kept while the context comes and goes
+  let target = reduced ? 1 : 0, p = target, raf = 0, visible = false, near = false, last = 0, dead = false, fonts = false, ready = false;
 
-  let ready = false, target = reduced ? 1 : 0, p = target, raf = 0, visible = false, last = 0, dead = false;
+  // the plain chrome gradient, only while a context is wanted but can't be had (no WebGL2, the budget is full, lost)
+  const fallbackOn = () => { if (!fb && !dead) fb = fallback(el, warm, cool, start, end); };
+  const fallbackOff = () => { if (fb) { fb(); fb = null; } };
+
+  /* ---------- the WebGL context: held only while the heading is on or near the screen (see ../gpu.js) ---------- */
+  const h = holder({ kind: 'chrome', release: () => drop(true), retry: () => acquire() });
+
+  function create() {
+    const c = document.createElement('canvas');
+    const g = c.getContext('webgl2', { premultipliedAlpha: true, alpha: true, antialias: false });
+    if (!g) return false;
+    const compile = (type, src) => { const sh = g.createShader(type); g.shaderSource(sh, src); g.compileShader(sh); if (!g.getShaderParameter(sh, g.COMPILE_STATUS)) throw new Error(g.getShaderInfoLog(sh)); return sh; };
+    const prog = g.createProgram();
+    try {
+      g.attachShader(prog, compile(g.VERTEX_SHADER, VS)); g.attachShader(prog, compile(g.FRAGMENT_SHADER, FS));
+      g.linkProgram(prog);
+      if (!g.getProgramParameter(prog, g.LINK_STATUS)) throw new Error(g.getProgramInfoLog(prog));
+    } catch (e) { console.warn('chrome: falling back', e); g.getExtension('WEBGL_lose_context')?.loseContext(); return false; }
+    g.useProgram(prog);
+    const vao = g.createVertexArray(); g.bindVertexArray(vao);
+    const buf = g.createBuffer(); g.bindBuffer(g.ARRAY_BUFFER, buf);
+    g.bufferData(g.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), g.STATIC_DRAW);
+    g.enableVertexAttribArray(0); g.vertexAttribPointer(0, 2, g.FLOAT, false, 0, 0);
+    tex = g.createTexture(); g.bindTexture(g.TEXTURE_2D, tex);
+    g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MIN_FILTER, g.LINEAR); g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MAG_FILTER, g.LINEAR);
+    g.texParameteri(g.TEXTURE_2D, g.TEXTURE_WRAP_S, g.CLAMP_TO_EDGE); g.texParameteri(g.TEXTURE_2D, g.TEXTURE_WRAP_T, g.CLAMP_TO_EDGE);
+    U = {}; for (const k of ['M', 'tx', 'P', 'T', 'SH', 'GL', 'BV', 'W', 'C']) U[k] = g.getUniformLocation(prog, k);
+    g.uniform1i(U.M, 0); g.uniform3fv(U.W, hex(warm)); g.uniform3fv(U.C, hex(cool));
+    g.uniform1f(U.SH, reduced ? 0 : shimmer); g.uniform1f(U.GL, glow);
+    canvas = c; gl = g;
+    // the canvas sits over the element, a little larger so the bloom has room
+    if (getComputedStyle(el).position === 'static') s.position = 'relative';
+    c.setAttribute('aria-hidden', 'true');
+    Object.assign(c.style, { position: 'absolute', pointerEvents: 'none', display: 'block' });
+    c.addEventListener('webglcontextlost', onLost);
+    fallbackOff();
+    el.append(c);
+    build();
+    return true;
+  }
+
+  /* Give the context back: the text shows in its own colour (it's off screen) or the fallback (lost while on screen). */
+  function drop(lose) {
+    if (!gl) return;
+    const c = canvas, g = gl;
+    canvas = gl = U = tex = null; ready = false;
+    c.removeEventListener('webglcontextlost', onLost);
+    if (lose) g.getExtension('WEBGL_lose_context')?.loseContext();
+    c.remove();
+    cancelAnimationFrame(raf); raf = 0;
+    s.color = keep.color; s.webkitTextFillColor = keep.fill;
+  }
+  function onLost(e) {
+    e.preventDefault();
+    const t = performance.now();
+    losses = losses.filter((x) => t - x < 30000); losses.push(t);
+    drop(false); h.forget(); fallbackOn();
+    if (losses.length < 3) setTimeout(acquire, 300);
+  }
+  function acquire() {
+    if (dead || noGL || gl || !near || !fonts) return;
+    if (losses.length >= 3 && performance.now() - losses[0] < 30000) return;
+    if (!h.claim()) { if (visible) fallbackOn(); return; }   // retried when a context frees up
+    if (!create()) { noGL = true; h.forget(); fallbackOn(); }
+  }
+
   const draw = (now) => {
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.uniform1f(U.P, p); gl.uniform1f(U.T, reduced ? 0 : now / 1000);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   };
-  const build = () => {
-    if (dead) return;
+  function build() {
+    if (dead || !gl) return;
     const rect = el.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
     const fs = parseFloat(getComputedStyle(el).fontSize) || 16;
@@ -226,50 +269,59 @@ function one(el, { warm = '#ff8a3d', cool = '#3d7bff', start = 0.85, end = 0.3, 
     // the element's border box, relative to its padding box (where absolute children are placed)
     const bl = el.clientLeft, bt = el.clientTop;
     Object.assign(canvas.style, { left: `${-pad - bl}px`, top: `${-pad - bt}px`, width: `${rect.width + pad * 2}px`, height: `${rect.height + pad * 2}px` });
-    const w = Math.round((rect.width + pad * 2) * dpr), h = Math.round((rect.height + pad * 2) * dpr);
-    canvas.width = w; canvas.height = h;
-    const { pixels, size } = rasterise(el, pad, dpr, w, h);
+    const w = Math.round((rect.width + pad * 2) * dpr), hh = Math.round((rect.height + pad * 2) * dpr);
+    canvas.width = w; canvas.height = hh;
+    if (!raster || raster.w !== w || raster.h !== hh) raster = { w, h: hh, dpr, ...rasterise(el, pad, dpr, w, hh) };
     s.color = 'transparent'; s.webkitTextFillColor = 'transparent';
     gl.bindTexture(gl.TEXTURE_2D, tex);
     gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-    gl.uniform2f(U.tx, 1.5 / w, 1.5 / h);
-    gl.uniform1f(U.BV, Math.max(6, size * dpr * 0.03) * 1.6);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, hh, 0, gl.RGBA, gl.UNSIGNED_BYTE, raster.pixels);
+    gl.uniform2f(U.tx, 1.5 / w, 1.5 / hh);
+    gl.uniform1f(U.BV, Math.max(6, raster.size * dpr * 0.03) * 1.6);
     ready = true;
     draw(performance.now());
-  };
+    kick();
+  }
   const loop = (now) => {
     raf = 0;
-    if (!ready || !visible) return;
+    if (!ready || !visible || !gl) return;
     const dt = Math.min(0.5, (now - (last || now)) / 1000); last = now;
     p += (target - p) * (1 - Math.exp(-dt * 5));
     if (Math.abs(target - p) < 0.0005) p = target;
     draw(now);
     raf = requestAnimationFrame(loop);
   };
-  const kick = () => { if (!reduced && visible && !raf) { last = 0; raf = requestAnimationFrame(loop); } };
+  const kick = () => { if (!reduced && visible && ready && !raf) { last = 0; raf = requestAnimationFrame(loop); } };
 
   const stopScroll = reduced ? () => {} : enter(el, (v) => { target = v; kick(); }, { from: start, to: end });
-  const io = new IntersectionObserver((es) => { visible = es.some((e) => e.isIntersecting); if (visible) kick(); }, { rootMargin: '100px' });
-  io.observe(el);
+  const io = new IntersectionObserver((es) => {
+    visible = es.some((e) => e.isIntersecting);
+    h.see(visible);
+    if (visible) { acquire(); kick(); }
+  }, { rootMargin: '100px' });
+  // within a screen of the viewport: get a context ready; more than two and a half screens away: give it back
+  const nearIO = new IntersectionObserver((es) => { near = es.some((e) => e.isIntersecting); if (near) acquire(); }, { rootMargin: '100%' });
+  const farIO = new IntersectionObserver((es) => { if (!es.some((e) => e.isIntersecting)) h.free(); }, { rootMargin: '250%' });
+  io.observe(el); nearIO.observe(el); farIO.observe(el);
   let rz = 0;
-  const ro = new ResizeObserver(() => { cancelAnimationFrame(rz); rz = requestAnimationFrame(build); });
+  const ro = new ResizeObserver(() => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { raster = null; build(); }); });
   ro.observe(el);
-  (document.fonts?.ready ?? Promise.resolve()).then(build);
-  const lost = (e) => { e.preventDefault(); ready = false; };
-  canvas.addEventListener('webglcontextlost', lost);
+  (document.fonts?.ready ?? Promise.resolve()).then(() => { fonts = true; raster = null; if (gl) build(); else acquire(); });
 
-  return () => {
-    dead = true; stopScroll(); io.disconnect(); ro.disconnect(); cancelAnimationFrame(raf); cancelAnimationFrame(rz);
-    canvas.removeEventListener('webglcontextlost', lost);
-    gl.getExtension('WEBGL_lose_context')?.loseContext();
-    canvas.remove();
-    s.position = keep.pos; s.color = keep.color; s.webkitTextFillColor = keep.fill;
+  return {
+    stop() {
+      dead = true; stopScroll(); io.disconnect(); nearIO.disconnect(); farIO.disconnect(); ro.disconnect(); cancelAnimationFrame(raf); cancelAnimationFrame(rz);
+      h.drop(); drop(true); fallbackOff();
+      s.position = keep.pos; s.color = keep.color; s.webkitTextFillColor = keep.fill;
+    },
+    stats: () => ({ effect: 'chrome', mode: gl ? 'gl' : fb ? 'fallback' : 'text', dpr: canvas ? canvas.width / Math.max(1, parseFloat(canvas.style.width)) : 0, visible, hasContext: !!gl }),
   };
 }
 
+/** Returns { stop() } (and stats() for debugging: one entry per element). */
 export function chrome(target, opts = {}) {
-  return { stop: stopAll(resolve(target).map((el) => one(el, opts))) };
+  const all = resolve(target).map((el) => one(el, opts));
+  return { stop: stopAll(all.map((x) => x.stop)), stats: () => all.map((x) => x.stats()) };
 }
 
 export default chrome;

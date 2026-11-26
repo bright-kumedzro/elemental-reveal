@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Performance · Reveal</title>
+  <meta name="description" content="A stress page for Reveal: twenty reveals and a few scroll effects on one page, with live fps, WebGL contexts and render resolution.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0c0c0c">
+  <link rel="icon" href="/bk-mark.png" type="image/png">
+  <style>
+    :root { --bg: #0c0c0c; --surface: #161616; --ink: #f1f1ef; --soft: #8d8d8d; --line: #232323; --accent: #33adff; --leaf: #5cc976; --warn: #ffb347; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif; }
+    header { padding: 72px 16px 40px; max-width: 760px; margin: 0 auto; }
+    h1 { font-weight: 500; font-size: clamp(30px, 6vw, 48px); line-height: 1.05; margin: 0 0 14px; letter-spacing: -0.02em; }
+    h1 span { color: var(--soft); }
+    header p { color: #c9c9c6; margin: 0 0 10px; }
+    code { font: 13px ui-monospace, Consolas, monospace; background: var(--surface); padding: 1px 6px; border-radius: 6px; }
+    .fx { position: relative; height: 72vh; min-height: 320px; margin: 0 0 8vh; overflow: hidden; }
+    .fx .tag { position: absolute; left: 16px; bottom: 14px; font: 12px/1 ui-monospace, Consolas, monospace; background: rgba(0,0,0,.6); color: #fff; padding: 6px 9px; border-radius: 999px; }
+    .chrome { max-width: 1040px; margin: 0 auto 18vh; padding: 0 16px; font-size: clamp(56px, 15vw, 168px); font-weight: 600; letter-spacing: -0.03em; line-height: 1; text-align: center; color: var(--ink); }
+    .words { max-width: 760px; margin: 0 auto 18vh; padding: 0 16px; font-size: clamp(24px, 4.5vw, 40px); font-weight: 500; line-height: 1.2; }
+    .stats { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; margin: 0 auto 18vh; padding: 0 16px; }
+    .stats b { display: block; font-size: clamp(40px, 9vw, 72px); font-weight: 500; line-height: 1; }
+    .stats span { color: var(--soft); font-size: 13px; }
+    #hud { position: fixed; z-index: 10; right: max(8px, env(safe-area-inset-right)); bottom: max(8px, env(safe-area-inset-bottom)); width: min(300px, calc(100vw - 16px));
+      background: rgba(12,12,12,.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: 14px;
+      padding: 10px 12px; font: 12px/1.45 ui-monospace, Consolas, monospace; color: #d4d4d8; }
+    #hud .row { display: flex; justify-content: space-between; gap: 8px; }
+    #hud .big { font-size: 20px; color: var(--ink); }
+    #hud .ok { color: var(--leaf); } #hud .warn { color: var(--warn); }
+    #hud ul { list-style: none; margin: 6px 0 0; padding: 6px 0 0; border-top: 1px solid var(--line); max-height: 30vh; overflow: auto; }
+    #hud li { display: flex; justify-content: space-between; gap: 8px; }
+    #hud li i { font-style: normal; color: var(--soft); }
+    #hud button { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 2px 8px; cursor: pointer; }
+    @media (max-width: 520px) { #hud ul { display: none; } #hud.open ul { display: block; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Performance. <span>Twenty reveals and a few scroll effects on one page.</span></h1>
+    <p>Scroll the whole way down and back. Each reveal only holds a WebGL context while it's on or near the screen, and the page never holds more than the budget. The panel in the corner shows the frame rate, the contexts in use, and the resolution each visible effect renders at (it steps down on its own while frames run slow).</p>
+    <p>Built from the published entries: <code>@brightkumedzro/reveal/elemental/&lt;effect&gt;</code>, <code>/shinobi</code>, <code>/paper</code> and <code>/scroll</code>. Add <code>?budget=4</code> to try a smaller budget.</p>
+  </header>
+
+  <main id="list"></main>
+
+  <aside id="hud" aria-live="off">
+    <div class="row"><span>fps</span><span class="big" id="fps">–</span></div>
+    <div class="row"><span>WebGL contexts</span><span id="ctx">–</span></div>
+    <div class="row"><span>most at once</span><span id="peak">0</span></div>
+    <div class="row"><span>on screen</span><span id="vis">0</span></div>
+    <div class="row"><button type="button" id="more">Details</button><span id="jank"></span></div>
+    <ul id="items"></ul>
+  </aside>
+
+  <script type="module">
+    import { reveal as fire } from '/js/entry/elemental/fire.js';
+    import { reveal as water } from '/js/entry/elemental/water.js';
+    import { reveal as air } from '/js/entry/elemental/air.js';
+    import { reveal as earth } from '/js/entry/elemental/earth.js';
+    import { reveal as lightning } from '/js/entry/elemental/lightning.js';
+    import { reveal as frost } from '/js/entry/elemental/frost.js';
+    import { reveal as snow } from '/js/entry/elemental/snow.js';
+    import { reveal as shinobi } from '/js/shinobi/index.js';
+    import { reveal as paper } from '/js/paper/index.js';
+    import { chrome, words, count, gpu } from '/js/scroll/index.js';
+
+    const q = new URLSearchParams(location.search);
+    if (q.get('budget')) gpu.budget = Math.max(1, Number(q.get('budget')) || gpu.budget);
+
+    const ONE = { fire, water, air, earth, lightning, frost, snow };
+    const PLAN = [
+      'fire', 'clone', 'curl', 'water', 'vortex', ['chrome', 'Shipped.'], 'fold', 'air', 'spiral', 'earth',
+      ['words'], 'blade', 'draw', 'lightning', 'storm', ['stats'], 'frost', 'twister', 'snow', 'magma', ['chrome', 'Twenty.'], 'shuriken', 'fire', 'storm',
+    ];
+    const SHINOBI = ['clone', 'vortex', 'spiral', 'blade', 'storm', 'twister', 'magma', 'shuriken'], PAPER = ['curl', 'fold', 'draw'];
+    const list = document.querySelector('#list');
+    const fxs = [], scrolls = [];
+    for (const item of PLAN) {
+      if (Array.isArray(item)) {
+        const [kind, text] = item;
+        if (kind === 'chrome') { const h = document.createElement('h2'); h.className = 'chrome'; h.textContent = text; list.append(h); scrolls.push(chrome(h)); }
+        if (kind === 'words') { const p = document.createElement('p'); p.className = 'words'; p.textContent = 'Every effect here only works while you can see it. Off screen it stops drawing, and a long way off it gives its graphics context back so the ones on screen can have it.'; list.append(p); scrolls.push(words(p)); }
+        if (kind === 'stats') { const d = document.createElement('div'); d.className = 'stats'; d.innerHTML = '<div><b>20</b><span>reveals on this page</span></div><div><b>8</b><span>contexts at most</span></div><div><b>60</b><span>frames a second, ideally</span></div>'; list.append(d); scrolls.push(count(d.querySelectorAll('b'))); }
+        continue;
+      }
+      const sec = document.createElement('section');
+      sec.className = 'fx';
+      sec.innerHTML = `<span class="tag">${item}</span>`;
+      list.append(sec);
+      const make = ONE[item] || (SHINOBI.includes(item) ? shinobi : PAPER.includes(item) ? paper : null);
+      const fx = make(sec, { effect: item, from: '/demo/sketch.jpg', to: '/demo/final.jpg', credit: false });
+      fx.name = item;
+      fxs.push(fx);
+    }
+
+    // the HUD: fps from animation frames, contexts from the shared budget, each visible effect's resolution
+    let frames = 0, t0 = performance.now(), peak = 0, worst = 0, lastT = 0;
+    const $ = (s) => document.querySelector(s);
+    $('#more').addEventListener('click', () => $('#hud').classList.toggle('open'));
+    function tick(now) {
+      frames++;
+      if (lastT) worst = Math.max(worst, now - lastT);
+      lastT = now;
+      const live = gpu.live;
+      peak = Math.max(peak, live);
+      if (now - t0 >= 500) {
+        const fps = (frames * 1000) / (now - t0);
+        $('#fps').textContent = fps.toFixed(0);
+        $('#fps').className = 'big ' + (fps >= 50 ? 'ok' : 'warn');
+        $('#jank').textContent = `longest frame ${worst.toFixed(0)} ms`;
+        frames = 0; t0 = now; worst = 0;
+        const all = [...fxs.map((f) => f.stats()), ...scrolls.flatMap((s) => (s.stats ? s.stats() : []))];
+        const vis = all.filter((s) => s.visible);
+        $('#vis').textContent = vis.length;
+        $('#items').innerHTML = vis.map((s) => `<li><span>${s.effect}</span><i>${s.mode} · ${s.dpr ? s.dpr.toFixed(2) + '×' : '–'}</i></li>`).join('');
+      }
+      $('#ctx').textContent = `${live} / ${gpu.budget}`;
+      $('#ctx').className = live <= gpu.budget ? 'ok' : 'warn';
+      $('#peak').textContent = peak;
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    // for automated checks
+    window.__perf = { fxs, scrolls, gpu, get peak() { return peak; } };
+  </script>
+</body>
+</html>

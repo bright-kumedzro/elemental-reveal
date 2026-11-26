@@ -28,13 +28,22 @@ import { reveal } from '@brightkumedzro/reveal/shinobi';     // clone · vortex 
 import { reveal } from '@brightkumedzro/reveal/paper';       // curl · fold · draw
 ```
 
+Or just one effect, for the smallest bundle (about 12 to 14 kB gzipped, against 22 to 47 kB for a pack and 89 kB for everything). Every effect has its own entry at `<pack>/<effect>`, and `effect` isn't needed:
+
+```js
+import { reveal } from '@brightkumedzro/reveal/elemental/fire';
+import { reveal } from '@brightkumedzro/reveal/shinobi/storm';
+import { reveal } from '@brightkumedzro/reveal/paper/curl';
+reveal('#hero', { from: '/sketch.png', to: '/final.png' });
+```
+
 Or with no build step, straight from a CDN. Pin the version so updates never change your page unexpectedly:
 
 ```html
 <div id="hero" style="height: 80vh"></div>
 <script type="module">
   import { reveal } from 'https://cdn.jsdelivr.net/npm/@brightkumedzro/reveal@1/js/lib.js';
-  // one pack: …/reveal@1/js/elemental/index.js or …/reveal@1/js/shinobi/index.js
+  // one pack: …/reveal@1/js/elemental/index.js · one effect: …/reveal@1/js/entry/elemental/fire.js
   reveal('#hero', { effect: 'fire', from: '/sketch.png', to: '/final.png' });
 </script>
 ```
@@ -81,7 +90,7 @@ Each returns `{ stop() }`, they share one scroll listener, and with reduced moti
 | `onProgress` | none | Called every frame with progress from 0 to 1 (the draft is gone by about 0.9) |
 | `credit` | `true` | One line crediting the library in the browser console |
 
-`reveal()` returns `{ ready, progress(p?), play(), reset(), sound(on?), destroy() }`. The package also exports `effects` (every effect by name), `packs` (`{ elemental, shinobi }`), `makeReveal(effects)` for your own set, and `VERSION`.
+`reveal()` returns `{ ready, progress(p?), play(), reset(), sound(on?), stats(), destroy() }`; `stats()` is for debugging (what it is drawing with, the resolution it renders at, the recent frame time). The package also exports `effects` (every effect by name), `packs` (`{ elemental, shinobi, paper }`), `makeReveal(effects)` for your own set, `gpu` (the WebGL context budget, see Performance) and `VERSION`.
 
 ## Sound
 
@@ -98,11 +107,26 @@ Every effect has its own sound, synthesised with Web Audio: fire roars and the c
 
 Every reveal on a page shares one sound switch, and the visitor's choice is remembered. A reveal goes quiet when it scrolls out of view.
 
+## Performance
+
+- **Only while it can be seen.** A reveal draws nothing while it's off screen, or finished and still; so does a chrome heading.
+- **A budget for WebGL contexts.** Browsers only allow so many live WebGL contexts (about 16 in Chrome, fewer on some phones), and past that the oldest go blank. So each effect gets its context when it comes within a screen of the viewport and gives it back once it's two and a half screens away, and the whole page holds at most `gpu.budget` (8) at once: when a new one needs a context, the one seen longest ago gives its up first. Until it has one, an effect shows its plain fallback, never a blank box. If the browser takes a context away (a GPU reset, too many tabs), the effect falls back at once and asks for a fresh one.
+- **Resolution that follows the frame rate.** It renders at up to 2× (1.5× on phones and low-core machines, never wider than 3200 px). If frames run slow for about a second it steps its resolution down, no lower than 0.75×, and back up once there's room again. Only the effect's own canvas is resized: no reload, no flash.
+- **Small imports.** One effect is about 12 to 14 kB gzipped, a pack 22 to 47 kB, and the scroll effects tree-shake to what you use (`words` is about 1 kB, `chrome` about 6 kB).
+- Page Curl's cloth simulation sleeps once the sheet has settled and nothing is moving it.
+
+```js
+import { gpu } from '@brightkumedzro/reveal';
+gpu.budget = 6;   // hold fewer contexts at once (default 8)
+gpu.live;         // how many are held right now
+```
+
+See twenty reveals on one page, with live numbers, at [reveal.brightkumedzro.com/perf](https://reveal.brightkumedzro.com/perf).
+
 ## Good to know
 
 - Images from another domain need CORS headers, or WebGL can't read them.
-- Each call gets its own WebGL2 canvas. Browsers cap how many can run at once (often around 16), so call `destroy()` on ones you're done with.
-- On slow devices it drops its render resolution automatically until it's smooth.
+- Call `destroy()` on reveals you're done with; it gives the context back straight away.
 - Without WebGL2 it falls back to a wipe. With reduced motion on it cross-fades, so nothing flashes.
 - It's safe to import during server rendering; it only runs in the browser.
 
@@ -131,6 +155,8 @@ MIT licensed, so use it anywhere. Keeping the copyright notice in the code is th
 |---|---|
 | `js/core.js` | The engine and the site's drawings, shared by both packs |
 | `js/reveal.js` | The library: `makeReveal(effects)` |
+| `js/gpu.js` | The WebGL context budget every reveal and chrome heading shares |
+| `js/entry/` | One entry per effect (`@brightkumedzro/reveal/<pack>/<effect>`), written by `scripts/entries.mjs` |
 | `js/lib.js` | The package's main entry: every effect |
 | `js/elemental/` | The elemental pack: `index.js` (its entry), one file per effect, and `sfx.js`, its sound recipes |
 | `js/shinobi/` | The shinobi pack: `index.js` (its entry), one file per effect, and `sfx*.js`, its sound recipes |

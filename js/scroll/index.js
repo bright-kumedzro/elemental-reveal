@@ -15,3 +15,4 @@ export { zoom } from './zoom.js';
 export { chrome } from './chrome.js';
 export { enter, through, onceVisible, reduced } from './core.js';
 export { VERSION } from '../reveal.js';
+export { gpu } from '../gpu.js';

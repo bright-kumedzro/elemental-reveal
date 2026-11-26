@@ -52,7 +52,7 @@ const id = (i, r) => r * (N + 1) + i;
 function makeSheet() {
   return {
     X: new Float32Array(2 * (N + 1) * 3), PX: new Float32Array(2 * (N + 1) * 3), Wt: new Float32Array(2 * (N + 1)),
-    links: [], W: 1, H: 1, acc: 0, a: 0, posed: false,
+    links: [], W: 1, H: 1, acc: 0, a: 0, posed: false, calm: 0, ver: 0,
     cy: new Spring(0.82, SPRINGS.settle, 1e-3),        // where on the free edge the hand holds (0 top, 1 bottom)
     flick: new Spring(0, SPRINGS.page, 1e-4),          // a click's extra lift, springing back
     data: new Float32Array((N + 1) * (M + 1) * 9),
@@ -79,7 +79,7 @@ function pose(S, a) {
     S.X[k] = S.PX[k] = u * c; S.X[k + 1] = S.PX[k + 1] = r * S.H; S.X[k + 2] = S.PX[k + 2] = u * s;
     S.Wt[id(i, r)] = i === 0 ? 0 : 1;
   }
-  S.acc = 0; S.posed = true;
+  S.acc = 0; S.posed = true; S.calm = 0; S.ver++;
 }
 const PI = Math.PI;
 function step(S, h) {
@@ -116,6 +116,14 @@ function tick(S, dt) {
   S.cy.tick(dt); S.flick.tick(dt);
   S.acc += Math.min(dt, 0.25);
   while (S.acc >= STEP) { step(S, STEP); S.acc -= STEP; }
+  S.ver++;
+}
+/* Has the cloth stopped moving? (the largest distance any point moved in the last step) */
+function settled(S) {
+  const { X, PX } = S;
+  let m = 0;
+  for (let k = 0; k < X.length; k++) { const d = Math.abs(X[k] - PX[k]); if (d > m) m = d; }
+  return m < 2e-5;
 }
 /* The ruled surface between the strips: vertex (i, m) = lerp(top_i, bottom_i, m/M); normal = ∂u × ∂v; bend k. */
 function fill(S) {
@@ -262,18 +270,19 @@ function initGL(ch, gl) {
   gl.bindVertexArray(prevVao); gl.bindBuffer(gl.ARRAY_BUFFER, prevBuf);
   const U = {};
   for (const n of ['uW', 'uD', 'uShadow', 'uLight', 'uDraft']) U[n] = gl.getUniformLocation(prog, n);
-  ch.sheetGL = { prog, vao, vbo, nIdx: idx.length, U };
+  ch.sheetGL = { prog, vao, vbo, nIdx: idx.length, U, ver: -1 };
 }
 
 function drawGL(ch, gl) {
   const G = ch.sheetGL, S = ch.s.sheet;
   if (!G || !S || !live(ch)) return;
-  fill(S);
+  const fresh = G.ver !== S.ver;   // rebuild the mesh only when the sheet has moved
+  if (fresh) { fill(S); G.ver = S.ver; }
   const prevVao = gl.getParameter(gl.VERTEX_ARRAY_BINDING), prevBuf = gl.getParameter(gl.ARRAY_BUFFER_BINDING), prevProg = gl.getParameter(gl.CURRENT_PROGRAM);
   gl.useProgram(G.prog);
   gl.bindVertexArray(G.vao);
   gl.bindBuffer(gl.ARRAY_BUFFER, G.vbo);
-  gl.bufferSubData(gl.ARRAY_BUFFER, 0, S.data);
+  if (fresh) gl.bufferSubData(gl.ARRAY_BUFFER, 0, S.data);
   const D = PERSP * S.W;
   gl.uniform1f(G.U.uW, S.W); gl.uniform1f(G.U.uD, D); gl.uniform2f(G.U.uLight, 0.42, 0.62); gl.uniform1i(G.U.uDraft, 0);   // the draft is already on unit 0
   // the cast shadow, on the design underneath
@@ -318,6 +327,7 @@ const curl = {
   fuel,
   initGL,
   drawGL,
+  releaseGL(ch) { ch.sheetGL = null; },   // the context was given back; initGL builds the mesh again
 
   // dust shaken off where the page has just lifted
   emit(ch, x, y, d, act) { if (d > 0 && d < 0.015 && Math.random() < act * 0.1) mote(ch, x, y); },
@@ -343,8 +353,13 @@ const curl = {
     S.cy.to(fineP ? clamp(1 - ch.ptr.v, 0.06, 0.94) : 0.82);
     if (fineP && a < 0.02 && S.flick.rest) S.flick.to(0.035 * ch.ptr.on * clamp((ch.ptr.u - 0.55) / 0.45, 0, 1));
     else if (S.flick.target > 0 && S.flick.target < 0.05) S.flick.to(0);
-    tick(S, dt || 1 / 60);
-    footprint(S);
+    // once the sheet has settled and nothing is pulling it, the simulation sleeps until scroll or the pointer moves it
+    if (a !== prev) S.calm = 0;
+    if (S.calm < 30 || !S.cy.rest || !S.flick.rest) {
+      tick(S, dt || 1 / 60);
+      S.calm = settled(S) ? S.calm + 1 : 0;
+      footprint(S);
+    }
     steer(ch);
     if (prev < GONE && a >= GONE && ch.sound?.ctx && live(ch)) playFlap(ch.sound, tuned('curl', CURL));
     // dust off the free edge while it moves
