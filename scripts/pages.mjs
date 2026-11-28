@@ -79,6 +79,7 @@ const head = ({ title, description, path, image, script = true, cls = '' }) => `
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">${script ? `
   <script type="module" src="/js/main.js"></script>` : ''}
+  <script src="/site-track.js" defer></script>
 </head>
 <body${cls ? ` class="${cls}"` : ''}>
   <main>`;
@@ -92,7 +93,7 @@ export const FOOTER = `
         <a href="${PLAYGROUND}">Playground</a>
         <a class="talk" href="${HOME}/contact"><i></i>Let's talk</a>
       </nav>
-      <p class="where">Accra, Ghana · 2026</p>
+      <p class="where">Accra, Ghana · 2026 · <a class="stats-link" href="/stats" rel="nofollow">Stats</a></p>
     </footer>`;
 const foot = `
     </section>${FOOTER}

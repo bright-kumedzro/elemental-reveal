@@ -260,6 +260,8 @@ h1, h2 {
 .site-foot .talk i { width: 7px; height: 7px; border-radius: 50%; background: var(--leaf); }
 .site-foot .talk:hover, .site-foot .talk:focus-visible { background: #2389df; }
 .site-foot .where { color: var(--soft); letter-spacing: .12em; text-transform: uppercase; font-size: 11px; }
+.site-foot .where .stats-link { color: var(--faint); text-decoration: none; }
+.site-foot .where .stats-link:hover, .site-foot .where .stats-link:focus-visible { color: var(--soft); outline: none; }
 
 /* ?capture=<chapter> renders one chapter full screen, without the page around it. */
 .capture .intro, .capture .after, .capture .track:not(.cap), .capture .hud, .capture .hint { display: none; }
