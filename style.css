@@ -1,18 +1,9 @@
 /* The same tokens as brightkumedzro.com (its dark theme), so the two read as one site. */
 :root {
-  --bg: #0c0c0c;
-  --surface: #161616;
-  --ink: #f1f1ef;
-  --body: #c9c9c6;
-  --soft: #8d8d8d;
-  --faint: #555;
-  --line: #232323;
-  --accent: #33adff;
-  --leaf: #5cc976;
+  /* colour tokens live in /theme.css (light + dark) */
   --paper: #f1e9d8;
   /* film grain, as on the portfolio */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -62,11 +53,11 @@ main { position: relative; z-index: 1; }
   inset: 0;
   z-index: -1;
   background: var(--grain);
-  opacity: .12;
+  opacity: var(--grain-op);
   mix-blend-mode: screen;
   pointer-events: none;
 }
-.lede a, .after a { color: var(--accent); }
+.lede a, .after a { color: var(--accent-text); }
 
 .chapters { display: flex; flex-wrap: wrap; gap: 10px; }
 .chapters a {
@@ -74,7 +65,7 @@ main { position: relative; z-index: 1; }
   align-items: center;
   gap: 10px;
   padding: 10px 16px 10px 12px;
-  border: 1px solid #2a2a2f;
+  border: 1px solid var(--line2);
   border-radius: 999px;
   color: var(--ink);
   text-decoration: none;
@@ -86,11 +77,12 @@ main { position: relative; z-index: 1; }
   font-variant-numeric: tabular-nums;
   color: #0b0b0c;
   background: var(--c);
+  box-shadow: inset 0 0 0 1px var(--chip-edge);
   border-radius: 999px;
   padding: 2px 7px;
 }
 .chapters a:hover, .chapters a:focus-visible { border-color: var(--c); outline: none; }
-.cue { position: absolute; left: max(16px, calc((100% - 760px) / 2)); bottom: 24px; margin: 0; color: var(--soft); font-size: 13px; }
+.cue { position: absolute; left: max(16px, calc((100% - 760px) / 2)); bottom: 24px; margin: 0; color: var(--muted); font-size: 13px; }
 
 /* ---------- chapters ---------- */
 .track { position: relative; height: 380vh; }
@@ -120,11 +112,11 @@ main { position: relative; z-index: 1; }
 
 .pill {
   margin: 0;
-  background: rgba(14, 14, 16, .74);
+  background: var(--pill-bg);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   color: var(--ink);
-  border: 1px solid rgba(255, 255, 255, .09);
+  border: 1px solid var(--pill-line);
   border-radius: 999px;
   padding: 7px 14px;
   font-size: 13px;
@@ -181,7 +173,7 @@ a.pill:hover, a.pill:focus-visible { border-color: var(--accent); outline: none;
 
 /* small spaced caps, as on the portfolio */
 .eyebrow {
-  color: var(--soft);
+  color: var(--muted);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: .14em;
@@ -203,7 +195,7 @@ h1, h2 {
 
 .elements { margin: 32px 0; display: grid; gap: 22px; }
 .elements div { border-left: 2px solid var(--c); padding-left: 16px; }
-.elements dt { font-weight: 600; color: var(--c); margin-bottom: 4px; }
+.elements dt { font-weight: 600; color: color-mix(in srgb, var(--c) var(--cmix), #000); margin-bottom: 4px; }
 .elements dd { margin: 0; color: var(--body); }
 
 .actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 32px 0 40px; }
@@ -222,13 +214,13 @@ h1, h2 {
 }
 /* buttons keep their own colours inside sections that tint links */
 .after a.btn, .intro a.btn { color: var(--ink); }
-.after a.btn.primary, .intro a.btn.primary { color: #0c0c0c; }
-.btn:hover, .btn:focus-visible { background: #222; outline: none; }
-.btn:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
-.btn.primary { background: var(--ink); color: #0c0c0c; border-color: var(--ink); }
-.btn.primary:hover, .btn.primary:focus-visible { background: #fff; }
+.after a.btn.primary, .intro a.btn.primary { color: var(--on-ink); }
+.btn:hover, .btn:focus-visible { background: var(--surface2); outline: none; }
+.btn:focus-visible { box-shadow: 0 0 0 2px var(--ring); }
+.btn.primary { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+.btn.primary:hover, .btn.primary:focus-visible { background: var(--ink-hover); }
 
-.after .small { font-size: 14px; color: var(--soft); }
+.after .small { font-size: 14px; color: var(--muted); }
 .after .chapters + .small { margin-top: 32px; }
 .after .foot { margin-top: 48px; }
 
@@ -246,11 +238,11 @@ h1, h2 {
   font-size: 13px;
 }
 .site-foot .me { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; }
-.site-foot .me img { width: 34px; height: 34px; border-radius: 9px; }
+.site-foot .me img { width: 34px; height: 34px; border-radius: 9px; filter: var(--mark-filter); }
 .site-foot .me b { display: block; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: 12px; }
-.site-foot .me span { display: block; color: var(--soft); letter-spacing: .12em; text-transform: uppercase; font-size: 11px; margin-top: 2px; }
+.site-foot .me span { display: block; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; font-size: 11px; margin-top: 2px; }
 .site-foot nav { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; }
-.site-foot nav a { color: var(--soft); text-decoration: none; }
+.site-foot nav a { color: var(--muted); text-decoration: none; }
 .site-foot nav a:hover, .site-foot nav a:focus-visible { color: var(--ink); outline: none; }
 .site-foot .talk {
   display: inline-flex; align-items: center; gap: 8px;
@@ -259,16 +251,16 @@ h1, h2 {
 }
 .site-foot .talk i { width: 7px; height: 7px; border-radius: 50%; background: var(--leaf); }
 .site-foot .talk:hover, .site-foot .talk:focus-visible { background: #2389df; }
-.site-foot .where { color: var(--soft); letter-spacing: .12em; text-transform: uppercase; font-size: 11px; }
-.site-foot .where .stats-link { color: var(--faint); text-decoration: none; }
-.site-foot .where .stats-link:hover, .site-foot .where .stats-link:focus-visible { color: var(--soft); outline: none; }
+.site-foot .where { color: var(--muted); letter-spacing: .12em; text-transform: uppercase; font-size: 11px; }
+.site-foot .where .stats-link { color: var(--faint-text); text-decoration: none; }
+.site-foot .where .stats-link:hover, .site-foot .where .stats-link:focus-visible { color: var(--muted); outline: none; }
 
 /* ?capture=<chapter> renders one chapter full screen, without the page around it. */
 .capture .intro, .capture .after, .capture .track:not(.cap), .capture .hud, .capture .hint { display: none; }
 .capture .cap { height: 100vh; }
 
 /* On an element's own page */
-.others-label { margin: 8px 0 12px !important; font-size: 13px; color: var(--soft) !important; }
+.others-label { margin: 8px 0 12px !important; font-size: 13px; color: var(--muted) !important; }
 .elements dt a { color: inherit; text-decoration: none; }
 .elements dt a:hover, .elements dt a:focus-visible { text-decoration: underline; }
 
@@ -288,7 +280,7 @@ h1, h2 {
 .snd:hover, .snd:focus-visible { border-color: var(--c, var(--accent)); outline: none; }
 .snd svg .w, .snd.on svg .x { display: none; }
 .snd.on svg .w { display: inline; }
-.snd.on { color: var(--c, var(--accent)); }
+.snd.on { color: color-mix(in srgb, var(--c, var(--accent)) var(--cmix), #000); }
 .intro .snd { margin-top: 20px; align-self: flex-start; padding: 9px 16px 9px 13px; font-size: 14px; }
 .snd[hidden] { display: none; }
 .pct b { font-weight: inherit; }
@@ -297,7 +289,7 @@ h1, h2 {
 /* ---------- shinobi pack ---------- */
 /* The shinobi pages (body.shinobi) take an orange accent and their own ink: a wash behind the intro, a big brushed
    glyph bleeding off the edge, and a red seal by the title. */
-.shinobi { --accent: #ff8a3d; }
+.shinobi { --accent: #ff8a3d; --accent-text: color-mix(in srgb, #ff8a3d var(--cmix), #000); }
 /* ---------- ink ---------- */
 /* A wash of sumi ink behind the intro, a big brushed glyph bleeding off the edge, and a red seal by the title. */
 .shinobi .intro { overflow: hidden; isolation: isolate; }
@@ -319,7 +311,7 @@ h1, h2 {
   z-index: -1;
   margin: 0;
   font: 400 clamp(260px, 52vw, 620px)/1 "Yu Mincho", "Hiragino Mincho ProN", "Noto Serif CJK JP", "Noto Serif JP", serif;
-  color: rgba(241, 241, 239, .045);
+  color: var(--seal-glyph);
   pointer-events: none;
   user-select: none;
 }
@@ -338,7 +330,7 @@ h1, h2 {
   transform: rotate(6deg);
   box-shadow: inset 0 0 0 3px rgba(251, 238, 230, .25);
 }
-.shinobi .intro .chapters a { background: rgba(11, 11, 12, .6); }
+.shinobi .intro .chapters a { background: var(--soft-chip); }
 .shinobi .credit { margin-top: 20px !important; }
 
 /* ---------- landing ---------- */
@@ -347,7 +339,7 @@ h1, h2 {
 .home .intro h1 { max-width: 860px; margin: 0 auto 32px; font-size: clamp(30px, 4.6vw, 46px); }
 .home .intro .actions { justify-content: center; margin: 0; }
 .home .install { margin: 22px auto 0; display: inline-flex; gap: 10px; align-items: center; padding: 8px 8px 8px 16px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font: 13px/1 ui-monospace, Consolas, monospace; color: var(--ink); }
-.home .install span { color: var(--faint); }
+.home .install span { color: var(--faint-text); }
 .after.packs { padding: 24px max(16px, calc((100% - 1100px) / 2)) 72px; }
 .packs .grid { max-width: 1100px; margin: 0 auto; display: grid; gap: 18px; grid-template-columns: 1fr; }
 @media (min-width: 860px) { .packs .grid { grid-template-columns: 1fr 1fr; } }
@@ -358,8 +350,8 @@ h1, h2 {
 .packs .pack .txt { padding: 20px 12px 0; display: flex; flex-direction: column; flex: 1; }
 .packs .pack h2 { font-size: clamp(24px, 3vw, 30px); margin: 0 0 10px; }
 .packs .pack h2 a { color: inherit; text-decoration: none; }
-.packs .pack h2 a:hover, .packs .pack h2 a:focus-visible { color: var(--c); outline: none; }
-.packs .pack .eyebrow { color: var(--c); margin-bottom: 8px; }
+.packs .pack h2 a:hover, .packs .pack h2 a:focus-visible { color: color-mix(in srgb, var(--c) var(--cmix), #000); outline: none; }
+.packs .pack .eyebrow { color: color-mix(in srgb, var(--c) var(--cmix), #000); margin-bottom: 8px; }
 .packs .pack p { font-size: 15px; }
 .packs .pack .chapters { margin: 6px 0 18px; gap: 8px; }
 .packs .pack .chapters a { font-size: 13px; padding: 7px 12px 7px 8px; }
@@ -371,17 +363,17 @@ h1, h2 {
 .pack-intro { align-items: center; text-align: center; padding-top: 112px; padding-bottom: 56px; }
 .pack-intro h1 { max-width: 900px; margin: 0 auto 32px; font-size: clamp(30px, 4.6vw, 46px); }
 .pack-intro h1 .seal { display: inline-grid; vertical-align: .08em; margin: 0 .12em; width: .95em; font-size: .9em; }
-.pack-intro .banner { display: block; width: min(100%, 900px); aspect-ratio: 40 / 21; margin: 0 auto 28px; border-radius: 22px; overflow: hidden; background: var(--surface); box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
+.pack-intro .banner { display: block; width: min(100%, 900px); aspect-ratio: 40 / 21; margin: 0 auto 28px; border-radius: 22px; overflow: hidden; background: var(--surface); box-shadow: var(--shadow-lg); }
 .pack-intro .banner img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .8s ease; }
 .pack-intro .banner:hover img, .pack-intro .banner:focus-visible img { transform: scale(1.025); }
 .pack-intro .chapters { justify-content: center; max-width: 900px; }
 .pack-intro .go { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 26px; flex-wrap: wrap; }
 .pack-intro .go .snd { margin: 0; }
-.pack-intro .cue { position: static; color: var(--soft); font-size: 13px; }
+.pack-intro .cue { position: static; color: var(--muted); font-size: 13px; }
 .pack-intro .cue span { display: inline-block; animation: nudge 1.8s ease-in-out infinite; }
 @keyframes nudge { 50% { transform: translateY(4px); } }
 @media (prefers-reduced-motion: reduce) { .pack-intro .cue span { animation: none; } }
-.shinobi .pack-intro .chapters a { background: rgba(12, 12, 12, .6); }
+.shinobi .pack-intro .chapters a { background: var(--soft-chip); }
 
 .fx-cards { display: grid; gap: 12px; grid-template-columns: 1fr; margin: 32px 0; }
 @media (min-width: 640px) { .fx-cards { grid-template-columns: 1fr 1fr; } }
@@ -390,9 +382,9 @@ h1, h2 {
 .fx-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .fx .num { font-size: 12px; font-variant-numeric: tabular-nums; color: #0c0c0c; background: var(--c); border-radius: 999px; padding: 2px 7px; }
 .fx b { font-weight: 600; }
-.fx .name { color: var(--soft); font-size: 13px; }
+.fx .name { color: var(--muted); font-size: 13px; }
 .fx-body { color: var(--body); font-size: 14px; line-height: 1.55; }
-.fx-go { margin-top: auto; color: var(--c); font-size: 13px; font-weight: 600; }
+.fx-go { margin-top: auto; color: color-mix(in srgb, var(--c) var(--cmix), #000); font-size: 13px; font-weight: 600; }
 
 /* ---------- scroll effects ---------- */
 /* the demo sections on /scroll: each brings its own content styles; these are the shared frame and code blocks */
@@ -402,12 +394,18 @@ h1, h2 {
 .sd-code {
   margin: 28px 0 0; padding: 16px 18px; overflow-x: auto;
   background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
-  font: 13px/1.7 ui-monospace, Consolas, monospace; color: #d4d4d8;
+  font: 13px/1.7 ui-monospace, Consolas, monospace; color: var(--text2);
 }
-.sd-code .k { color: #c4a7ff; } .sd-code .s { color: #9be29b; } .sd-code .c { color: var(--soft); }
+.sd-code .k { color: var(--syn-k-sd); } .sd-code .s { color: var(--syn-s-sd); } .sd-code .c { color: var(--muted); }
 .after .sd-code { margin: 0 0 24px; }
 .sd pre { max-width: 100%; overflow-x: auto; }
 .after code, .sd code { font: 13px ui-monospace, Consolas, monospace; background: var(--surface); padding: 1px 6px; border-radius: 6px; }
 .scrollfx .pack-intro .install { margin: 22px auto 0; display: inline-flex; gap: 10px; align-items: center; padding: 8px 16px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font: 13px/1 ui-monospace, Consolas, monospace; }
-.scrollfx .pack-intro .install span { color: var(--faint); }
+.scrollfx .pack-intro .install span { color: var(--faint-text); }
 .packs .grid > .pack:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+/* ---------- feedback widget (host custom properties, see feedback.brightkumedzro.com/w.js) ---------- */
+/* effect pages: lift the launcher above the sound / progress pills in the bottom-right of each stage */
+html:has(.track) { --feedback-offset: calc(46px + env(safe-area-inset-bottom)); }
+/* recording mode (?capture): no launcher, same as the theme toggle */
+.capture { --feedback-launcher: hidden; }

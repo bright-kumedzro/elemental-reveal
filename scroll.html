@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Scroll effects · Reveal · Bright Kumedzro</title>
   <meta name="description" content="Scrollytelling effects for your own content: words that light up, numbers that count, lines that draw themselves, type that masks a picture, pinned steps, frame scrubbing, zoom-throughs and liquid chrome type.">
-  <meta name="theme-color" content="#0c0c0c">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0c0c0c" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://reveal.brightkumedzro.com/scroll">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://reveal.brightkumedzro.com/scroll">
@@ -20,7 +21,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/theme.css">
   <link rel="stylesheet" href="/style.css">
+  <script src="/theme.js"></script>
   <script src="/site-track.js" defer></script>
 </head>
 <body class="scrollfx">
@@ -54,7 +57,7 @@ words(<span class="s">'#manifesto'</span>);</pre>
   <style>
     .sd-words .sd-stage { min-height: 130vh; display: flex; align-items: center; }
     .sd-manifesto { margin: 0; max-width: 900px; font-size: clamp(26px, 3.8vw, 44px); line-height: 1.28; letter-spacing: -.02em; font-weight: 500; color: var(--ink); }
-    .sd-manifesto em { font-style: normal; color: var(--accent); }
+    .sd-manifesto em { font-style: normal; color: var(--accent-text); }
   </style>
   <script type="module">
     import { words } from '/js/scroll/words.js';
@@ -80,7 +83,7 @@ count(<span class="s">'.sd-n'</span>);   <span class="c">// "1,000+", "£2.3m", 
     .sd-stats { margin: 0; width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px 24px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 36px 0; }
     @media (min-width: 760px) { .sd-stats { grid-template-columns: repeat(4, 1fr); } }
     .sd-stats dt { font-size: clamp(36px, 6vw, 60px); line-height: 1; font-weight: 500; letter-spacing: -.03em; color: var(--ink); }
-    .sd-stats dd { margin: 10px 0 0; color: var(--soft); font-size: 14px; }
+    .sd-stats dd { margin: 10px 0 0; color: var(--muted); font-size: 14px; }
   </style>
   <script type="module">
     import { count } from '/js/scroll/count.js';
@@ -93,11 +96,11 @@ count(<span class="s">'.sd-n'</span>);   <span class="c">// "1,000+", "£2.3m", 
     #lines .lines-demo { margin: 36px 0 28px; padding: clamp(12px, 3vw, 28px); border-radius: 22px; background: var(--surface, #161616); border: 1px solid var(--line, #232323); overflow: hidden; }
     #lines svg { display: block; width: 100%; height: auto; overflow: visible; }
     #lines .ink { fill: none; stroke: var(--ink, #f1f1ef); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    #lines .leaf { fill: rgba(241, 241, 239, .08); }
+    #lines .leaf { fill: color-mix(in srgb, var(--ink) 8%, transparent); }
     #lines .start { fill: var(--accent, #33adff); stroke: var(--accent, #33adff); stroke-width: 2; }
     #lines .label { font: 500 21px Caveat, "Segoe Print", cursive; fill: var(--ink, #f1f1ef); opacity: 0; transition: opacity .35s ease; }
     #lines .label.on { opacity: 1; }
-    #lines .all { font: 600 20px Caveat, "Segoe Print", cursive; fill: var(--soft, #8d8d8d); }
+    #lines .all { font: 600 20px Caveat, "Segoe Print", cursive; fill: var(--muted, #8d8d8d); }
     @media (prefers-reduced-motion: reduce) { #lines .label { transition: none; } }
   </style>
   <p class="eyebrow">Scroll · Lines</p>
@@ -187,16 +190,16 @@ mask(<span class="s">'#masked'</span>, { src: <span class="s">'/og/shinobi.png'<
     #steps .steps-demo { --steps-visual-h: 380px; --steps-bg: var(--bg, #0c0c0c); margin: 36px 0 28px; }
     #steps .card { height: var(--steps-visual-h); border-radius: 22px; background: var(--surface, #161616); border: 1px solid var(--line, #232323); display: grid; place-items: center; overflow: hidden; position: relative; }
     #steps .card svg { width: 78%; height: auto; overflow: visible; }
-    #steps .card .tag { position: absolute; top: 16px; left: 18px; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
+    #steps .card .tag { position: absolute; top: 16px; left: 18px; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: color-mix(in srgb, var(--c) var(--cmix), #000); }
     #steps .card .ln { fill: none; stroke: var(--ink, #f1f1ef); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     #steps .card .soft { stroke: var(--soft, #8d8d8d); }
     #steps .card .acc { stroke: var(--c); }
     #steps .card .fillc { fill: var(--c); }
     #steps ol { list-style: none; margin: 0; padding: 0; }
     #steps li h3 { margin: 0 0 8px; font-size: clamp(22px, 3vw, 28px); font-weight: 500; letter-spacing: -.02em; }
-    #steps li h3 span { color: var(--soft, #8d8d8d); font-size: .6em; font-variant-numeric: tabular-nums; margin-right: 10px; letter-spacing: 0; }
+    #steps li h3 span { color: var(--muted, #8d8d8d); font-size: .6em; font-variant-numeric: tabular-nums; margin-right: 10px; letter-spacing: 0; }
     #steps li p { margin: 0; color: var(--body, #c9c9c6); max-width: 420px; }
-    #steps li.is-active h3 span { color: var(--c); }
+    #steps li.is-active h3 span { color: color-mix(in srgb, var(--c) var(--cmix), #000); }
     @media (max-width: 760px) { #steps .steps-demo { --steps-visual-h: 230px; } #steps .card svg { width: 60%; } }
   </style>
   <p class="eyebrow">Scroll · Steps</p>
@@ -283,13 +286,15 @@ steps(<span class="s">'[data-steps]'</span>, { onStep: (i) =&gt; chart.show(i) }
     #scrub .sd-head h2 { margin-bottom: 16px; }
     #scrub .sd-head p { color: var(--body); margin: 0; }
     #scrub .sd-track { position: relative; height: 320vh; }
+    /* the pinned stage follows the theme (scrub paints it dark by default, so this wins over its inline style) */
+    #scrub [data-scrub-stage] { background: var(--surface) !important; }
     #scrub .sd-stage { height: 100vh; height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 0 16px; }
-    #scrub .sd-frame { position: relative; width: min(100%, 1100px, 150vh); aspect-ratio: 960 / 504; border-radius: 22px; overflow: hidden; background: var(--surface); box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
-    #scrub .sd-cap { margin: 0; color: var(--soft); font-size: 13px; font-variant-numeric: tabular-nums; }
+    #scrub .sd-frame { position: relative; width: min(100%, 1100px, 150vh); aspect-ratio: 960 / 504; border-radius: 22px; overflow: hidden; background: var(--surface); box-shadow: var(--shadow-lg); }
+    #scrub .sd-cap { margin: 0; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
     #scrub .sd-cap b { color: var(--ink); font-weight: 600; }
     #scrub .sd-code { max-width: 760px; margin: 32px auto 96px; padding: 0 16px; }
     #scrub pre { margin: 0; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; font: 13px/1.6 ui-monospace, Consolas, monospace; color: var(--body); }
-    #scrub pre .k { color: #c084fc; } #scrub pre .s { color: #86efac; } #scrub pre .c { color: var(--soft); }
+    #scrub pre .k { color: var(--syn-k-sc); } #scrub pre .s { color: var(--syn-s); } #scrub pre .c { color: var(--muted); }
   </style>
   <div class="sd-head">
     <p class="eyebrow">Scroll · Scrub</p>
@@ -330,16 +335,16 @@ scrub(<span class="s">'.product'</span>, {
     #zoom .sd-head p { color: var(--body); margin: 0; }
     #zoom .sd-track { position: relative; height: 420vh; }
     #zoom [data-zoom-scene] { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; background: var(--bg, #0c0c0c); padding: 0 16px; }
-    #zoom .board { position: relative; width: min(100%, 1100px, 150vh); aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .45); background: var(--surface); }
+    #zoom .board { position: relative; width: min(100%, 1100px, 150vh); aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; box-shadow: var(--shadow-lg); background: var(--surface); }
     #zoom .board img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
     /* where the camera dives in: the hero visual box on the sketch, the chart panel on the design */
     #zoom .spot { position: absolute; left: 57%; top: 18.6%; width: 39.1%; height: 52.1%; border-radius: 6px; outline: 2px dashed rgba(51, 173, 255, .7); outline-offset: 4px; }
-    #zoom .spot span { position: absolute; left: 50%; top: -34px; transform: translateX(-50%); white-space: nowrap; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent, #33adff); }
-    #zoom .cap { margin: 0; color: var(--soft); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+    #zoom .spot span { position: absolute; left: 50%; top: -34px; transform: translateX(-50%); white-space: nowrap; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-text, #33adff); }
+    #zoom .cap { margin: 0; color: var(--muted); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
     #zoom .cap b { color: var(--ink); font-weight: 600; }
     #zoom .sd-code { max-width: 760px; margin: 32px auto 96px; padding: 0 16px; }
     #zoom pre { margin: 0; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; font: 13px/1.6 ui-monospace, Consolas, monospace; color: var(--body); }
-    #zoom pre .k { color: #c084fc; } #zoom pre .s { color: #86efac; } #zoom pre .c { color: var(--soft); }
+    #zoom pre .k { color: var(--syn-k-sc); } #zoom pre .s { color: var(--syn-s); } #zoom pre .c { color: var(--muted); }
   </style>
   <div class="sd-head">
     <p class="eyebrow">Scroll · Zoom</p>
@@ -405,7 +410,7 @@ chrome(<span class="s">'#chromed'</span>, { warm: <span class="s">'#ff5a1f'</spa
     .sd-tints { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 0 16px; }
     .sd-tints .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; font-size: 13px; }
     .sd-tints .btn i { width: 10px; height: 10px; border-radius: 50%; }
-    .sd-tints .btn[aria-pressed="true"] { background: var(--ink); color: #0c0c0c; border-color: var(--ink); }
+    .sd-tints .btn[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
   </style>
   <script type="module">
     import { chrome } from '/js/scroll/chrome.js';
@@ -451,5 +456,6 @@ mask(<span class="s">'#title'</span>, { src: <span class="s">'/hero.jpg'</span> 
       <p class="where">Accra, Ghana · 2026 · <a class="stats-link" href="/stats" rel="nofollow">Stats</a></p>
     </footer>
   </main>
+  <script src="https://feedback.brightkumedzro.com/w.js" data-site="L03zWAze4Z6UtfI7" async></script>
 </body>
 </html>

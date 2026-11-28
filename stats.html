@@ -10,18 +10,20 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/theme.css">
   <link rel="stylesheet" href="/style.css">
+  <script src="/theme.js"></script>
   <style>
-    :root { --grid: var(--line); --mark: var(--accent); --muted: var(--soft); }
+    :root { --grid: var(--line); --mark: var(--accent); }
     .wrap { max-width: 980px; margin: 0 auto; padding: 56px 16px 80px; }
     .wrap h1 { font-size: clamp(32px, 6vw, 52px); margin: 0 0 10px; }
-    .sub { color: #d4d4d8; margin: 0 0 8px; max-width: 640px; }
+    .sub { color: var(--text2); margin: 0 0 8px; max-width: 640px; }
     /* the headline numbers: big figure, one line under it, between two hairlines */
     .figures { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 24px; border-top: 1px solid var(--grid); border-bottom: 1px solid var(--grid); padding: 32px 0; margin: 36px 0 40px; }
     @media (min-width: 720px) { .figures { grid-template-columns: repeat(4, 1fr); } }
     .figures dd { margin: 0; }
     .figures .n { font-size: clamp(1.9rem, 4vw, 2.4rem); line-height: 1; font-weight: 500; letter-spacing: -.03em; color: var(--ink); font-variant-numeric: tabular-nums; }
-    .figures .l { margin-top: 8px; font-size: 13px; line-height: 1.4; color: var(--soft); }
+    .figures .l { margin-top: 8px; font-size: 13px; line-height: 1.4; color: var(--muted); }
     .card { background: var(--surface); border: 1px solid var(--grid); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
     .card h2 { font-size: 15px; font-weight: 600; margin: 0 0 2px; letter-spacing: 0; }
     .card .cap { color: var(--muted); font-size: 12px; margin: 0 0 16px; }
@@ -30,16 +32,16 @@
     .chart { position: relative; }
     .chart svg { display: block; width: 100%; height: 220px; overflow: visible; }
     .chart .axis { fill: var(--muted); font: 11px "Plus Jakarta Sans", system-ui; font-variant-numeric: tabular-nums; }
-    .chart .tip { position: absolute; pointer-events: none; background: #1d1d21; border: 1px solid #2e2e33; border-radius: 10px; padding: 8px 10px; font-size: 12px; white-space: nowrap; transform: translate(-50%, -100%); opacity: 0; transition: opacity .12s; }
+    .chart .tip { position: absolute; pointer-events: none; background: var(--tip-bg); border: 1px solid var(--input-line); border-radius: 10px; padding: 8px 10px; font-size: 12px; white-space: nowrap; transform: translate(-50%, -100%); opacity: 0; transition: opacity .12s; }
     .chart .tip b { font-size: 14px; }
     .meters { display: grid; gap: 12px; }
     .meter { display: grid; grid-template-columns: 90px 1fr 64px; align-items: center; gap: 12px; font-size: 14px; }
     .meter .track { height: 10px; background: var(--grid); border-radius: 0 4px 4px 0; position: relative; }
     .meter .fill { position: absolute; inset: 0 auto 0 0; background: var(--mark); border-radius: 0 4px 4px 0; }
-    .meter .fig { text-align: right; font-variant-numeric: tabular-nums; color: var(--soft); }
+    .meter .fig { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
     .empty { color: var(--muted); font-size: 14px; padding: 4px 0; }
     .fine { color: var(--muted); font-size: 13px; margin-top: 28px; }
-    .fine a { color: var(--accent); }
+    .fine a { color: var(--accent-text); }
     .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
     .sec { font-size: clamp(22px, 3.4vw, 30px); margin: 56px 0 6px; }
     .figures .l a { color: inherit; }
@@ -48,14 +50,14 @@
     .show a:hover, .show a:focus-visible { border-color: var(--mark); outline: none; }
     .show b { display: block; font-weight: 600; overflow-wrap: anywhere; }
     .show span { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; }
-    .join pre { margin: 0; overflow-x: auto; background: #0b0b0c; border: 1px solid var(--grid); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #d4d4d8; }
-    .join pre b { color: var(--mark); font-weight: 600; }
+    .join pre { margin: 0; overflow-x: auto; background: var(--input-bg); border: 1px solid var(--grid); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: var(--text2); }
+    .join pre b { color: var(--accent-text); font-weight: 600; }
     .owner { margin-top: 40px; }
     .submit { display: flex; gap: 8px; flex-wrap: wrap; margin: 0; }
-    .submit input { flex: 1; min-width: 200px; background: #0b0b0c; color: var(--ink); border: 1px solid #2e2e33; border-radius: 10px; padding: 11px 14px; font: inherit; }
-    .submit input:focus-visible { outline: 2px solid var(--mark); outline-offset: 1px; }
+    .submit input { flex: 1; min-width: 200px; background: var(--input-bg); color: var(--ink); border: 1px solid var(--input-line); border-radius: 10px; padding: 11px 14px; font: inherit; }
+    .submit input:focus-visible { outline: 2px solid var(--ring); outline-offset: 1px; }
     .owner .bar { display: flex; gap: 8px; flex-wrap: wrap; }
-    .owner input { flex: 1; min-width: 180px; background: #0b0b0c; color: var(--ink); border: 1px solid #2e2e33; border-radius: 10px; padding: 9px 12px; font: inherit; }
+    .owner input { flex: 1; min-width: 180px; background: var(--input-bg); color: var(--ink); border: 1px solid var(--input-line); border-radius: 10px; padding: 9px 12px; font: inherit; }
     .owner table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13px; }
     .owner td { padding: 8px 6px; border-top: 1px solid var(--grid); vertical-align: middle; }
     .owner td:last-child { text-align: right; white-space: nowrap; }
@@ -252,7 +254,7 @@
         try { localStorage.setItem(KEY, token); } catch { /* private mode */ }
         const sites = ((await r.json()).sites || []).filter((s) => s.showcase);
         $('#owner-list').innerHTML = sites.length
-          ? `<table>${sites.map((s) => `<tr><td><a href="https://${esc(s.site)}" target="_blank" rel="noopener" style="color:var(--accent)">${esc(s.site)}</a></td><td>${esc(s.showcase)}</td><td>${fmt(s.loads)} loads</td><td><button class="btn small" data-site="${esc(s.site)}" data-status="approved">Approve</button><button class="btn small" data-site="${esc(s.site)}" data-status="hidden">Hide</button></td></tr>`).join('')}</table>`
+          ? `<table>${sites.map((s) => `<tr><td><a href="https://${esc(s.site)}" target="_blank" rel="noopener" style="color:var(--accent-text)">${esc(s.site)}</a></td><td>${esc(s.showcase)}</td><td>${fmt(s.loads)} loads</td><td><button class="btn small" data-site="${esc(s.site)}" data-status="approved">Approve</button><button class="btn small" data-site="${esc(s.site)}" data-status="hidden">Hide</button></td></tr>`).join('')}</table>`
           : '<p class="empty">No requests yet.</p>';
       }
       $('#owner-form').addEventListener('submit', (e) => { e.preventDefault(); token = $('#token').value.trim(); load(); });
@@ -266,5 +268,6 @@
       if (token) load();
     }
   </script>
+  <script src="https://feedback.brightkumedzro.com/w.js" data-site="L03zWAze4Z6UtfI7" async></script>
 </body>
 </html>

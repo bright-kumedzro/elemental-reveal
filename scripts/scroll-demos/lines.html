@@ -3,11 +3,11 @@
     #lines .lines-demo { margin: 36px 0 28px; padding: clamp(12px, 3vw, 28px); border-radius: 22px; background: var(--surface, #161616); border: 1px solid var(--line, #232323); overflow: hidden; }
     #lines svg { display: block; width: 100%; height: auto; overflow: visible; }
     #lines .ink { fill: none; stroke: var(--ink, #f1f1ef); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    #lines .leaf { fill: rgba(241, 241, 239, .08); }
+    #lines .leaf { fill: color-mix(in srgb, var(--ink) 8%, transparent); }
     #lines .start { fill: var(--accent, #33adff); stroke: var(--accent, #33adff); stroke-width: 2; }
     #lines .label { font: 500 21px Caveat, "Segoe Print", cursive; fill: var(--ink, #f1f1ef); opacity: 0; transition: opacity .35s ease; }
     #lines .label.on { opacity: 1; }
-    #lines .all { font: 600 20px Caveat, "Segoe Print", cursive; fill: var(--soft, #8d8d8d); }
+    #lines .all { font: 600 20px Caveat, "Segoe Print", cursive; fill: var(--muted, #8d8d8d); }
     @media (prefers-reduced-motion: reduce) { #lines .label { transition: none; } }
   </style>
   <p class="eyebrow">Scroll · Lines</p>

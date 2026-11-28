@@ -62,7 +62,8 @@ const head = ({ title, description, path, image, script = true, cls = '' }) => `
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>${esc(title)} · Bright Kumedzro</title>
   <meta name="description" content="${esc(description)}">
-  <meta name="theme-color" content="#0c0c0c">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0c0c0c" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="${SITE}${path}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="${SITE}${path}">
@@ -77,7 +78,9 @@ const head = ({ title, description, path, image, script = true, cls = '' }) => `
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/style.css">${script ? `
+  <link rel="stylesheet" href="/theme.css">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/theme.js"></script>${script ? `
   <script type="module" src="/js/main.js"></script>` : ''}
   <script src="/site-track.js" defer></script>
 </head>
@@ -98,6 +101,7 @@ export const FOOTER = `
 const foot = `
     </section>${FOOTER}
   </main>
+  <script src="https://feedback.brightkumedzro.com/w.js" data-site="L03zWAze4Z6UtfI7" async></script>
 </body>
 </html>
 `;

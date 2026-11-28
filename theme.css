@@ -1,0 +1,91 @@
+/* Theme tokens, shared with brightkumedzro.com so all the tools read as one family. Light is the default; dark follows
+   the system, or the choice saved by /theme.js (data-theme on <html>). The dark values are what the site always had. */
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --surface: #f5f5f4;
+  --ink: #161616;
+  --soft: #8b8b8b;
+  --faint: #b9b9b9;
+  --line: #ececea;
+  --accent: #0099ff;
+  --ring: #0071bd;          /* focus ring: the accent, darkened enough to be seen on white */
+  /* added for the site's own UI */
+  --body: #3f3f3d;          /* paragraph text */
+  --muted: #6b6b6b;         /* small grey text that must stay readable (soft is for decoration) */
+  --faint-text: #767676;    /* the quietest text, still 4.5:1 */
+  --accent-text: #0071bd;   /* accent colour used as text */
+  --text2: #3f3f3d;         /* docs paragraphs and table cells */
+  --surface2: #ebebe9;      /* hover fill, one step above surface */
+  --line2: #d9d9d5;         /* stronger border: chips, inputs */
+  --on-ink: #ffffff;        /* text on an --ink button */
+  --ink-hover: #3a3a3a;
+  --pill-bg: rgba(255, 255, 255, .82);
+  --pill-line: rgba(0, 0, 0, .1);
+  --leaf: #267a3f;
+  --warn: #a35f00;
+  --code-bg: #f3f3f1;
+  --code-ink: #2a2a28;
+  --code-line: #e2e2de;
+  --code-inline-bg: #ececea;
+  --code-inline-line: #d9d9d5;
+  --syn-k: #6d4fd1; --syn-k-sd: #6d4fd1; --syn-k-sc: #6d4fd1;
+  --syn-s: #1a7a3a; --syn-s-sd: #1a7a3a; --syn-c: #6b6b6b;
+  --input-bg: #ffffff; --input-line: #8c8c88;
+  --tip-bg: #ffffff;
+  --shadow: 0 20px 50px rgba(0, 0, 0, .14);
+  --shadow-lg: 0 30px 80px rgba(0, 0, 0, .18);
+  --panel: #f8f8f6; --veil: rgba(0, 0, 0, .03); --veil-line: rgba(0, 0, 0, .1); --hud-bg: rgba(255, 255, 255, .9);
+  --mark-filter: invert(1); /* the logo mark is white on transparent */
+  --grain-op: 0;            /* film grain is a dark-mode texture */
+  --seal-glyph: rgba(22, 22, 22, .05);
+  --cmix: 48%;              /* how much of a pack colour is kept when it is used as text (see --c) */
+  --chip-edge: rgba(0, 0, 0, .14);
+  --soft-chip: rgba(255, 255, 255, .7);
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0c0c0c; --surface: #161616; --ink: #f1f1ef; --soft: #8d8d8d; --faint: #555555; --line: #232323; --accent: #33adff; --ring: #33adff;
+  --body: #c9c9c6; --muted: #8d8d8d; --faint-text: #555555; --accent-text: #33adff; --text2: #d4d4d8;
+  --surface2: #222222; --line2: #2a2a2f; --on-ink: #0c0c0c; --ink-hover: #ffffff;
+  --pill-bg: rgba(14, 14, 16, .74); --pill-line: rgba(255, 255, 255, .09);
+  --leaf: #5cc976; --warn: #ffb347;
+  --code-bg: #111114; --code-ink: #e4e4e7; --code-line: #232323; --code-inline-bg: #17171a; --code-inline-line: #26262b;
+  --syn-k: #c4b5fd; --syn-k-sd: #c4a7ff; --syn-k-sc: #c084fc; --syn-s: #86efac; --syn-s-sd: #9be29b; --syn-c: #71717a;
+  --input-bg: #0b0b0c; --input-line: #2e2e33; --tip-bg: #1d1d21;
+  --shadow: 0 20px 50px rgba(0, 0, 0, .4); --shadow-lg: 0 30px 80px rgba(0, 0, 0, .45);
+  --panel: #111113; --veil: rgba(255, 255, 255, .04); --veil-line: rgba(255, 255, 255, .12); --hud-bg: rgba(12, 12, 12, .88);
+  --mark-filter: none; --grain-op: .12; --seal-glyph: rgba(241, 241, 239, .045); --cmix: 100%; --chip-edge: transparent; --soft-chip: rgba(11, 11, 12, .6);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0c0c0c; --surface: #161616; --ink: #f1f1ef; --soft: #8d8d8d; --faint: #555555; --line: #232323; --accent: #33adff; --ring: #33adff;
+    --body: #c9c9c6; --muted: #8d8d8d; --faint-text: #555555; --accent-text: #33adff; --text2: #d4d4d8;
+    --surface2: #222222; --line2: #2a2a2f; --on-ink: #0c0c0c; --ink-hover: #ffffff;
+    --pill-bg: rgba(14, 14, 16, .74); --pill-line: rgba(255, 255, 255, .09);
+    --leaf: #5cc976; --warn: #ffb347;
+    --code-bg: #111114; --code-ink: #e4e4e7; --code-line: #232323; --code-inline-bg: #17171a; --code-inline-line: #26262b;
+    --syn-k: #c4b5fd; --syn-k-sd: #c4a7ff; --syn-k-sc: #c084fc; --syn-s: #86efac; --syn-s-sd: #9be29b; --syn-c: #71717a;
+    --input-bg: #0b0b0c; --input-line: #2e2e33; --tip-bg: #1d1d21;
+    --shadow: 0 20px 50px rgba(0, 0, 0, .4); --shadow-lg: 0 30px 80px rgba(0, 0, 0, .45);
+    --panel: #111113; --veil: rgba(255, 255, 255, .04); --veil-line: rgba(255, 255, 255, .12); --hud-bg: rgba(12, 12, 12, .88);
+  --mark-filter: none; --grain-op: .12; --seal-glyph: rgba(241, 241, 239, .045); --cmix: 100%; --chip-edge: transparent; --soft-chip: rgba(11, 11, 12, .6);
+  }
+}
+:root[data-theme="light"] { color-scheme: light; }
+
+/* the sun / moon button: fixed in the top-right corner of every page */
+.theme-toggle {
+  position: fixed; z-index: 1000;
+  top: max(12px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right));
+  width: 40px; height: 40px; padding: 0; display: grid; place-items: center;
+  border-radius: 50%; border: 1px solid var(--pill-line); background: var(--pill-bg); color: var(--ink);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  cursor: pointer; transition: border-color .2s, background .2s;
+}
+.theme-toggle:hover { border-color: var(--accent); }
+.theme-toggle:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.theme-toggle svg { display: block; }
+.capture .theme-toggle { display: none; }
+@media print { .theme-toggle { display: none; } }

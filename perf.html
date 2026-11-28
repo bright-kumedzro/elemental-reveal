@@ -6,16 +6,20 @@
   <title>Performance · Reveal</title>
   <meta name="description" content="A stress page for Reveal: twenty reveals and a few scroll effects on one page, with live fps, WebGL contexts and render resolution.">
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#0c0c0c">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0c0c0c" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/bk-mark.png" type="image/png">
+  <link rel="stylesheet" href="/theme.css">
+  <script src="/theme.js"></script>
   <style>
-    :root { --bg: #0c0c0c; --surface: #161616; --ink: #f1f1ef; --soft: #8d8d8d; --line: #232323; --accent: #33adff; --leaf: #5cc976; --warn: #ffb347; }
+    /* diagnostics page with a HUD in the bottom-right corner: no feedback launcher there */
+    :root { --feedback-launcher: hidden; }
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif; }
     header { padding: 72px 16px 40px; max-width: 760px; margin: 0 auto; }
     h1 { font-weight: 500; font-size: clamp(30px, 6vw, 48px); line-height: 1.05; margin: 0 0 14px; letter-spacing: -0.02em; }
     h1 span { color: var(--soft); }
-    header p { color: #c9c9c6; margin: 0 0 10px; }
+    header p { color: var(--body); margin: 0 0 10px; }
     code { font: 13px ui-monospace, Consolas, monospace; background: var(--surface); padding: 1px 6px; border-radius: 6px; }
     /* chrome() draws its canvas a little wider than the heading; clip it sideways so a phone does not scroll sideways */
     #list { overflow-x: clip; }
@@ -25,16 +29,16 @@
     .words { max-width: 760px; margin: 0 auto 18vh; padding: 0 16px; font-size: clamp(24px, 4.5vw, 40px); font-weight: 500; line-height: 1.2; }
     .stats { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; margin: 0 auto 18vh; padding: 0 16px; }
     .stats b { display: block; font-size: clamp(40px, 9vw, 72px); font-weight: 500; line-height: 1; }
-    .stats span { color: var(--soft); font-size: 13px; }
+    .stats span { color: var(--muted); font-size: 13px; }
     #hud { position: fixed; z-index: 10; right: max(8px, env(safe-area-inset-right)); bottom: max(8px, env(safe-area-inset-bottom)); width: min(300px, calc(100vw - 16px));
-      background: rgba(12,12,12,.88); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: 14px;
-      padding: 10px 12px; font: 12px/1.45 ui-monospace, Consolas, monospace; color: #d4d4d8; }
+      background: var(--hud-bg); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid var(--line); border-radius: 14px;
+      padding: 10px 12px; font: 12px/1.45 ui-monospace, Consolas, monospace; color: var(--text2); }
     #hud .row { display: flex; justify-content: space-between; gap: 8px; }
     #hud .big { font-size: 20px; color: var(--ink); }
     #hud .ok { color: var(--leaf); } #hud .warn { color: var(--warn); }
     #hud ul { list-style: none; margin: 6px 0 0; padding: 6px 0 0; border-top: 1px solid var(--line); max-height: 30vh; overflow: auto; }
     #hud li { display: flex; justify-content: space-between; gap: 8px; }
-    #hud li i { font-style: normal; color: var(--soft); }
+    #hud li i { font-style: normal; color: var(--muted); }
     #hud button { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 2px 8px; cursor: pointer; }
     @media (max-width: 520px) { #hud ul { display: none; } #hud.open ul { display: block; } }
   </style>
@@ -129,5 +133,6 @@
     // for automated checks
     window.__perf = { fxs, scrolls, gpu, get peak() { return peak; } };
   </script>
+  <script src="https://feedback.brightkumedzro.com/w.js" data-site="L03zWAze4Z6UtfI7" async></script>
 </body>
 </html>

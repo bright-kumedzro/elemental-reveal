@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Use it in your project · Reveal</title>
   <meta name="description" content="Drop any of the eighteen Reveal effects into your own page, between any two images: the elemental pack (fire, water, air, earth, lightning, frost, snow), the shinobi pack (clone, vortex, spiral, blade, storm, twister, magma, shuriken) and the paper pack (curl, fold, draw). One import, no dependencies.">
-  <meta name="theme-color" content="#0c0c0c">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0c0c0c" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://reveal.brightkumedzro.com/use">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Reveal: use it in your project">
@@ -16,40 +17,42 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/theme.css">
   <link rel="stylesheet" href="/style.css">
+  <script src="/theme.js"></script>
   <style>
     .docs { max-width: 860px; margin: 0 auto; padding: 72px 16px 80px; }
     .docs .back { display: inline-block; margin-bottom: 40px; }
-    .docs p, .docs li { color: #d4d4d8; }
+    .docs p, .docs li { color: var(--text2); }
     .docs h2 { font-size: clamp(24px, 4vw, 32px); margin: 64px 0 16px; letter-spacing: -.02em; }
     .demo { position: relative; aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); background: #111; cursor: crosshair; touch-action: pan-y; }
     .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 16px 0 0; }
     .seg { display: inline-flex; flex-wrap: wrap; gap: 6px; }
     .seg button {
       font: 600 14px/1 "Plus Jakarta Sans", system-ui, sans-serif; color: var(--ink); background: transparent;
-      border: 1px solid #2e2e33; border-radius: 999px; padding: 10px 14px; cursor: pointer;
+      border: 1px solid var(--line2); border-radius: 999px; padding: 10px 14px; cursor: pointer;
     }
-    .seg button[aria-pressed="true"] { background: var(--ink); color: #0b0b0c; border-color: var(--ink); }
-    .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-    .slider { display: flex; align-items: center; gap: 10px; flex: 1 1 220px; color: var(--soft); font-size: 13px; }
+    .seg button[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); border-color: var(--ink); }
+    .seg button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    .slider { display: flex; align-items: center; gap: 10px; flex: 1 1 220px; color: var(--muted); font-size: 13px; }
     .slider input { flex: 1; accent-color: var(--accent); }
-    .hintline { color: var(--soft); font-size: 13px; margin-top: 10px; }
+    .hintline { color: var(--muted); font-size: 13px; margin-top: 10px; }
     pre {
-      background: #111114; border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; overflow-x: auto;
-      font: 13.5px/1.65 "JetBrains Mono", ui-monospace, monospace; color: #e4e4e7; margin: 16px 0;
+      background: var(--code-bg); border: 1px solid var(--code-line); border-radius: 14px; padding: 18px 20px; overflow-x: auto;
+      font: 13.5px/1.65 "JetBrains Mono", ui-monospace, monospace; color: var(--code-ink); margin: 16px 0;
     }
     code { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: .92em; }
-    p code, li code, td code { background: #17171a; border: 1px solid #26262b; border-radius: 6px; padding: 1px 6px; }
-    .k { color: #c4b5fd; } .s { color: #86efac; } .c { color: #71717a; }
+    p code, li code, td code { background: var(--code-inline-bg); border: 1px solid var(--code-inline-line); border-radius: 6px; padding: 1px 6px; }
+    .k { color: var(--syn-k); } .s { color: var(--syn-s); } .c { color: var(--syn-c); }
     .figures { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 26px 0; margin: 8px 0 36px; }
     .figures dd { margin: 0; }
     .figures .n { font-size: clamp(1.7rem, 4vw, 2.2rem); line-height: 1; font-weight: 500; letter-spacing: -.03em; color: var(--ink); font-variant-numeric: tabular-nums; }
-    .figures .l { margin-top: 8px; font-size: 13px; line-height: 1.4; color: var(--soft); }
-    .figures .l a { color: var(--accent); }
+    .figures .l { margin-top: 8px; font-size: 13px; line-height: 1.4; color: var(--muted); }
+    .figures .l a { color: var(--accent-text); }
     .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
     table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
-    th, td { text-align: left; vertical-align: top; padding: 12px 10px; border-bottom: 1px solid var(--line); color: #d4d4d8; }
-    th { color: var(--soft); font-weight: 600; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    th, td { text-align: left; vertical-align: top; padding: 12px 10px; border-bottom: 1px solid var(--line); color: var(--text2); }
+    th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
     td:first-child { white-space: nowrap; }
     .table-wrap { overflow-x: auto; }
   </style>
@@ -175,17 +178,17 @@ fx.destroy();        <span class="c">// remove the canvases and listeners</span>
 
     <h2>Good to know</h2>
     <ul>
-      <li>Use as many as you like on a page. Each one only holds a WebGL context while it's on or near the screen, and the page holds at most eight at once (<code>gpu.budget</code>), so you never hit the browser's limit. Until one has a context, it shows its plain fallback. <a href="/perf" style="color:var(--accent)">Twenty on one page</a>.</li>
+      <li>Use as many as you like on a page. Each one only holds a WebGL context while it's on or near the screen, and the page holds at most eight at once (<code>gpu.budget</code>), so you never hit the browser's limit. Until one has a context, it shows its plain fallback. <a href="/perf" style="color:var(--accent-text)">Twenty on one page</a>.</li>
       <li>Without WebGL2 it falls back to a wipe. With reduced motion turned on, it cross-fades, so lightning doesn't flash.</li>
       <li>Anything inside the element stays on top of the effect, so it works as a background behind your own headline or buttons.</li>
       <li>It only draws while it's on screen. On slow devices it lowers its render resolution until it's smooth, and raises it again when there's room.</li>
     </ul>
 
     <h2>Privacy</h2>
-    <p>The library makes no network requests of its own: it only loads the images you give it, and it sends nothing about you or your visitors anywhere. (This website, not the package, counts visits anonymously: which pages are viewed and where visitors came from, with no cookies or personal data.) Using it on a site? <a href="/stats" style="color:var(--accent)">Submit it</a> to be listed under “Made with Reveal”.</p>
+    <p>The library makes no network requests of its own: it only loads the images you give it, and it sends nothing about you or your visitors anywhere. (This website, not the package, counts visits anonymously: which pages are viewed and where visitors came from, with no cookies or personal data.) Using it on a site? <a href="/stats" style="color:var(--accent-text)">Submit it</a> to be listed under “Made with Reveal”.</p>
 
     <h2>License and credit</h2>
-    <p>MIT licensed: use it in anything, commercial or not. Keeping the copyright notice in the code is the only requirement. If it helps your project, a link back to <a href="/" style="color:var(--accent)">reveal.brightkumedzro.com</a> is appreciated, never required.</p>
+    <p>MIT licensed: use it in anything, commercial or not. Keeping the copyright notice in the code is the only requirement. If it helps your project, a link back to <a href="/" style="color:var(--accent-text)">reveal.brightkumedzro.com</a> is appreciated, never required.</p>
   </main>
   <footer class="site-foot">
     <a class="me" href="https://www.brightkumedzro.com"><img src="/bk-mark.png" alt="" width="34" height="34"><span><b>Bright Kumedzro</b><span>Product designer &amp; manager</span></span></a>
@@ -227,5 +230,6 @@ fx.destroy();        <span class="c">// remove the canvases and listeners</span>
       document.querySelectorAll('#figures .n').forEach((el, i) => { el.textContent = v[i]; });
     }).catch(() => document.querySelector('#figures').remove());
   </script>
+  <script src="https://feedback.brightkumedzro.com/w.js" data-site="L03zWAze4Z6UtfI7" async></script>
 </body>
 </html>

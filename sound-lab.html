@@ -7,23 +7,25 @@
   <meta name="robots" content="noindex">
   <link rel="icon" href="/bk-mark.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/theme.css">
   <link rel="stylesheet" href="/style.css">
+  <script src="/theme.js"></script>
   <style>
     .lab { max-width: 1040px; margin: 0 auto; padding: 48px 16px 80px; }
     .lab h1 { margin-bottom: 12px; }
-    .lab > p { color: #d4d4d8; max-width: 680px; }
-    .lab section { margin-top: 40px; padding: 24px; border: 1px solid var(--line); border-radius: 20px; background: #111113; }
+    .lab > p { color: var(--text2); max-width: 680px; }
+    .lab section { margin-top: 40px; padding: 24px; border: 1px solid var(--line); border-radius: 20px; background: var(--panel); }
     .lab h2 { font-size: 26px; margin: 0 0 6px; }
-    .blurb { color: var(--soft); margin: 0 0 18px; max-width: 680px; }
+    .blurb { color: var(--muted); margin: 0 0 18px; max-width: 680px; }
     .bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 16px 0; }
-    .preset { color: var(--soft); font-size: 14px; display: inline-flex; align-items: center; gap: 8px; }
-    select, textarea { font: 14px/1.5 ui-monospace, Consolas, monospace; background: #0b0b0c; color: var(--ink); border: 1px solid #2e2e33; border-radius: 10px; padding: 8px 10px; }
+    .preset { color: var(--muted); font-size: 14px; display: inline-flex; align-items: center; gap: 8px; }
+    select, textarea { font: 14px/1.5 ui-monospace, Consolas, monospace; background: var(--input-bg); color: var(--ink); border: 1px solid var(--input-line); border-radius: 10px; padding: 8px 10px; }
     select { font-family: inherit; }
-    textarea { width: 100%; resize: vertical; color: var(--soft); }
+    textarea { width: 100%; resize: vertical; color: var(--muted); }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 4px 20px; }
-    .grid.live { padding: 12px 14px 14px; border-radius: 14px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.12); margin-bottom: 18px; }
-    .grid .row { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; color: #d4d4d8; margin-top: 10px; }
-    .grid output { color: var(--accent); font-variant-numeric: tabular-nums; }
+    .grid.live { padding: 12px 14px 14px; border-radius: 14px; background: var(--veil); border: 1px solid var(--veil-line); margin-bottom: 18px; }
+    .grid .row { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; color: var(--text2); margin-top: 10px; }
+    .grid output { color: var(--accent-text); font-variant-numeric: tabular-nums; }
     .grid input[type=range] { width: 100%; accent-color: var(--accent); }
     .btn { padding: 11px 16px; font-size: 14px; }
     .pack-title { margin: 56px 0 0; font-size: clamp(24px, 4vw, 34px); }
@@ -60,5 +62,6 @@
     </nav>
     <p class="where">Accra, Ghana · 2026 · <a class="stats-link" href="/stats" rel="nofollow">Stats</a></p>
   </footer>
+  <script src="https://feedback.brightkumedzro.com/w.js" data-site="L03zWAze4Z6UtfI7" async></script>
 </body>
 </html>

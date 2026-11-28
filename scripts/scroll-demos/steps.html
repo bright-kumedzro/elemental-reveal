@@ -3,16 +3,16 @@
     #steps .steps-demo { --steps-visual-h: 380px; --steps-bg: var(--bg, #0c0c0c); margin: 36px 0 28px; }
     #steps .card { height: var(--steps-visual-h); border-radius: 22px; background: var(--surface, #161616); border: 1px solid var(--line, #232323); display: grid; place-items: center; overflow: hidden; position: relative; }
     #steps .card svg { width: 78%; height: auto; overflow: visible; }
-    #steps .card .tag { position: absolute; top: 16px; left: 18px; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
+    #steps .card .tag { position: absolute; top: 16px; left: 18px; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: color-mix(in srgb, var(--c) var(--cmix), #000); }
     #steps .card .ln { fill: none; stroke: var(--ink, #f1f1ef); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     #steps .card .soft { stroke: var(--soft, #8d8d8d); }
     #steps .card .acc { stroke: var(--c); }
     #steps .card .fillc { fill: var(--c); }
     #steps ol { list-style: none; margin: 0; padding: 0; }
     #steps li h3 { margin: 0 0 8px; font-size: clamp(22px, 3vw, 28px); font-weight: 500; letter-spacing: -.02em; }
-    #steps li h3 span { color: var(--soft, #8d8d8d); font-size: .6em; font-variant-numeric: tabular-nums; margin-right: 10px; letter-spacing: 0; }
+    #steps li h3 span { color: var(--muted, #8d8d8d); font-size: .6em; font-variant-numeric: tabular-nums; margin-right: 10px; letter-spacing: 0; }
     #steps li p { margin: 0; color: var(--body, #c9c9c6); max-width: 420px; }
-    #steps li.is-active h3 span { color: var(--c); }
+    #steps li.is-active h3 span { color: color-mix(in srgb, var(--c) var(--cmix), #000); }
     @media (max-width: 760px) { #steps .steps-demo { --steps-visual-h: 230px; } #steps .card svg { width: 60%; } }
   </style>
   <p class="eyebrow">Scroll · Steps</p>
